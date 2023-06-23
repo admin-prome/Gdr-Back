@@ -115,6 +115,7 @@ def createIssue(dataIssue: dict) -> json:
     newIssue: object = None
     try:
         print(f'Esto es lo que llega del front: {dataIssue}')
+        dataIssue['key'] = 'GDD'
        
         
 
