@@ -14,7 +14,7 @@ from source.jiraModule.components.userHandler.getAllUsers.view_getAllUsers impor
 
 # getUserForProject_bp = Blueprint("getUserForProject_bp", __name__)
 app = Flask(__name__)
-# cors = CORS(app, origins=["https://requerimientos.provinciamicrocreditos.com"],methods="POST")
+cors = CORS(app, origins=["https://requerimientos.provinciamicrocreditos.com","https://gdrfront.azurewebsites.net" ],methods="POST")
 CORS(app)
 app.url_map.strict_slashes = False
 app.register_blueprint(test_bp)
