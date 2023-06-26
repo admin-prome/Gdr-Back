@@ -12,11 +12,11 @@ def GetProjects() -> json:
     response: dict = {}
     try:
         projects = controller_getAllProjects.getAllProjects()
-        initiatives = controller_getAllProjects.getInitiatives()
+        #initiatives = controller_getAllProjects.getInitiatives()
         
     
         response['projects']= projects
-        response['initiatives'] = initiatives
+        response['initiatives'] = {"initiatives": "0"}
      
         #response = jsonify({'projects': projects})
         
