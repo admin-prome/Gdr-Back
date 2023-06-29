@@ -15,7 +15,9 @@ class Settings:
     DBNAME: str
     DEVCLIENTID: str
     DEVCLIENSECRET: str
-
+    EMAIL_REMITENTE: str
+    EMAIL_PASSWORD: str
+    
 load_dotenv()
 
 settings = Settings(
@@ -29,7 +31,9 @@ settings = Settings(
     DBIPPRIVATE=  os.getenv('DBIPPRIVATE'),
     DBNAME= os.getenv('DBNAME'),
     DEVCLIENTID= os.getenv('DEVCLIENTID'),
-    DEVCLIENSECRET= os.getenv('DEVCLIENSECRET') 
+    DEVCLIENSECRET= os.getenv('DEVCLIENSECRET'),
+    EMAIL_REMITENTE= os.getenv('EMAIL_REMITENTE'),
+    EMAIL_PASSWORD= os.getenv('EMAIL_PASSWORDT')
     )
 
 

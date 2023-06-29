@@ -2,8 +2,7 @@ import json
 from source.modules.mapeoGerencia import *
 
 def MapeoDeRequerimientos(data: json, issue_dict : dict, ENVIROMENT: str) -> dict:
-    print(ENVIROMENT)
-    print('data en funcion', data)
+   
     names: list = ['GDD', 'GT', 'GP0007', 'RDG', 'SP000BN']
     
     if (ENVIROMENT == 'PROD'):

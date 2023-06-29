@@ -13,6 +13,7 @@ from source.jiraModule.utils.conexion import jiraConectionServices
 from source.settings.settings import settings
 from source.modules.obtenerIdRequerimiento import get_req_id
 from source.jiraModule.components.createIssue.model_createIssue import Issue
+from source.modules.enviarCorreo import *
 
 
 
@@ -50,12 +51,8 @@ def getlastIssue():
         issues = result.get("issues", [])
         if issues:
             last_issue = issues[0]
-            print(f"Último requerimiento en el proyecto {project_code}: {last_issue.get('key')} - {last_issue.get('fields').get('summary')}")
+           #print(f"Último requerimiento en el proyecto {project_code}: {last_issue.get('key')} - {last_issue.get('fields').get('summary')}")
             summary = str(last_issue.get('fields').get('summary'))
-            print('+++++++++++++++++++++++++++++++++++++++++')
-            print(summary)
-            print(type(summary))
-            print('+++++++++++++++++++++++++++++++++++++++++')
             reqId = get_req_id(summary)            
         else:
             print(f"No se encontraron requerimientos en el proyecto {project_code}.")
@@ -114,7 +111,7 @@ def createIssue(dataIssue: dict) -> json:
     link: str = ''
     newIssue: object = None
     try:
-        print(f'Esto es lo que llega del front: {dataIssue}')
+        #print(f'Esto es lo que llega del front: {dataIssue}')
         dataIssue['key'] = 'GDD'
        
         
@@ -161,18 +158,25 @@ def createIssue(dataIssue: dict) -> json:
                     }   
         
         MapeoDeRequerimientos(dataIssue, issueDict, 'PROD')
- 
         
-        for i in issueDict.keys():
-            print(f'{i} : {issueDict[i]}')
+        
+        asunto: str = str('Requerimiento creado con GDR: [REQ '+ idUltimoRequerimiento+'] ' + dataIssue['summary'] +' - No responder' )
+        destinatarios: list = ["analisis@provinciamicrocreditos.com"]
+        destinatarios.append(dataIssue['user']['email'])     
+        
+        # for i in issueDict.keys():
+        #     print(f'{i} : {issueDict[i]}')
             
         try:       
             #Descomentar para crear un requerimiento en JIRA            
             newIssue = jira.create_issue(issueDict)
-            print(f'creando requerimiento: {newIssue}')
+            enviarCorreo(destinatarios,asunto,armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
+            #print(f'creando requerimiento: {newIssue}')
             #Formateo el enlace al requerimiento            
             status = '200'    
             
+            #enviarCorreo(destinatarios,asunto,armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
+             
         except requests.exceptions.HTTPError as e:
             response_json = e.response.json()
             error_messages = response_json.get("errorMessages", [])
