@@ -62,16 +62,27 @@ def getlastIssue():
     return  reqId 
 
 
-def getlastIssueReq(num_issues=10, issueType: str = 'REQ'):
+def getlastIssueReq(num_issues=10, issueType: str = 'REQ', subIssueType: str = "", project: str = "GDD"):
+    """
+    Pre: Recibe la cantidad cantidad maxíma de requerimientos por iteración, el prefijo y el id de proyecto
+    Pos: devuelve el el numero mas grande con en el proyecto con dicho prefijo.
+    """
     try:
+        id: str = ''
         # Configure el servidor Jira y la autenticación
         server = f"https://{domain}.com"
         api_url = f"{server}/rest/api/2/search"
-        if (issueType == 'REQ'):
-            regex = r"\[REQ\s+(\d+)\]"
-        elif(issueType == "INC"):
-            regex = r"\[INC\s+(\d+)\]"
-        project_code = "GDD"
+        
+        # if (issueType == 'REQ'):
+        #     regex = r"\[REQ\s+(\d+)\]"
+            
+        # elif(issueType == "INC"):
+        #     regex = r"\[INC\s+(\d+)\]"
+       
+             
+        regex = fr"\[{issueType}-{subIssueType}\s+(\d+)\]"  
+        print(f'Este es el regex: {regex}')
+        project_code = project
         req_ids = []
         
         # Configure los parámetros de la solicitud GET
@@ -94,9 +105,18 @@ def getlastIssueReq(num_issues=10, issueType: str = 'REQ'):
                         req_id = match.group(1)
                         print(f"Requerimiento encontrado: {req_id}")
                         req_ids.append(int(req_id))
-                        return str(int(req_id)+1)
+                        print(req_ids)
+                        id = str(int(req_id)+1).zfill(3)
+                        
                     else:
                         print(f"No se encontró el número de requerimiento en el campo 'summary'.")
+                        req_id: int = 000
+                        print('-----------------------')
+                        print(str((int(req_id)+1)).zfill(3))
+                        
+                        print('-----------------------')
+                        id = str(int(req_id)+1).zfill(3)
+                    return str((int(req_id)+1)).zfill(3)
             else:
                 print(f"No se encontraron requerimientos en el proyecto {project_code}.")
         else:
@@ -110,11 +130,10 @@ def getlastIssueReq(num_issues=10, issueType: str = 'REQ'):
 def createIssue(dataIssue: dict) -> json:
     link: str = ''
     newIssue: object = None
+    
     try:
-        #print(f'Esto es lo que llega del front: {dataIssue}')
+        # print(f'Esto es lo que llega del front: {dataIssue}')
         dataIssue['key'] = 'GDD'
-       
-        
 
         jiraOptions ={'server': "https://"+domain+".atlassian.net"}
         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))
@@ -122,47 +141,52 @@ def createIssue(dataIssue: dict) -> json:
         
         
         idUltimoRequerimiento: str = ''
-        idUltimoRequerimiento = getlastIssueReq()    
         
-        # try:
-            
-        #     # Convertir el valor de 'userCredential' de string a diccionario
-        #     user_credential = json.loads(dataIssue['userCredential'])
-        #     print(user_credential)
-        #     print(type(user_credential))
-        #     # Acceder a la clave 'given_name' en el diccionario 'user_credential'          
-
-        #     user: str = user_credential['given_name']
-        #     userEmail: str = user_credential['email']
-            
-        # except: print('fallo mapeo de google')
+        if (dataIssue['issueType'] != "FIX"):
+            idUltimoRequerimiento = getlastIssueReq(issueType= dataIssue['issueType'], subIssueType= dataIssue['subIssueType'])    
+     
+       
         
         #CAMPOS MINIMOS NECESARIOS PARA CREAR EL REQUERIMIENTO EN JIRA
-        issueDict = {
-                        #"project": dataIssue['key'],
-                        "project": "GDD",
-                        "summary": '[REQ '+ idUltimoRequerimiento+'] ' + dataIssue['summary'],
-                        "description": str(f"""
-                                        *Creado por:* {dataIssue['user']['name']}
-                                        *Correo:* {dataIssue['user']['email']}                                        
-                                        *Rol:* {dataIssue['managment']}
-                                        *Funcionalidad:* {dataIssue['description']}
-                                        *Beneficio:* {dataIssue['impact']}
-                                        *Enlace a la Documentación:* {dataIssue['attached']}.
-                                        *Prioridad* definida por el usuario: {dataIssue['priority']} 
-                                        *Iniciativa:* {dataIssue['initiative']}
-                                        """), #+ '\n Iniciativa: '+ dataIssue['initiative'],        
-                                        
-                        "priority": {"id": '3'},
-                        "issuetype": {"id": "10001"}                        
-                    }   
+        try: 
+            issueDict: dict = {}
+            idUltimoRequerimiento: str = ''
+        
+            if (dataIssue['issueType'] == "FIX"):
+                tituloDelRequerimiento: str = f"[{dataIssue['issueType']}-{dataIssue['subIssueType']}] {dataIssue['summary']}"
+               
+            else:
+                idUltimoRequerimiento = getlastIssueReq(issueType= dataIssue['issueType'], subIssueType= dataIssue['subIssueType'])    
+                tituloDelRequerimiento: str = f"[{dataIssue['issueType']}-{dataIssue['subIssueType']} {str(idUltimoRequerimiento)}]"
+                
+            issueDict['summary'] = tituloDelRequerimiento
+            dataIssue['summary'] = tituloDelRequerimiento
+           
+            issueDict["project"] = "GDD"            
+         
+            description = f"""
+                *Creado por:* {dataIssue['userCredential']['name']}
+                *Correo:* {dataIssue['userCredential']['email']}
+                *Rol:* {dataIssue['managment']}
+                *Funcionalidad:* {dataIssue['description']}
+                *Beneficio:* {dataIssue['impact']}
+                *Enlace a la Documentación:* {dataIssue['attached']}.
+                *Prioridad* definida por el usuario: {dataIssue['priority']}
+                *Iniciativa:* {dataIssue['initiative']}
+                """
+            
+            issueDict["description"] = description            
+            issueDict["priority"] = {"id": '3'}         
+            issueDict["issuetype"] = {"id": "10001"} 
+                     
+        except Exception as e: print(f'Ocurrio un error en el mapeo de issueDict: {e}')
         
         MapeoDeRequerimientos(dataIssue, issueDict, 'PROD')
         
         
-        asunto: str = str('Requerimiento creado con GDR: [REQ '+ idUltimoRequerimiento+'] ' + dataIssue['summary'] +' - No responder' )
+        asunto: str = str('Requerimiento creado con GDR: '+ issueDict['summary']+' - No responder' )
         destinatarios: list = ["analisis@provinciamicrocreditos.com"]
-        destinatarios.append(dataIssue['user']['email'])     
+        destinatarios.append(dataIssue['userCredential']['email'])     
         
         # for i in issueDict.keys():
         #     print(f'{i} : {issueDict[i]}')
@@ -170,7 +194,7 @@ def createIssue(dataIssue: dict) -> json:
         try:       
             #Descomentar para crear un requerimiento en JIRA            
             newIssue = jira.create_issue(issueDict)
-            enviarCorreo(destinatarios,asunto,armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
+           
             #print(f'creando requerimiento: {newIssue}')
             #Formateo el enlace al requerimiento            
             status = '200'    
@@ -178,6 +202,7 @@ def createIssue(dataIssue: dict) -> json:
             #enviarCorreo(destinatarios,asunto,armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
              
         except requests.exceptions.HTTPError as e:
+            enviarCorreo(destinatarios,f"Error en carga: {asunto}",armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
             response_json = e.response.json()
             error_messages = response_json.get("errorMessages", [])
             errors = response_json.get("errors", {})
@@ -186,18 +211,24 @@ def createIssue(dataIssue: dict) -> json:
             
         except Exception as e:
             print(f"Error al crear el issue en JIRA: {e}")
+            enviarCorreo(destinatarios,f"Error en carga: {asunto}",armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
+            
             
         #jira.add_attachment(issue=new_issue, attachment='C:/Users/Colaborador/Documents/logo-icon.png')
        
     except Exception as e:
-        print(f'Ocurrio un error en la ejecucion de crear requerimiento: {e}')    
+        print(f'Ocurrio un error en la ejecucion de crear requerimiento: {e}')  
+        enviarCorreo(destinatarios,f"Error en carga: {asunto}",armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
+              
         status = f'Error: {e}'
     
     try: 
         link = str(f'https://{domain}.atlassian.net/browse/{newIssue.key}')
+        dataIssue['link'] = link
+        enviarCorreo(destinatarios,asunto,armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
         
     except: link = 'hola mundo'
     
-    return jsonify({"link":link, "key":link})
+    return jsonify({"link":link, "status":status})
 
   

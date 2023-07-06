@@ -26,10 +26,10 @@ def mapearCuerpoDeCorreo(dataIssue: dict, idUltimoRequerimiento: str):
     
     try:
        issueDetail = str(f"""
-                    <h3 class="Titulo">[REQ {idUltimoRequerimiento}] {dataIssue['summary']}</h3>
+                    <a href="{dataIssue['link']}"><h3 class="Titulo">{dataIssue['summary']}</h3></a>
                     <p><b>Proyecto: </b>Gestion de la Demanda</p>
-                    <p><b>Creado por: </b>{dataIssue['user']['name']}</p>
-                    <p><b>Correo: </b>{dataIssue['user']['email']}</p>
+                    <p><b>Creado por: </b>{dataIssue['userCredential']['name']}</p>
+                    <p><b>Correo: </b>{dataIssue['userCredential']['email']}</p>
                     <p><b>Rol: </b>{dataIssue['managment']}</p>
                     <p><b>Funcionalidad: </b>{dataIssue['description']}</p>
                     <p><b>Beneficio: </b>{dataIssue['impact']}</p>
@@ -116,6 +116,9 @@ def armarCuerpoDeCorreo(data: dict, id: str):
                 .image img{
                     margin: auto;
                     
+                }
+                a {
+                    text-decoration: none;
                 }
                 </style>
             </head>
