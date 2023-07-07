@@ -206,7 +206,7 @@ def createIssue(dataIssue: dict) -> json:
            
             print(f'creando requerimiento: {newIssue}')
             #Formateo el enlace al requerimiento            
-            status = 400    
+            status = 200    
             
             enviarCorreo(destinatarios,asunto,armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
              
@@ -216,11 +216,11 @@ def createIssue(dataIssue: dict) -> json:
             errors = response_json.get("errors", {})
             print(f"Error al crear el issue en JIRA: {error_messages} - {errors}")
             status = f"Error: {error_messages}"
-            enviarCorreo(["mmillan@provinciamicrocreditos"],f"Error en GDR", f"Error al crear: {asunto} : {e}")
+            enviarCorreo(["mmillan@provinciamicrocreditos"],f"Error en GDR", f"Error al crear: {asunto} : {status}")
            
         except Exception as e:
             print(f"Error al crear el issue en JIRA: {e}")
-            enviarCorreo(["mmillan@provinciamicrocreditos"],f"Error en GDR", f"Error al crear: {asunto} : {e}")
+            enviarCorreo(["mmillan@provinciamicrocreditos"],f"Error en GDR", f"Error al crear: {asunto} : {str(e)}")
            
             
         #jira.add_attachment(issue=new_issue, attachment='C:/Users/Colaborador/Documents/logo-icon.png')
@@ -228,7 +228,7 @@ def createIssue(dataIssue: dict) -> json:
     except Exception as e:
         print(f'Ocurrio un error en la ejecucion de crear requerimiento: {e}')          
         status = f'Error: {e}'
-        enviarCorreo(["mmillan@provinciamicrocreditos"],f"Error en GDR", f"Error al crear: {asunto} : {e}")
+        enviarCorreo(["mmillan@provinciamicrocreditos"],f"Error en GDR", f"Error al crear: {asunto} : {status}")
            
     try: 
         link = str(f'https://{domain}.atlassian.net/browse/{newIssue.key}')
