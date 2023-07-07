@@ -133,6 +133,7 @@ def createIssue(dataIssue: dict) -> json:
     newIssue: object = None
     correoGerente: str = ''
     asunto: str = ''
+    e: str = ''
     
     try:
         print(f'Esto es lo que llega del front: {dataIssue}')
@@ -215,7 +216,7 @@ def createIssue(dataIssue: dict) -> json:
             error_messages = response_json.get("errorMessages", [])
             errors = response_json.get("errors", {})
             print(f"Error al crear el issue en JIRA: {error_messages} - {errors}")
-            status = f"Error: {error_messages}"
+            status = str(f"Error: {error_messages}")
             enviarCorreo(["mmillan@provinciamicrocreditos"],f"Error en GDR", f"Error al crear: {asunto} : {status}")
            
         except Exception as e:
@@ -227,7 +228,7 @@ def createIssue(dataIssue: dict) -> json:
        
     except Exception as e:
         print(f'Ocurrio un error en la ejecucion de crear requerimiento: {e}')          
-        status = f'Error: {e}'
+        status = str(f'Error: {e}')
         enviarCorreo(["mmillan@provinciamicrocreditos"],f"Error en GDR", f"Error al crear: {asunto} : {status}")
            
     try: 
@@ -237,7 +238,7 @@ def createIssue(dataIssue: dict) -> json:
     except Exception as e: 
         link = 'http://requerimientos.provinciamicrocreditos.com/error'
         dataIssue['link'] = link
-        enviarCorreo(["mmillan@provinciamicrocreditos"],f"Error en GDR", f"Error al crear: {asunto} : {e}")
+        enviarCorreo(["mmillan@provinciamicrocreditos"],f"Error en GDR", f"Error al crear: {asunto} : {str(e)}")
            
     try:
         if (status == 200):
@@ -250,7 +251,7 @@ def createIssue(dataIssue: dict) -> json:
     
     except Exception as e: 
         print(f'Fallo el envio de correo {e}')
-        enviarCorreo(["mmillan@provinciamicrocreditos"],f"Error en GDR", f"Error al crear: {asunto} : {e}")
+        enviarCorreo(["mmillan@provinciamicrocreditos"],f"Error en GDR", f"Error al crear: {asunto} : {str(e)}")
            
 
         
