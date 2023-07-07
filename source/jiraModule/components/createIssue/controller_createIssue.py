@@ -202,13 +202,13 @@ def createIssue(dataIssue: dict) -> json:
         print(destinatarios)
         try:       
             #Descomentar para crear un requerimiento en JIRA            
-            #newIssue = jira.create_issue(issueDict)
+            newIssue = jira.create_issue(issueDict)
            
             print(f'creando requerimiento: {newIssue}')
             #Formateo el enlace al requerimiento            
             status = 400    
             
-            #enviarCorreo(destinatarios,asunto,armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
+            enviarCorreo(destinatarios,asunto,armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
              
         except requests.exceptions.HTTPError as e:
             response_json = e.response.json()
