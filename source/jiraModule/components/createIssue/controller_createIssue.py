@@ -132,6 +132,7 @@ def createIssue(dataIssue: dict) -> json:
     link: str = ''
     newIssue: object = None
     correoGerente: str = ''
+    asunto: str = ''
     
     try:
         print(f'Esto es lo que llega del front: {dataIssue}')
