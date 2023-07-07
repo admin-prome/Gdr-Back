@@ -209,7 +209,7 @@ def createIssue(dataIssue: dict) -> json:
             #Formateo el enlace al requerimiento            
             status = 200    
             
-            enviarCorreo(destinatarios,asunto,armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
+            #enviarCorreo(destinatarios,asunto,armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
              
         except requests.exceptions.HTTPError as e:
             response_json = e.response.json()
