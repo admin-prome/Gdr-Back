@@ -52,4 +52,29 @@ def mapeoDeGerente(gerente:str, ENVIROMENT: str) -> str:
 
 
 
+def mapeoMailGerente(name: str = "Juan Carlos canepa") -> str:
+    """_Mapeo De Mail del Gerente_
 
+    Args:
+        name (str, optional): _El nombre del gerente tal cual se recibe del front_. Defaults to "Juan Carlos canepa".
+
+    Returns:
+        _str_: _El correo del gerente_
+    """
+    mail: str = ''
+    managmentMail:dict =   {
+                            'Ariel Cosentino' : 'acosentino@provinciamicrocreditos.com' , #Gerencia de red de Sucursales
+                            'Gisela Marino' : 'gmarino@provinciamicrocreditos.com' , #Gerencia Comercial
+                            'Alejandro Bermann' : 'abermann@provinciamicrocreditos.com' , #Gerencia de AFyL
+                            'Juan Carlos Canepa' :'jcanepa@provinciamicrocreditos.com' , #Gerencia de Tecnología
+                            'Carmen Rojas' : 'crojas@provinciamicrocreditos.com', #Compliance y Procesos
+                            'Solange Altilio' : 'saltilio@provinciamicrocreditos.com', #Investigación y Capacitación
+                            'Ignacio Stella' : 'istella@provinciamicrocreditos.com' , #Comunicación Institucional
+                            'Mariela Luna' : 'mluna@provinciamicrocreditos.com' #Riesgo
+                        }
+                 
+    if name in managmentMail:
+            mail = managmentMail[name]      
+    else: mail = managmentMail['Juan Carlos Canepa']
+    
+    return mail

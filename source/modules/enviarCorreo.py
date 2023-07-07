@@ -39,8 +39,8 @@ def mapearCuerpoDeCorreo(dataIssue: dict, idUltimoRequerimiento: str):
                     """)
 
     except Exception as e: 
-        print(f'Ocurrio un error al mapear cuerpo del correo: {e}')
-        issueDetail = "Requerimiento creado con éxito"
+        print(f'Ocurrio un error al mapear cuerpo del correo: {e}')        
+        issueDetail ='Ocurrio un error al mapear cuerpo del correo'
         
     return issueDetail
     
