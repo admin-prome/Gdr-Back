@@ -27,6 +27,8 @@ def MapeoDeRequerimientos(data: json, issue_dict : dict, ENVIROMENT: str) -> dic
         #MAPEO DE CAMPOS EN PROYECTO GESTIÓN DE TECNOLOGÍA
         elif (data['key'] == 'GT'):
 
+            issue_dict["issuetype"] = {"id":"10003"} 
+            
             issue_dict['description'] = f"""{issue_dict['description']} 
                                             *Aprobado por:* @[{mapeoDeGerente(str(data['approvers']), ENVIROMENT)}]
                                             *Gerencia:* {mapeoGerencia(str(data['approvers']), ENVIROMENT)}"""

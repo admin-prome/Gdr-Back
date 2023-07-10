@@ -167,15 +167,29 @@ def enviarCorreo(destinatarios: list, asunto: str, _mensaje: str):
         texto = mensaje.as_string()
         server.sendmail(EMAIL_REMITENTE, destinatarios, texto)
         server.quit()
-
         print("Email enviado exitosamente")
+        
     except Exception as e:
         print('Error en el envio de mail',e)
 
+def enviarCorreoDeError(_asunto: str, error:str):
+    
+    print(_asunto)
+    print(error)
+    
+    correosDeError: list =  ["mmillan@provinciamicrocreditos.com"]
+    mensaje: str =  f"Error al crear el requerimiento ->  {str(error)}"
+    asunto: str = f"Error en GDR: {str(_asunto)}"
+    print(_asunto)
+    print(error)
+    print(type(_asunto))
+    print(type(error))
+    enviarCorreo(correosDeError, asunto, mensaje)
+    
     
 if __name__ == "__main__":
     
-    destinatarios: list = ["mmillan@provinciamicrocreditos.com","mmillan@provinciamicrocreditos.com"]
+    destinatarios: list = ["mmillan@provinciamicrocreditos.com"]
     enviarCorreo("mmillan@provinciamicrocreditos.com","prueba", "GDR prueba")
     print(str(",".join(destinatarios)))
     
