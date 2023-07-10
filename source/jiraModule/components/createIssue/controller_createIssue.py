@@ -224,6 +224,7 @@ def createIssue(dataIssue: dict) -> json:
     issueDict: dict = {}
     destinatarios: list = []
     status: int = 400   
+    response: dict = {}
     
     try:
         print(f'Esto es lo que llega del front: {dataIssue}')        
@@ -248,7 +249,7 @@ def createIssue(dataIssue: dict) -> json:
         print(f'creando requerimiento: {newIssue}')
         #Formateo el enlace al requerimiento            
         status = 200   
-        mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
+        
        
         if (status == 200):      
             correoGerente = mapeoMailGerente(str(mapeoDeGerente(str(dataIssue['approvers']), 'PROD')))        
@@ -276,6 +277,8 @@ def createIssue(dataIssue: dict) -> json:
     
         #jira.add_attachment(issue=new_issue, attachment='C:/Users/Colaborador/Documents/logo-icon.png')
     
-    return jsonify({"link":link, "status":status})
+    response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
+    
+    return jsonify(response)
 
   
