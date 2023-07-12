@@ -50,14 +50,15 @@ def getAllProjects() -> list:
     '''
     #aca obtengo el token del usuario decodificando.
     
-    try:
+    #try:
        
     #     jiraOptions ={'server': "https://"+domain+".atlassian.net"}
     #     jira = JIRA(options=jiraOptions, basic_auth=(mail))
-    #     data: list=[]
+    #     data: list=['1']
     #     projectInfo: dict = {'name': str, 'key': str}
     #     projects: dict = {}
     #     projects = jira.projects()
+    #     print('-------------------------------')
     #     print(projects)
     #     for project in projects:
     #         projectInfo['key']= (project.key)
@@ -67,22 +68,22 @@ def getAllProjects() -> list:
     #         projectInfo = {}
     #         print(project)
 
-    #     data = filtrarProyectos(data)
+    #     #data = filtrarProyectos(data)
     #     sorted(data, key=lambda name: max(list(name.values())))    
         
-    #     jsonify({"projects":data})
+    #     #jsonify({"projects":data})
         
-    #     # for i in range(data):
-    #     #     projects[i+1] = data[i]
-    #     #     print(data[i])
+    #     for i in range(data):
+    #         projects[i+1] = data[i]
+    #         print(data[i])
             
-    #     # print('--------------------------------------------------------------')
-    #     # print(projects)
-    #     # print('--------------------------------------------------------------')
-        return {"key": "GDD", "name": "GDD - Gesti\u00f3n de la Demanda"}
-    except Exception as e: 
-         print(f'OCurrio un error en la ejecución de obtener proyectos: {e}')
+    #     print('--------------------------------------------------------------')
+    #     print(projects)
+    #     print('--------------------------------------------------------------')
+    #     # return {"key": "GDD", "name": "GDD - Gesti\u00f3n de la Demanda"}
+    # except Exception as e: 
+    #      print(f'OCurrio un error en la ejecución de obtener proyectos: {e}')
     
     # print(data)
-    # return data
-    #return jsonify({project{"key": "GDD", "name": "GDD - Gesti\u00f3n de la Demanda"},})
+    #return jsonify({"projects":data})
+    return{"project": {"key": "GDD", "name": "GDD - Gesti\u00f3n de la Demanda"}}

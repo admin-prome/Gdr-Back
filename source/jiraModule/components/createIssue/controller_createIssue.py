@@ -139,18 +139,27 @@ def clasificarProyecto(dataIssue: dict, issueDict: dict) -> None:
             
     if (dataIssue['issueType'] == "FIX"):
         tituloDelRequerimiento: str = f"[{dataIssue['issueType']}-{dataIssue['subIssueType']}] {dataIssue['summary']}"
-        
+        issueDict["project"] = "GDD"
+        dataIssue["key"] = "GDD"
     else:                
         
         if (dataIssue["issueType"] == "INF"): #Mapeo el requerimiento al tablero GIT
             issueDict["project"] = "GT"
             dataIssue["key"] = "GT"
-            destinatarios = ["infra_tecno@provinciamicrocreditos.com"]        
+            destinatarios = ["infra_tecno@provinciamicrocreditos.com"]  
+            issueDict["priority"] = {"id": '3'}
+            
+        # elif ( dataIssue["issueType"] == 'INC'):
+        #     issueDict["project"] = "GGDI"
+        #     dataIssue["key"] = "GGDI"
+        #     destinatarios = ["analisis@provinciamicrocreditos.com"]
+                 
             
         else: 
             destinatarios = ["analisis@provinciamicrocreditos.com"]        
             issueDict["project"] = "GDD"              
             dataIssue["key"] = "GDD"
+            issueDict["priority"] = {"id": '3'}
                     
         
 def mapearCamposParaJIRA(dataIssue: dict, issueDict: dict, idUltimoRequerimiento: str|list) -> None:
@@ -179,8 +188,9 @@ def mapearCamposParaJIRA(dataIssue: dict, issueDict: dict, idUltimoRequerimiento
             *Prioridad* definida por el usuario: {dataIssue['priority']}
             *Iniciativa:* {dataIssue['initiative']}
             """        
-        issueDict["description"] = description            
-        issueDict["priority"] = {"id": '3'}      
+        issueDict["description"] = description 
+                   
+              
                     
     except Exception as e: 
         print(f'Ocurrio un error en el mapeo de issueDict: {e}')
@@ -198,20 +208,22 @@ def mapearRespuestaAlFront(newIssue, dataIssue: dict, issueDict: dict) -> dict:
     Returns:
         response (dict): diccionario para el cliente contiene status y el enlace al requerimiento a la pagina de error
     """
-    status: str = ''
+    status: str = '400'
     response: dict = {}
     
     try: 
         link = str(f'https://{domain}.atlassian.net/browse/{newIssue.key}')
         dataIssue['link'] = link
-        
+        status = '200'
+        return {"link":link, "status":status}
+    
     except Exception as e: 
         link = 'http://requerimientos.provinciamicrocreditos.com/error'
         dataIssue['link'] = link           
-        enviarCorreoDeError(issueDict['summary'],   str(e))
-       
-    response =  {"link":link, "status":status}
-    return response
+        enviarCorreoDeError(issueDict['summary'],   str(e))           
+        response =  ''
+        print(response)
+        return response
 
 
 def createIssue(dataIssue: dict) -> json:
@@ -223,7 +235,7 @@ def createIssue(dataIssue: dict) -> json:
     idUltimoRequerimiento: str | list = ''
     issueDict: dict = {}
     destinatarios: list = []
-    status: int = 400   
+    status: int = '400'  
     response: dict = {}
     
     try:
@@ -237,8 +249,7 @@ def createIssue(dataIssue: dict) -> json:
         mapearCamposParaJIRA(dataIssue, issueDict, idUltimoRequerimiento)     
         MapeoDeRequerimientos(dataIssue, issueDict, 'PROD')     
            
-        
-        
+                
         # for i in issueDict.keys():
         #     print(f'{i} : {issueDict[i]}')
         
@@ -248,20 +259,28 @@ def createIssue(dataIssue: dict) -> json:
         
         print(f'creando requerimiento: {newIssue}')
         #Formateo el enlace al requerimiento            
-        status = 200   
+        status = '200'   
         
        
-        if (status == 200):      
+        if (status =='200'):      
             correoGerente = mapeoMailGerente(str(mapeoDeGerente(str(dataIssue['approvers']), 'PROD')))        
-            asunto: str = str('Requerimiento creado con GDR: '+ issueDict['summary']+' - No responder' )  
-            destinatarios.append(dataIssue['userCredential']['email'])    #Agregamos al usuario que crea el requerimiento
-            destinatarios.append(correoGerente)  #Agregamos al gerente quien aprueba la carga del requerimiento                
+            asunto: str = str('Requerimiento creado con GDR: '+ issueDict['summary']+' - No responder' )              
+            
+            if((dataIssue['priority'].upper() == 'ALTA') or (dataIssue['priority'].upper() == 'MUY ALTA') or (dataIssue['priority'].upper() == 'NORMATIVA')):
+                destinatarios.append( (dataIssue['userCredential']['email']))    #Agregamos al usuario que crea el requerimiento
+            
+            else:
+                destinatarios = (dataIssue['userCredential']['email'])
+                            
+            destinatarios.append(correoGerente)  #Agregamos al gerente quien aprueba la carga del requerimiento 
+            response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)              
             enviarCorreo(destinatarios,asunto,armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
             
         else:              
             dataIssue['summary'] =  f"ERROR al crear: {dataIssue['summary']}"
             enviarCorreoDeError(dataIssue['summary'],  str(status))            
             #enviarCorreo(destinatarios,f"ERROR al crear: {asunto}",armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
+            response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
         
                          
     except requests.exceptions.HTTPError as e:
@@ -277,7 +296,8 @@ def createIssue(dataIssue: dict) -> json:
     
         #jira.add_attachment(issue=new_issue, attachment='C:/Users/Colaborador/Documents/logo-icon.png')
     
-    response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
+    #response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
+    print(response)
     
     return jsonify(response)
 

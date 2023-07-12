@@ -21,8 +21,7 @@ def MapeoDeRequerimientos(data: json, issue_dict : dict, ENVIROMENT: str) -> dic
                 issue_dict['customfield_10038']= str((data['finalDate'][0:10]))
 
             if "normativeDate" in data:
-                issue_dict['customfield_10039']=str((data['normativeDate'][0:10]))
-                
+                issue_dict['customfield_10039']=str((data['normativeDate'][0:10]))  
 
         #MAPEO DE CAMPOS EN PROYECTO GESTIÓN DE TECNOLOGÍA
         elif (data['key'] == 'GT'):
@@ -30,7 +29,7 @@ def MapeoDeRequerimientos(data: json, issue_dict : dict, ENVIROMENT: str) -> dic
             issue_dict["issuetype"] = {"id":"10003"} 
             
             issue_dict['description'] = f"""{issue_dict['description']} 
-                                            *Aprobado por:* @[{mapeoDeGerente(str(data['approvers']), ENVIROMENT)}]
+                                            *Aprobado por:* [{mapeoDeGerente(str(data['approvers']), ENVIROMENT)}]
                                             *Gerencia:* {mapeoGerencia(str(data['approvers']), ENVIROMENT)}"""
 
             if "finalDate" in data:
@@ -39,11 +38,18 @@ def MapeoDeRequerimientos(data: json, issue_dict : dict, ENVIROMENT: str) -> dic
             if "normativeDate" in data:
                  issue_dict['description'] = issue_dict['description'] + '\n' + '*Fecha normativa:* '+ str((data['normativeDate'][0:10]))               
 
-        
+
         else:
             
+            if data['key'] == 'GGDI':
+                issue_dict["issuetype"] = {"id":"10090"} 
+                # issue_dict["status"] =  { "id": "10199"}
+                # print("----------------------")
+                # print(issue_dict["issuetype"] )
+                # print("----------------------")
+            
             issue_dict['description'] = f"""{issue_dict['description']} 
-                                            *Aprobado por:* @[{mapeoDeGerente(str(data['approvers']), ENVIROMENT)}]
+                                            *Aprobado por:* [{mapeoDeGerente(str(data['approvers']), ENVIROMENT)}]
                                             *Gerencia:* {mapeoGerencia(str(data['approvers']), ENVIROMENT)}"""
 
             if "finalDate" in data:

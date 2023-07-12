@@ -17,8 +17,9 @@ def GetProjects() -> json:
     
         response['projects']= projects
         response['initiatives'] = {"initiatives": "0"}
+        print(projects)
      
-        #response = jsonify({'projects': projects})
+        response = jsonify({'projects': projects})
         
         
     except Exception as e:

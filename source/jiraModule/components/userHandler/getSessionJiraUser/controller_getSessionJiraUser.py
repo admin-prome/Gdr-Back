@@ -2,8 +2,8 @@ import json, requests, re
 from flask import jsonify, request
 from source.settings.settings import settings
 
-from google.oauth2 import id_token
-from google.auth.transport import requests as google_requests
+# from google.oauth2 import id_token
+# from google.auth.transport import requests as google_requests
 
 
 def getSessionJiraUser(data: json):
