@@ -79,8 +79,7 @@ def getlastIssueReq(num_issues=10, issueType: str = 'REQ', subIssueType: str = "
         #     regex = r"\[REQ\s+(\d+)\]"
             
         # elif(issueType == "INC"):
-        #     regex = r"\[INC\s+(\d+)\]"
-       
+        #     regex = r"\[INC\s+(\d+)\]"       
              
         regex = fr"\[{issueType}-{subIssueType}\s+(\d+)\]"  
         print(f'Este es el regex: {regex}')
@@ -114,8 +113,7 @@ def getlastIssueReq(num_issues=10, issueType: str = 'REQ', subIssueType: str = "
                         print(f"No se encontró el número de requerimiento en el campo 'summary'.")
                         req_id: int = 000
                         print('-----------------------')
-                        print(str((int(req_id)+1)).zfill(3))
-                        
+                        print(str((int(req_id)+1)).zfill(3))                        
                         print('-----------------------')
                         id = str(int(req_id)+1).zfill(3)
                     return str((int(req_id)+1)).zfill(3)
@@ -127,6 +125,8 @@ def getlastIssueReq(num_issues=10, issueType: str = 'REQ', subIssueType: str = "
         print(f"Ocurrió un error al obtener los últimos requerimientos: {e}")
        
     return req_ids
+
+
 
 
 def clasificarProyecto(dataIssue: dict, issueDict: dict) -> None:  
@@ -208,22 +208,29 @@ def mapearRespuestaAlFront(newIssue, dataIssue: dict, issueDict: dict) -> dict:
     Returns:
         response (dict): diccionario para el cliente contiene status y el enlace al requerimiento a la pagina de error
     """
+    link = 'http://requerimientos.provinciamicrocreditos.com/error'
     status: str = '400'
-    response: dict = {}
+    response: dict = {"link": link, "status": status}
     
     try: 
         link = str(f'https://{domain}.atlassian.net/browse/{newIssue.key}')
+        
+        print(link)
+        
         dataIssue['link'] = link
         status = '200'
-        return {"link":link, "status":status}
+        response = {"link":link, "status":status}
     
     except Exception as e: 
-        link = 'http://requerimientos.provinciamicrocreditos.com/error'
+        print(f"Ocurrio un error al mapear el response:  {e}")
         dataIssue['link'] = link           
         enviarCorreoDeError(issueDict['summary'],   str(e))           
-        response =  ''
-        print(response)
-        return response
+        
+    print('..................................................')
+    print(response)
+    print('..................................................')
+    
+    return response
 
 
 def createIssue(dataIssue: dict) -> json:
@@ -245,6 +252,7 @@ def createIssue(dataIssue: dict) -> json:
         jira = jiraServices.getConection()        
         
         clasificarProyecto(dataIssue, issueDict)  
+        print(dataIssue['issueType'])
         idUltimoRequerimiento = getlastIssueReq(issueType= dataIssue['issueType'], subIssueType= dataIssue['subIssueType'], project= dataIssue['key'])    
         mapearCamposParaJIRA(dataIssue, issueDict, idUltimoRequerimiento)     
         MapeoDeRequerimientos(dataIssue, issueDict, 'PROD')     
@@ -297,8 +305,9 @@ def createIssue(dataIssue: dict) -> json:
         #jira.add_attachment(issue=new_issue, attachment='C:/Users/Colaborador/Documents/logo-icon.png')
     
     #response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
-    print(response)
-    
+    print('-----------------------------')
+    print(f'esto es el response: {response}')
+    print('-----------------------------')
     return jsonify(response)
 
   
