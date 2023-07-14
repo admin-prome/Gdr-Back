@@ -1,4 +1,4 @@
-import json, requests, re
+import json, requests, re, os
 import traceback
 from jira import JIRA
 from flask import jsonify
@@ -63,8 +63,72 @@ def getlastIssue():
         
     return  reqId 
 
+def readIssueIds():
+    with open('docs/issuesId.json', 'r') as archivo:
+        contenido = archivo.read()
+        datos = json.loads(contenido)  
+        print(datos)     
+        
+    return datos
 
-def getlastIssueReq(num_issues=10, issueType: str = 'REQ', subIssueType: str = "", project: str = "GDD"):
+def up_json_GDR(data: dict, issueType: str, subIssueType: str, number: int):
+    data[issueType][subIssueType] = number
+    directory = "docs"
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    file_path = os.path.join(directory, "issuesId.json")
+    with open(file_path, "w") as json_file:
+        json.dump(data, json_file, indent=4)
+
+def searchId(issueType: str, subIssueType: str):
+    data = readIssueIds()
+    
+    if issueType in data and subIssueType in data[issueType]:
+        data[issueType][subIssueType] += 1
+    else:
+        data[issueType] = {subIssueType: 1}
+    
+    up_json_GDR(data, issueType, subIssueType)
+    
+    return str(data[issueType][subIssueType]).zfill(3)
+   
+
+def update_counter(primary_key, secondary_key=None):
+    with open("docs/issuesId.json") as json_file:
+        data = json.load(json_file)
+
+    if primary_key == "FIX":
+        data[primary_key] += 1
+    else:
+        data[primary_key][secondary_key] += 1
+
+    with open("docs/issuesId.json", "w") as json_file:
+        json.dump(data, json_file, indent=4)
+
+    updated_value = data[primary_key]
+    if secondary_key is not None:
+        updated_value = data[primary_key][secondary_key]
+
+    return str(updated_value).zfill(3)
+
+
+def revert_counter(primary_key, secondary_key=None):
+    file_path = "docs/issuesId.json"
+    if os.path.exists(file_path):
+        with open(file_path, "r+") as json_file:
+            data = json.load(json_file)
+            
+            if primary_key == "FIX":
+                data[primary_key] -= 1
+            else:
+                data[primary_key][secondary_key] -= 1
+            
+            json_file.seek(0)
+            json.dump(data, json_file, indent=4)
+            json_file.truncate()
+
+
+def getlastIssueReq(num_issues=50, issueType: str = 'REQ', subIssueType: str = "", project: str = "GDD"):
     """
     Pre: Recibe la cantidad cantidad maxíma de requerimientos por iteración, el prefijo y el id de proyecto
     Pos: devuelve el el numero mas grande con en el proyecto con dicho prefijo.
@@ -125,8 +189,6 @@ def getlastIssueReq(num_issues=10, issueType: str = 'REQ', subIssueType: str = "
         print(f"Ocurrió un error al obtener los últimos requerimientos: {e}")
        
     return req_ids
-
-
 
 
 def clasificarProyecto(dataIssue: dict, issueDict: dict) -> None:  
@@ -209,105 +271,205 @@ def mapearRespuestaAlFront(newIssue, dataIssue: dict, issueDict: dict) -> dict:
         response (dict): diccionario para el cliente contiene status y el enlace al requerimiento a la pagina de error
     """
     link = 'http://requerimientos.provinciamicrocreditos.com/error'
-    status: str = '400'
-    response: dict = {"link": link, "status": status}
-    
-    try: 
-        link = str(f'https://{domain}.atlassian.net/browse/{newIssue.key}')
-        
-        print(link)
-        
+    status = '400'
+    response = {"link": link, "status": status}
+
+    try:
+        domain = "provinciamicroempresa"
+        link = f'https://{domain}.atlassian.net/browse/{newIssue.key}'
+       
+
         dataIssue['link'] = link
         status = '200'
-        response = {"link":link, "status":status}
-    
-    except Exception as e: 
-        print(f"Ocurrio un error al mapear el response:  {e}")
-        dataIssue['link'] = link           
-        enviarCorreoDeError(issueDict['summary'],   str(e))           
-        
-    print('..................................................')
-    print(response)
-    print('..................................................')
-    
+        response = {"link": link, "status": status}
+
+    except Exception as e:
+        print(f"Ocurrió un error al mapear la respuesta: {e}")
+        dataIssue['link'] = link
+        enviarCorreoDeError(issueDict.get('summary', ''), str(e))
+
     return response
 
 
+# def createIssue(dataIssue: dict) -> json:
+#     link: str = ''
+#     newIssue: object = None
+#     correoGerente: str = ''
+#     asunto: str = ''
+#     e: str = ''
+#     idUltimoRequerimiento: str | list = ''
+#     issueDict: dict = {}
+#     destinatarios: list = []
+#     status: int = '400'  
+#     response: dict = {}
+    
+#     try:
+#         print(f'Esto es lo que llega del front: {dataIssue}')        
+#         jiraOptions ={'server': "https://"+domain+".atlassian.net"}
+#         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))
+#         jira = jiraServices.getConection()        
+      
+#         clasificarProyecto(dataIssue, issueDict)  
+       
+#         idUltimoRequerimiento = update_counter(dataIssue['issueType'], dataIssue['subIssueType'] )
+       
+#         input('Ingrese Enter')
+#         #idUltimoRequerimiento = getlastIssueReq(issueType= dataIssue['issueType'], subIssueType= dataIssue['subIssueType'], project= dataIssue['key'])    
+       
+#         print(idUltimoRequerimiento)
+        
+       
+#         mapearCamposParaJIRA(dataIssue, issueDict, idUltimoRequerimiento)     
+#         MapeoDeRequerimientos(dataIssue, issueDict, 'PROD')     
+           
+                
+#         # for i in issueDict.keys():
+#         #     print(f'{i} : {issueDict[i]}')
+        
+         
+#         #Descomentar para crear un requerimiento en JIRA            
+#         newIssue = jira.create_issue(issueDict)
+        
+#         print(f'creando requerimiento: {newIssue}')
+#         #Formateo el enlace al requerimiento            
+#         status = '200'   
+        
+       
+#         if (status =='200'):      
+#             correoGerente = mapeoMailGerente(str(mapeoDeGerente(str(dataIssue['approvers']), 'PROD')))        
+#             asunto: str = str('Requerimiento creado con GDR: '+ issueDict['summary']+' - No responder' )              
+            
+#             if((dataIssue['priority'].upper() == 'ALTA') or (dataIssue['priority'].upper() == 'MUY ALTA') or (dataIssue['priority'].upper() == 'NORMATIVA')):
+#                 destinatarios.append( (dataIssue['userCredential']['email']))    #Agregamos al usuario que crea el requerimiento
+            
+#             else:
+#                 destinatarios = (dataIssue['userCredential']['email'])
+                            
+#             destinatarios.append(correoGerente)  #Agregamos al gerente quien aprueba la carga del requerimiento 
+#             response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)              
+#             enviarCorreo(destinatarios,asunto,armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
+            
+#         else:              
+#             dataIssue['summary'] =  f"ERROR al crear: {dataIssue['summary']}"
+#             enviarCorreoDeError(dataIssue['summary'],  str(status))            
+#             #enviarCorreo(destinatarios,f"ERROR al crear: {asunto}",armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
+#             response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
+        
+                         
+#     except requests.exceptions.HTTPError as e:
+#         response_json = e.response.json()
+#         error_messages = response_json.get("errorMessages", [])
+#         errors = response_json.get("errors", {})
+#         print(f"Error al crear el issue en JIRA: {error_messages} - {errors}")           
+#         enviarCorreoDeError(issueDict['summary'],  f'{error_messages} -> {errors}')         
+        
+#     except Exception as e:
+#         print(f"Error al crear el issue en JIRA: {e}")     
+#         enviarCorreoDeError(issueDict['summary'],  str(e))            
+    
+#         #jira.add_attachment(issue=new_issue, attachment='C:/Users/Colaborador/Documents/logo-icon.png')
+    
+#     #response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
+#     print('-----------------------------')
+#     print(f'esto es el response: {response}')
+#     print('-----------------------------')
+#     return jsonify(response)
+
+
+
+
 def createIssue(dataIssue: dict) -> json:
-    link: str = ''
-    newIssue: object = None
-    correoGerente: str = ''
-    asunto: str = ''
-    e: str = ''
-    idUltimoRequerimiento: str | list = ''
-    issueDict: dict = {}
-    destinatarios: list = []
-    status: int = '400'  
-    response: dict = {}
+    link = ''
+    newIssue = None
+    correoGerente = ''
+    asunto = ''
+    idUltimoRequerimiento = ''
+    issueDict = {}
+    destinatarios = []
+    status = '400'
+    response = {}
     
     try:
         print(f'Esto es lo que llega del front: {dataIssue}')        
-        jiraOptions ={'server': "https://"+domain+".atlassian.net"}
+        jiraOptions = {'server': "https://"+domain+".atlassian.net"}
         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))
-        jira = jiraServices.getConection()        
+        jira = jiraServices.getConection()
+      
+        clasificarProyecto(dataIssue, issueDict)
+       
+        idUltimoRequerimiento = update_counter(dataIssue['issueType'], dataIssue.get('subIssueType'))
+       
+   
+       
+        print(f"Esto es el ID del ultimo requerimiento: {idUltimoRequerimiento}")
         
-        clasificarProyecto(dataIssue, issueDict)  
-        print(dataIssue['issueType'])
-        idUltimoRequerimiento = getlastIssueReq(issueType= dataIssue['issueType'], subIssueType= dataIssue['subIssueType'], project= dataIssue['key'])    
-        mapearCamposParaJIRA(dataIssue, issueDict, idUltimoRequerimiento)     
-        MapeoDeRequerimientos(dataIssue, issueDict, 'PROD')     
-           
-                
-        # for i in issueDict.keys():
-        #     print(f'{i} : {issueDict[i]}')
+        mapearCamposParaJIRA(dataIssue, issueDict, idUltimoRequerimiento)
+        MapeoDeRequerimientos(dataIssue, issueDict, 'PROD')
         
-         
-        #Descomentar para crear un requerimiento en JIRA            
+        # Verificar si ya existe un requerimiento con el mismo summary
+        existing_issues = jira.search_issues(f'summary ~ "{issueDict["summary"]}"')
+        if existing_issues:
+            existing_link = f'https://{domain}.atlassian.net/browse/{existing_issues[0].key}'
+            response = {"link": existing_link, "status": "409"}
+            
+            # Restablecer el número anterior en issuesId.json
+            if dataIssue['issueType'] != 'FIX':
+                primary_key = dataIssue['issueType']
+                secondary_key = dataIssue.get('subIssueType')
+                decrement_counter(primary_key, secondary_key)
+            
+            return jsonify(response)
+        
         newIssue = jira.create_issue(issueDict)
         
         print(f'creando requerimiento: {newIssue}')
-        #Formateo el enlace al requerimiento            
-        status = '200'   
+        status = '200'
         
-       
-        if (status =='200'):      
-            correoGerente = mapeoMailGerente(str(mapeoDeGerente(str(dataIssue['approvers']), 'PROD')))        
-            asunto: str = str('Requerimiento creado con GDR: '+ issueDict['summary']+' - No responder' )              
+        if status == '200':
+            correoGerente = mapeoMailGerente(str(mapeoDeGerente(str(dataIssue['approvers']), 'PROD')))
+            asunto = 'Requerimiento creado con GDR: ' + issueDict['summary'] + ' - No responder'
             
-            if((dataIssue['priority'].upper() == 'ALTA') or (dataIssue['priority'].upper() == 'MUY ALTA') or (dataIssue['priority'].upper() == 'NORMATIVA')):
-                destinatarios.append( (dataIssue['userCredential']['email']))    #Agregamos al usuario que crea el requerimiento
-            
+            if dataIssue['priority'].upper() in ['ALTA', 'MUY ALTA', 'NORMATIVA']:
+                destinatarios.append(dataIssue['userCredential']['email'])
             else:
-                destinatarios = (dataIssue['userCredential']['email'])
-                            
-            destinatarios.append(correoGerente)  #Agregamos al gerente quien aprueba la carga del requerimiento 
-            response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)              
-            enviarCorreo(destinatarios,asunto,armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
+                destinatarios = [dataIssue['userCredential']['email']]
             
-        else:              
-            dataIssue['summary'] =  f"ERROR al crear: {dataIssue['summary']}"
-            enviarCorreoDeError(dataIssue['summary'],  str(status))            
-            #enviarCorreo(destinatarios,f"ERROR al crear: {asunto}",armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
+            destinatarios.append(correoGerente)
             response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
-        
-                         
+            enviarCorreo(destinatarios, asunto, armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
+        else:
+            dataIssue['summary'] = f"ERROR al crear: {dataIssue['summary']}"
+            enviarCorreoDeError(dataIssue['summary'], str(status))
+            response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
+    
     except requests.exceptions.HTTPError as e:
+        revert_counter(dataIssue['issueType'], dataIssue.get('subIssueType'))
         response_json = e.response.json()
         error_messages = response_json.get("errorMessages", [])
         errors = response_json.get("errors", {})
-        print(f"Error al crear el issue en JIRA: {error_messages} - {errors}")           
-        enviarCorreoDeError(issueDict['summary'],  f'{error_messages} -> {errors}')         
+        print(f"Error al crear el issue en JIRA: {error_messages} - {errors}")
+        enviarCorreoDeError(issueDict.get('summary', ''), f'{error_messages} -> {errors}')
         
     except Exception as e:
-        print(f"Error al crear el issue en JIRA: {e}")     
-        enviarCorreoDeError(issueDict['summary'],  str(e))            
+        print(f"Error al crear el issue en JIRA: {e}")
+        enviarCorreoDeError(issueDict.get('summary', ''), str(e))
     
-        #jira.add_attachment(issue=new_issue, attachment='C:/Users/Colaborador/Documents/logo-icon.png')
-    
-    #response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
     print('-----------------------------')
     print(f'esto es el response: {response}')
     print('-----------------------------')
     return jsonify(response)
 
-  
+
+def decrement_counter(primary_key, secondary_key=None):
+    with open("docs/issuesId.json") as json_file:
+        data = json.load(json_file)
+
+    if primary_key == "FIX":
+        data[primary_key] -= 1
+    else:
+        data[primary_key][secondary_key] -= 1
+
+    with open("docs/issuesId.json", "w") as json_file:
+        json.dump(data, json_file, indent=4)
+
+
