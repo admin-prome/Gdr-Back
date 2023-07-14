@@ -275,7 +275,7 @@ def mapearRespuestaAlFront(newIssue, dataIssue: dict, issueDict: dict) -> dict:
     response = {"link": link, "status": status}
 
     try:
-        domain = "provinciamicroempresa"
+        domain = "provinciamicroempresas"
         link = f'https://{domain}.atlassian.net/browse/{newIssue.key}'
        
 
