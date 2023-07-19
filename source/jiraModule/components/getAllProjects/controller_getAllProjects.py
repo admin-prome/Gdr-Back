@@ -24,11 +24,11 @@ def getInitiatives()->list:
     initiative: dict = {'name': str, 'description': str}
     
     try:
-        Base.metadata.create_all(engine)    
+        #Base.metadata.create_all(engine)    
         consulta = db.session.query(GDR)
-       
+        
         resultados = consulta.all()
-
+        
         for resultado in resultados:          
             initiative['name'] = str(resultado.nombre)
             initiative['description'] = str(resultado.descripcion)

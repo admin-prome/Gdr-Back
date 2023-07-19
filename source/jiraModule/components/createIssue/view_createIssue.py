@@ -21,9 +21,17 @@ def CreateNewIssue() -> json:
     
     data = request.json
     dataIssue = request.json        
+    
+    # response = controller_createIssue.getNumberId('REQ','GDR')
+    
+   
+    
+    
     response = controller_createIssue.createIssue(dataIssue)
-    response.headers.add('Access-Control-Allow-Origin', '*')  # Permitir solicitudes desde cualquier origen
-    response.headers.add('Content-Type', 'application/json')  # Establecer el tipo de contenido como JSON
+    print(response)
+    
+    # response.headers.add('Access-Control-Allow-Origin', '*')  # Permitir solicitudes desde cualquier origen
+    # response.headers.add('Content-Type', 'application/json')  # Establecer el tipo de contenido como JSON
    
     #MAPEO DE CAMPOS PERSONALIZADOS 
     

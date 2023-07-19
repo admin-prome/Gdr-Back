@@ -1,4 +1,5 @@
-from source.jiraModule.utils.conexion.db import Base
+
+from source.jiraModule.utils.conexion import db
 from sqlalchemy import Column, Integer, String
 
 class Issue:
@@ -46,8 +47,8 @@ class Issue:
         repr : str = f"<{self.__class__.__name__}({attrs_str})>"
         return repr
 
-class IDRequerimientos(Base):
-    __tablename__ = 'GDR_REQUERIMIENTOS'
+class IDRequerimientos(db.Base):
+    __tablename__ = 'dbo.GDR_REQUERIMIENTOS'
     
     id_req = Column(Integer, primary_key=True)
     titulo = Column(String(80), unique=True, nullable=False)
@@ -63,3 +64,24 @@ class IDRequerimientos(Base):
     
     def __repr__(self):
         return '<id_req %r>' % self.id_req    
+    
+    
+class Numerador(db.Base):
+    __tablename__ = 'GDR_Contador'
+    
+    id = Column(Integer, primary_key=True)
+    categoria = Column(String(80), unique=True, nullable=False)
+    subcategoria = Column(String(80), unique=True, nullable=True)
+    valor = Column(Integer, unique=True, nullable=False)
+    
+    def __init__(self, id, categoria, subcategoria, valor):
+        self.id = id
+        self.categoria = categoria
+        self.subcategoria = subcategoria
+        self.valor = valor  # Agrega el igual y el valor de la variable
+        
+    def __str__(self):
+        return str(self.id)  # Convierte el id a string
+    
+    def __repr__(self):
+        return f"<Numerador(id={self.id}, categoria={self.categoria}, subcategoria={self.subcategoria}, valor={self.valor})>"

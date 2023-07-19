@@ -13,7 +13,7 @@ def GetProjects() -> json:
     try:
         projects = controller_getAllProjects.getAllProjects()
         #initiatives = controller_getAllProjects.getInitiatives()
-        
+        #print(initiatives)
     
         response['projects']= projects
         response['initiatives'] = {"initiatives": "0"}
