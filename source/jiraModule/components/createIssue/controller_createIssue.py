@@ -72,16 +72,18 @@ def getNumberId(category: str, subcategory: str)->int:
     idNumbers: dict = {}
     idNumber: dict = {'category': str, 'subcategory': str, 'value' : int}
     consulta: Numerador = None
+    valorActualizado: int = 0
     
     try:
         #Actualizo el valor en la BD
         valorActualizado = updateValueDb(category, subcategory)   
+        enviarCorreoDeError("valor", str(valorActualizado))
         #Obtengo la tabla como un objeto Numerador    
         consulta = db.session.query(Numerador)        
         resultados = consulta.all()
       
         #Obtengo el ultimo valor 
-        valor = getValue(category, subcategory, resultados)
+        #valor = getValue(category, subcategory, resultados)
 
     except Exception as e:
         print(e)
