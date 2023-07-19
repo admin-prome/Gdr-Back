@@ -18,7 +18,7 @@ NAME: str = settings.DBNAME
 #conn_str = str(f"mssql+pyodbc://{TST_USER}:{TST_PASS}@{TST_IP}/{TST_NAME}?driver=ODBC+Driver+17+for+SQL+Server")
 conn_str = str(f"mssql+pyodbc://{USER}:{PASS}@{IP}/{NAME}?driver=ODBC+Driver+17+for+SQL+Server")
 
-print(conn_str)
+
 engine = create_engine(conn_str)
 Session = sessionmaker(bind=engine)
 session = Session()
