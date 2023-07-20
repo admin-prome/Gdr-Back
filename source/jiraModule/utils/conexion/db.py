@@ -7,7 +7,7 @@ import pyodbc
 print(pyodbc.drivers())
 USER: str = settings.DBUSER
 PASS: str = settings.DBPASS
-IP: str = settings.DBIP
+IP: str = settings.DBSERVER
 NAME: str = settings.DBNAME
 # TST_USER: str = settings.DBUSER_TST
 # TST_PASS: str = settings.DBPASS_TST

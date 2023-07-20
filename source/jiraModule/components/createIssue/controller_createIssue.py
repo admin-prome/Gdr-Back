@@ -77,7 +77,7 @@ def getNumberId(category: str, subcategory: str)->int:
     try:
         #Actualizo el valor en la BD
         valorActualizado = updateValueDb(category, subcategory)   
-        enviarCorreoDeError("valor", str(valorActualizado))
+        
         #Obtengo la tabla como un objeto Numerador    
         consulta = db.session.query(Numerador)        
         resultados = consulta.all()
@@ -88,177 +88,11 @@ def getNumberId(category: str, subcategory: str)->int:
     except Exception as e:
         print(e)
         idNumber = "Ocurrio un error en la consulta a la tabla GDR_Contador"
-
+        enviarCorreoDeError(idNumber, f"error: {e} / idReq: {str(valorActualizado)}")
+        
     print(f'esto es id number: {valorActualizado}')
     
     return int(valorActualizado)
-
-
-def getlastIssue():
-
-
-    # Configure el servidor Jira y la autenticación
-    server = f"https://{domain}.com"
-    api_url = f"{server}/rest/api/2/search"
-    reqId: str = '0000'
-
-    # Configure el parámetro jql para buscar en el proyecto deseado
-    project_code = "GDD"
-    jql = f"project={project_code} ORDER BY created DESC"
-
-    # Configure los parámetros de la solicitud GET
-    params = {
-        "jql": jql,
-        "maxResults": 1
-    }
-
-    # Envíe la solicitud GET y maneje la respuesta
-    response = conexion.get(params)
-    if response.status_code == 200:
-        # Analizar la respuesta JSON y obtener el último requerimiento del proyecto
-        result = response.json()
-        issues = result.get("issues", [])
-        if issues:
-            last_issue = issues[0]
-           #print(f"Último requerimiento en el proyecto {project_code}: {last_issue.get('key')} - {last_issue.get('fields').get('summary')}")
-            summary = str(last_issue.get('fields').get('summary'))
-            reqId = get_req_id(summary)
-        else:
-            print(f"No se encontraron requerimientos en el proyecto {project_code}.")
-    else:
-        print(f"Error al buscar el último requerimiento del proyecto {project_code}: {response.status_code} - {response.text}")
-
-    return  reqId
-
-
-def readIssueIds():
-    with open('docs/issuesId.json', 'r') as archivo:
-        contenido = archivo.read()
-        datos = json.loads(contenido)
-        print(datos)
-
-    return datos
-
-
-def up_json_GDR(data: dict, issueType: str, subIssueType: str, number: int):
-    data[issueType][subIssueType] = number
-    directory = "docs"
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    file_path = os.path.join(directory, "issuesId.json")
-    with open(file_path, "w") as json_file:
-        json.dump(data, json_file, indent=4)
-
-
-def searchId(issueType: str, subIssueType: str):
-    data = readIssueIds()
-
-    if issueType in data and subIssueType in data[issueType]:
-        data[issueType][subIssueType] += 1
-    else:
-        data[issueType] = {subIssueType: 1}
-
-    up_json_GDR(data, issueType, subIssueType)
-
-    return str(data[issueType][subIssueType]).zfill(3)
-
-
-def update_counter(primary_key, secondary_key=None):
-    with open("docs/issuesId.json") as json_file:
-        data = json.load(json_file)
-
-    if primary_key == "FIX":
-        data[primary_key] += 1
-    else:
-        data[primary_key][secondary_key] += 1
-
-    with open("docs/issuesId.json", "w") as json_file:
-        json.dump(data, json_file, indent=4)
-
-    updated_value = data[primary_key]
-    if secondary_key is not None:
-        updated_value = data[primary_key][secondary_key]
-
-    return str(updated_value).zfill(3)
-
-
-def revert_counter(primary_key, secondary_key=None):
-    file_path = "docs/issuesId.json"
-    if os.path.exists(file_path):
-        with open(file_path, "r+") as json_file:
-            data = json.load(json_file)
-
-            if primary_key == "FIX":
-                data[primary_key] -= 1
-            else:
-                data[primary_key][secondary_key] -= 1
-
-            json_file.seek(0)
-            json.dump(data, json_file, indent=4)
-            json_file.truncate()
-
-
-def getlastIssueReq(num_issues=50, issueType: str = 'REQ', subIssueType: str = "", project: str = "GDD"):
-    """
-    Pre: Recibe la cantidad cantidad maxíma de requerimientos por iteración, el prefijo y el id de proyecto
-    Pos: devuelve el el numero mas grande con en el proyecto con dicho prefijo.
-    """
-    try:
-        id: str = ''
-        # Configure el servidor Jira y la autenticación
-        server = f"https://{domain}.com"
-        api_url = f"{server}/rest/api/2/search"
-
-        # if (issueType == 'REQ'):
-        #     regex = r"\[REQ\s+(\d+)\]"
-
-        # elif(issueType == "INC"):
-        #     regex = r"\[INC\s+(\d+)\]"
-
-        regex = fr"\[{issueType}-{subIssueType}\s+(\d+)\]"
-        print(f'Este es el regex: {regex}')
-        project_code = project
-        req_ids = []
-
-        # Configure los parámetros de la solicitud GET
-        params = {
-            "jql": f"project={project_code} ORDER BY created DESC",
-            "maxResults": num_issues
-        }
-
-        # Envíe la solicitud GET y maneje la respuesta
-        response = conexion.get(params)
-        if response.status_code == 200:
-            # Analizar la respuesta JSON y obtener los últimos 10 requerimientos del proyecto
-            result = response.json()
-            issues = result.get("issues", [])
-            if issues:
-                for issue in issues:
-                    summary = str(issue.get('fields').get('summary'))
-                    match = re.search(regex, summary)
-                    if match:
-                        req_id = match.group(1)
-                        print(f"Requerimiento encontrado: {req_id}")
-                        req_ids.append(int(req_id))
-                        print(req_ids)
-                        id = str(int(req_id)+1).zfill(3)
-
-                    else:
-                        print(f"No se encontró el número de requerimiento en el campo 'summary'.")
-                        req_id: int = 000
-                        print('-----------------------')
-                        print(str((int(req_id)+1)).zfill(3))
-                        print('-----------------------')
-                        id = str(int(req_id)+1).zfill(3)
-                    return str((int(req_id)+1)).zfill(3)
-            else:
-                print(f"No se encontraron requerimientos en el proyecto {project_code}.")
-        else:
-            print(f"Error al buscar los últimos requerimientos del proyecto {project_code}: {response.status_code} - {response.text}")
-    except Exception as e:
-        print(f"Ocurrió un error al obtener los últimos requerimientos: {e}")
-
-    return req_ids
 
 
 def clasificarProyecto(dataIssue: dict, issueDict: dict) -> None:
@@ -270,9 +104,10 @@ def clasificarProyecto(dataIssue: dict, issueDict: dict) -> None:
     """
 
     if (dataIssue['issueType'] == "FIX"):
-        tituloDelRequerimiento: str = f"[{dataIssue['issueType']}-{dataIssue['subIssueType']}] {dataIssue['summary']}"
+        
         issueDict["project"] = "GDD"
         dataIssue["key"] = "GDD"
+        
     else:
 
         if (dataIssue["issueType"] == "INF"): #Mapeo el requerimiento al tablero GIT
@@ -281,10 +116,10 @@ def clasificarProyecto(dataIssue: dict, issueDict: dict) -> None:
             destinatarios = ["infra_tecno@provinciamicrocreditos.com"]
             issueDict["priority"] = {"id": '3'}
 
-        # elif ( dataIssue["issueType"] == 'INC'):
-        #     issueDict["project"] = "GGDI"
-        #     dataIssue["key"] = "GGDI"
-        #     destinatarios = ["analisis@provinciamicrocreditos.com"]
+        elif ( dataIssue["issueType"] == 'INC'):
+            issueDict["project"] = "GGDI"
+            dataIssue["key"] = "GGDI"
+            destinatarios = ["analisis@provinciamicrocreditos.com"]
 
 
         else:
@@ -307,7 +142,17 @@ def mapearCamposParaJIRA(dataIssue: dict, issueDict: dict, idUltimoRequerimiento
     description: str = ''
 
     try:
-        tituloDelRequerimiento = f"[{dataIssue['issueType']}-{dataIssue['subIssueType']} {str(idUltimoRequerimiento)}] {dataIssue['summary']}"
+        
+        if '"' in dataIssue["summary"]:
+                dataIssue["summary"]= dataIssue["summary"].replace('"',' ')
+        if "'" in dataIssue["summary"]:
+                dataIssue["summary"]= dataIssue["summary"].replace("'",' ')
+                
+        if (dataIssue['issueType'] == "FIX"):
+            tituloDelRequerimiento: str = f'[{dataIssue["issueType"]}-{dataIssue["subIssueType"]}] {dataIssue["summary"]}'
+        else:
+            tituloDelRequerimiento = f'[{dataIssue["issueType"]}-{dataIssue["subIssueType"]} {str(idUltimoRequerimiento).zfill(3)}] {dataIssue["summary"]}'
+            
         issueDict['summary'] = tituloDelRequerimiento
         dataIssue['summary'] = tituloDelRequerimiento
         description = f"""

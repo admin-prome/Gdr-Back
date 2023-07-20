@@ -10,7 +10,7 @@ class Settings:
     ENVIROMENT: str
     DBUSER: str
     DBPASS: str
-    DBIP: str
+    DBSERVER: str
     DBIPPRIVATE: str
     DBNAME: str
     DEVCLIENTID: str
@@ -32,7 +32,7 @@ settings = Settings(
     ENVIROMENT= os.getenv('ENVIROMENT'),
     DBUSER= os.getenv('DBUSER'),
     DBPASS= os.getenv('DBPASS'),
-    DBIP=   os.getenv('DBIP'),
+    DBSERVER=   os.getenv('DBSERVER'),
     DBIPPRIVATE=  os.getenv('DBIPPRIVATE'),
     DBNAME= os.getenv('DBNAME'),
     DEVCLIENTID= os.getenv('DEVCLIENTID'),
