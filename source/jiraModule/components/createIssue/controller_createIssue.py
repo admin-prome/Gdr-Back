@@ -36,15 +36,26 @@ def updateValueDb(categoria, subcategoria):
     Returns:
         _type_: _description_
     """
-    if subcategoria is None:
-        numerador =  db.session.query(Numerador).filter(Numerador.categoria == categoria, Numerador.subcategoria.is_(None)).first()
-    else:
-        numerador = db.session.query(Numerador).filter_by(categoria=categoria, subcategoria=subcategoria).first()
+    
+    try:
+        numerador: Numerador = None
+        if subcategoria is None:
+            numerador =  db.session.query(Numerador).filter(Numerador.categoria == categoria, Numerador.subcategoria.is_(None)).first()
+        else:
+            numerador = db.session.query(Numerador).filter_by(categoria=categoria, subcategoria=subcategoria).first()
 
-    if numerador:
-        numerador.valor += 1
-        db.session.commit()
+        if numerador:
+            numerador.valor += 1
+            db.session.commit()
+            
+    except Exception as e: 
+        print(f'Ocurrio un error al actualizar valor en BD: {e}')
+            
+    # finally: 
+    #     db.session.close()    
+        
     return numerador.valor
+
 
 
 def getValue(category: str, subcategory: str, objectList : list):
@@ -95,41 +106,46 @@ def getNumberId(category: str, subcategory: str)->int:
     return int(valorActualizado)
 
 
-def clasificarProyecto(dataIssue: dict, issueDict: dict) -> None:
+def clasificarProyecto(dataIssue: dict, issueDict: dict) -> str:
     """Clasificar proyecto
 
     Args:
         dataIssue (dict): Datos de entrada del formulario (front)
         issueDict (dict): Datos formateados para enviar a JIRA
     """
-
-    if (dataIssue['issueType'] == "FIX"):
-        
-        issueDict["project"] = "GDD"
-        dataIssue["key"] = "GDD"
-        
-    else:
-
-        if (dataIssue["issueType"] == "INF"): #Mapeo el requerimiento al tablero GIT
-            issueDict["project"] = "GT"
-            dataIssue["key"] = "GT"
-            destinatarios = ["infra_tecno@provinciamicrocreditos.com"]
-            issueDict["priority"] = {"id": '3'}
-
-        elif ( dataIssue["issueType"] == 'INC'):
-            issueDict["project"] = "GGDI"
-            dataIssue["key"] = "GGDI"
-            destinatarios = ["analisis@provinciamicrocreditos.com"]
-
-
-        else:
-            destinatarios = ["analisis@provinciamicrocreditos.com"]
+    try: 
+        print('Iniciando Clasificación de proyecto')
+        if (dataIssue['issueType'] == "FIX"):
+            
             issueDict["project"] = "GDD"
             dataIssue["key"] = "GDD"
-            issueDict["priority"] = {"id": '3'}
+            
+        else:
+
+            if (dataIssue["issueType"] == "INF"): #Mapeo el requerimiento al tablero GIT
+                issueDict["project"] = "GT"
+                dataIssue["key"] = "GT"
+                #destinatarios = ["infra_tecno@provinciamicrocreditos.com"]
+                issueDict["priority"] = {"id": '3'}
+
+            elif ( dataIssue["issueType"] == 'INC'):
+                issueDict["project"] = "GGDI"
+                dataIssue["key"] = "GGDI"
+                #destinatarios = ["analisis@provinciamicrocreditos.com"]
+
+            else:
+                #destinatarios = ["analisis@provinciamicrocreditos.com"]
+                issueDict["project"] = "GDD"
+                dataIssue["key"] = "GDD"
+                issueDict["priority"] = {"id": '3'}
+            
+            return str(dataIssue['key'])
+        
+    except Exception as e:   
+        print(f'Ocurrio un error al mapear proyecto: {e}')
 
 
-def mapearCamposParaJIRA(dataIssue: dict, issueDict: dict, idUltimoRequerimiento: str|list) -> None:
+def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: str|list) -> None:
     """ Mapeo de campos minimos de JIRA
 
     Args:
@@ -138,36 +154,36 @@ def mapearCamposParaJIRA(dataIssue: dict, issueDict: dict, idUltimoRequerimiento
         issueDict (dict): Datos formateados para enviar a JIRA
         idUltimoRequerimiento(str|list): ID del ultimo requerimiento encontrado
     """
-
+    tituloDelRequerimiento: str = ''
     description: str = ''
-
+    print('---------------------------------------------')
+    print(issue.summary)
     try:
         
-        if '"' in dataIssue["summary"]:
-                dataIssue["summary"]= dataIssue["summary"].replace('"',' ')
-        if "'" in dataIssue["summary"]:
-                dataIssue["summary"]= dataIssue["summary"].replace("'",' ')
+        if '"' in issue.summary:
+                issue.summary= issue.summary.replace('"',' ')
+        if "'" in issue.summary:
+                issue.summary= issue.summary.replace("'",' ')
                 
-        if (dataIssue['issueType'] == "FIX"):
-            tituloDelRequerimiento: str = f'[{dataIssue["issueType"]}-{dataIssue["subIssueType"]}] {dataIssue["summary"]}'
+        if (issue.summary == "FIX"):
+            tituloDelRequerimiento: str = f'[{issue.issueType}-{issue.subIssueType}] {issue.summary}'
         else:
-            tituloDelRequerimiento = f'[{dataIssue["issueType"]}-{dataIssue["subIssueType"]} {str(idUltimoRequerimiento).zfill(3)}] {dataIssue["summary"]}'
-            
+            tituloDelRequerimiento = f'[{issue.issueType}-{issue.subIssueType} {str(idUltimoRequerimiento).zfill(3)}] {issue.summary}'
+        
         issueDict['summary'] = tituloDelRequerimiento
-        dataIssue['summary'] = tituloDelRequerimiento
+        issue.summary = tituloDelRequerimiento
+        
         description = f"""
-            *Creado por:* {dataIssue['userCredential']['name']}
-            *Correo:* {dataIssue['userCredential']['email']}
-            *Rol:* {dataIssue['managment']}
-            *Funcionalidad:* {dataIssue['description']}
-            *Beneficio:* {dataIssue['impact']}
-            *Enlace a la Documentación:* {dataIssue['attached']}.
-            *Prioridad* definida por el usuario: {dataIssue['priority']}
-            *Iniciativa:* {dataIssue['initiative']}
+            *Creado por:* {issue.userCredential.name}
+            *Correo:* {issue.userCredential.email}
+            *Rol:* {issue.managment}
+            *Funcionalidad:* {issue.description}
+            *Beneficio:* {issue.impact}
+            *Enlace a la Documentación:* {issue.attached}.
+            *Prioridad* definida por el usuario: {issue.priority}
+            *Iniciativa:* {issue.initiative}
             """
         issueDict["description"] = description
-
-
 
     except Exception as e:
         print(f'Ocurrio un error en el mapeo de issueDict: {e}')
@@ -187,7 +203,7 @@ def mapearRespuestaAlFront(newIssue, dataIssue: dict, issueDict: dict) -> dict:
     """
     link = 'http://requerimientos.provinciamicrocreditos.com/error'
     status = '400'
-    response = {"link": link, "status": status}
+    response = {"link": link, "status": status, "issue": dict}
 
     try:
         domain = "provinciamicroempresas"
@@ -196,7 +212,7 @@ def mapearRespuestaAlFront(newIssue, dataIssue: dict, issueDict: dict) -> dict:
 
         dataIssue['link'] = link
         status = '200'
-        response = {"link": link, "status": status}
+        response = {"link": link, "status": status, "issue": issueDict}
 
     except Exception as e:
         print(f"Ocurrió un error al mapear la respuesta: {e}")
@@ -218,42 +234,50 @@ def createIssue(dataIssue: dict) -> json:
     response = {}
 
     try:
-        #print(f'Esto es lo que llega del front: {dataIssue}')
+        try:
+            issue = Issue(dataIssue)
+            print(issue)
+        except Exception as e : 
+            print('------------------- NO se pudo MApear-----------------')
+            print(e)
+            print('------------------- NO se pudo MApear-----------------')
+        print(f'Esto es lo que llega del front: {json.dumps(dataIssue, indent=4)}')
+        
         jiraOptions = {'server': "https://"+domain+".atlassian.net"}
         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))
         jira = jiraServices.getConection()
 
-        clasificarProyecto(dataIssue, issueDict)
+        issue.setKey(clasificarProyecto(dataIssue, issueDict))
 
         idUltimoRequerimiento = getNumberId(dataIssue['issueType'], dataIssue.get('subIssueType'))
 
 
         print(f"Esto es el ID del ultimo requerimiento: {str(idUltimoRequerimiento).zfill(3)}")
 
-        mapearCamposParaJIRA(dataIssue, issueDict, str(idUltimoRequerimiento))
-        MapeoDeRequerimientos(dataIssue, issueDict, 'PROD')
+        mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
+        MapeoDeRequerimientos(issue, issueDict, 'PROD')
 
         # Verificar si ya existe un requerimiento con el mismo summary
-        existing_issues = jira.search_issues(f'summary ~ "{issueDict["summary"]}"')
-        if existing_issues:
-            existing_link = f'https://{domain}.atlassian.net/browse/{existing_issues[0].key}'
-            response = {"link": existing_link, "status": "409"}
+        #existing_issues = jira.search_issues(f'summary ~ "{issueDict["summary"]}"')
+        # if existing_issues:
+        #     existing_link = f'https://{domain}.atlassian.net/browse/{existing_issues[0].key}'
+        #     response = {"link": existing_link, "status": "409"}
 
-            # Restablecer el número anterior en issuesId.json
-            if dataIssue['issueType'] != 'FIX':
-                primary_key = dataIssue['issueType']
-                secondary_key = dataIssue.get('subIssueType')
-                decrement_counter(primary_key, secondary_key)
-
-            return jsonify(response)
-
+        #     # Restablecer el número anterior en issuesId.json
+        #     if dataIssue['issueType'] != 'FIX':
+        #         primary_key = dataIssue['issueType']
+        #         secondary_key = dataIssue.get('subIssueType')
+               
+        #     return jsonify(response)
+        
+        #Aca se envia el requerimiento a JIRA
         newIssue = jira.create_issue(issueDict)
 
         print(f'creando requerimiento: {newIssue}')
         status = '200'
-
+        
         if status == '200':
-            correoGerente = mapeoMailGerente(str(mapeoDeGerente(str(dataIssue['approvers']), 'PROD')))
+            correoGerente = issue.approvers.email
             asunto = 'Requerimiento creado con GDR: ' + issueDict['summary'] + ' - No responder'
 
             if dataIssue['priority'].upper() in ['ALTA', 'MUY ALTA', 'NORMATIVA']:
@@ -270,7 +294,7 @@ def createIssue(dataIssue: dict) -> json:
             response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
 
     except requests.exceptions.HTTPError as e:
-        revert_counter(dataIssue['issueType'], dataIssue.get('subIssueType'))
+        
         response_json = e.response.json()
         error_messages = response_json.get("errorMessages", [])
         errors = response_json.get("errors", {})
@@ -280,23 +304,13 @@ def createIssue(dataIssue: dict) -> json:
     except Exception as e:
         print(f"Error al crear el issue en JIRA: {e}")
         enviarCorreoDeError(issueDict.get('summary', ''), str(e))
-
+    
+   
+        
     print('-----------------------------')
     print(f'esto es el response: {response}')
     print('-----------------------------')
     return jsonify(response)
-
-
-def decrement_counter(primary_key, secondary_key=None):
-    with open("docs/issuesId.json") as json_file:
-        data = json.load(json_file)
-
-    if primary_key == "FIX":
-        data[primary_key] -= 1
-    else:
-        data[primary_key][secondary_key] -= 1
-
-    with open("docs/issuesId.json", "w") as json_file:
-        json.dump(data, json_file, indent=4)
+    #return {'link': 'http://requerimientos.provinciamicrocreditos.com/error', 'status': '400'}
 
 

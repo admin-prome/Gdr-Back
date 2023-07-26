@@ -6,7 +6,7 @@ from source.jiraModule.utils.conexion.conexion import Conexion
 from source.jiraModule.utils.conexion.db import engine
 from source.jiraModule.utils.conexion.db import Base
 from source.jiraModule.utils.conexion import db
-from source.jiraModule.components.getAllProjects.model_GDR import GDR
+from source.jiraModule.components.getAllProjects.model_GDR import *
 
 ENVIROMENT: str = settings.ENVIROMENT
 domain: str = settings.DOMAIN
@@ -14,6 +14,35 @@ mail: str = settings.MAIL
 tokenId: str = settings.APIKEY
 conexion = Conexion()
 
+def getApprovers() -> dict:
+    try:
+        approvers = {}
+        consulta = db.session.query(AprobadoPor)
+        resultados = consulta.all()
+        
+        for resultado in resultados:          
+            approver = {
+                "id": resultado.id,
+                "email": str(resultado.email),
+                "value": str(resultado.idJIRA),
+                "name": str(resultado.nombre),
+                "management": str(resultado.area)
+            }
+            approvers[resultado.id] = approver
+
+        return approvers
+
+    except Exception as e:
+        print(e)
+        error = {
+            "error": True,
+            "mensaje": "Error en la consulta a la tabla del campo Aprobadores",
+            "descripcion": "Ocurrió un error al obtener la información de los aprobadores."
+        }
+        return error
+
+
+    
 
 def getInitiatives()->list:
     '''     

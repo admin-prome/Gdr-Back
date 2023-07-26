@@ -7,7 +7,7 @@ import pyodbc
 print(pyodbc.drivers())
 USER: str = settings.DBUSER
 PASS: str = settings.DBPASS
-IP: str = settings.DBSERVER
+SERVER: str = settings.DBSERVER
 NAME: str = settings.DBNAME
 # TST_USER: str = settings.DBUSER_TST
 # TST_PASS: str = settings.DBPASS_TST
@@ -16,7 +16,7 @@ NAME: str = settings.DBNAME
 
 
 #conn_str = str(f"mssql+pyodbc://{TST_USER}:{TST_PASS}@{TST_IP}/{TST_NAME}?driver=ODBC+Driver+17+for+SQL+Server")
-conn_str = str(f"mssql+pyodbc://{USER}:{PASS}@{IP}/{NAME}?driver=ODBC+Driver+17+for+SQL+Server")
+conn_str = str(f"mssql+pyodbc://{USER}:{PASS}@{SERVER}/{NAME}?driver=ODBC+Driver+17+for+SQL+Server")
 
 
 engine = create_engine(conn_str)
