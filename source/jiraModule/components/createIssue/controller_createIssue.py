@@ -304,6 +304,7 @@ def createIssue(dataIssue: dict) -> json:
     except Exception as e:
         print(f"Error al crear el issue en JIRA: {e}")
         enviarCorreoDeError(issueDict.get('summary', ''), str(e))
+        enviarCorreo(destinatarios, 'ERROR EN GDR: NO SE PUDO CREAR SU REQUERIMIENTO', armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
     
    
         
