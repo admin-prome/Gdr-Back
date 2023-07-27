@@ -12,32 +12,59 @@ class Conexion:
         self.headers = {"Accept": "application/json", "Content-Type": "application/json"}
         self.path = ""
         self.url = "https://{0}.atlassian.net/rest/api/3/".format(self.domain)
+        self.url2 = "https://{0}.atlassian.net/rest/api/2/".format(self.domain)
+       
     
-    def get(self, path):
+    def get(self, path, param = {}):
         if isinstance(path, str):
             self.path = path
-            response = requests.get(self.url + self.path, auth=self.auth, headers=self.headers)
-            return response
+            if (param != {}):
+                try:
+                    response = requests.get(self.url + self.path, auth=self.auth, headers=self.headers, params = param)
+                except:
+                    response = requests.get(self.url2 + self.path, auth=self.auth, headers=self.headers, params = param)
+               
+                return response
+            else:
+                try:
+                    response = requests.get(self.url + self.path, auth=self.auth, headers=self.headers)
+                except: 
+                    response = requests.get(self.url2 + self.path, auth=self.auth, headers=self.headers)
+                return response
         elif isinstance(path, dict):
             return self._get_with_params(path)
         else:
             raise ValueError("Invalid path type")
     
     def _get_with_params(self, params_dict):
-        response = requests.get(self.url + 'search', auth=self.auth, headers=self.headers, params=params_dict)
+        try:
+            response = requests.get(self.url + 'search', auth=self.auth, headers=self.headers, params=params_dict)
+        except:
+            response = requests.get(self.url2 + 'search', auth=self.auth, headers=self.headers, params=params_dict)
         return response
+    
+    
     
     def post(self, path, data):
         self.path = path
-        response = requests.post(self.url + self.path, auth=self.auth, headers=self.headers, json=data)
+        try:
+            response = requests.post(self.url + self.path, auth=self.auth, headers=self.headers, json=data)
+        except: 
+            response = requests.post(self.url2 + self.path, auth=self.auth, headers=self.headers, json=data)
         return response
     
     def put(self, path, data):
         self.path = path
-        response = requests.put(self.url + self.path, auth=self.auth, headers=self.headers, json=data)
+        try:
+            response = requests.put(self.url + self.path, auth=self.auth, headers=self.headers, json=data)
+        except: 
+            response = requests.put(self.url2 + self.path, auth=self.auth, headers=self.headers, json=data)
         return response
     
     def delete(self, path):
         self.path = path
-        response = requests.delete(self.url + self.path, auth=self.auth, headers=self.headers)
+        try:
+            response = requests.delete(self.url + self.path, auth=self.auth, headers=self.headers)
+        except:
+            response = requests.delete(self.url2 + self.path, auth=self.auth, headers=self.headers)
         return response

@@ -14,17 +14,24 @@ from source.jiraModule.components.createIssue import controller_createIssue
 # conexion = Conexion()
 createIssue_bp = Blueprint("createIssue_bp", __name__)
 
-
-
 #Crear requerimiento con la libreria de Jira
 
-@createIssue_bp.route('/CreateIssue', methods=['POST'])
+@createIssue_bp.route('/createissue', methods=['POST'])
 def CreateNewIssue() -> json:  
     
     data = request.json
     dataIssue = request.json        
-    response = controller_createIssue.createIssue(dataIssue)
     
+    # response = controller_createIssue.getNumberId('REQ','GDR')
+    
+   
+    
+    
+    response = controller_createIssue.createIssue(dataIssue)
+    print(response)
+    
+    # response.headers.add('Access-Control-Allow-Origin', '*')  # Permitir solicitudes desde cualquier origen
+    # response.headers.add('Content-Type', 'application/json')  # Establecer el tipo de contenido como JSON
    
     #MAPEO DE CAMPOS PERSONALIZADOS 
     

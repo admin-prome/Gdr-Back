@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generador de Contraseñas</title>
+</head>
+<body>
+    <h1>Bienvenido al Generador de Contraseñas</h1>
+    
+    {% if password %}
+        <p>Contraseña generada: {{ password }}</p>
+    {% endif %}
+    
+    <form method="POST" action="/generar">
+        <input type="submit" value="Generar">
+    </form>
+</body>
+</html>

@@ -1,0 +1,104 @@
+Emiliano Fernandez	615e66da289a54006a2ca1e3
+Automation for Jira	557058:f58131cb-b67d-43c7-b30d-6b58d40bd077
+Jira Outlook	5d53f3cbc6b9320d9ea5bdc2
+Atlassian Assist	5cb4ae0e4b97ab11a18e00c7
+Microsoft Teams for Jira Cloud	60e5a86a471e61006a4c51fd
+Slack	557058:0867a421-a9ee-4659-801a-bc0ee4a4487e
+Jira Service Management Widget	557058:950f9f5b-3d6d-4e1d-954a-21367ae9ac75
+Opsgenie Integration	5dd64082af96bc0efbe55103
+Trello	557058:214cdd6a-ff93-4d8b-838b-62dfcf1a2a71
+Statuspage for Jira	5b6c7b3afbc68529c6c47967
+Jira Spreadsheets	5cf112d31552030f1e3a5905
+Dario Keller	6228d70ef1e55c0070f2493c
+Mario Mendez	6228d7ef932f0f00716abd27
+Victoria Santin	62290ed34160640069ca764f
+Jonathan Sebastian Ludue�a Denis	615201b007ac3c0068a42dd6
+Juan Carlos Canepa	5cb0e51cfb6145589296296a
+Mariela Luna	60b55e675fa6f1006f93d22b
+Ariel Cosentino	616872d97a6be400718d74b2
+Ignacio Stella	6171a81dbcb57400682d861e
+Mar�a Carolina Gomez	61aa6bb06d002b006b02630e
+Gisela Marino	61bbafde08e4e00069aef74e
+Alejandro Daniel Bermann	6228d69b4160640069ca557b
+Leandro Martin Ottone	6228d79dc88f10006832563a
+Sergio Andres Rosanovich	6228d870a1245000688b1065
+Carmen Rojas	70121:5207ec8f-c9f4-456f-9116-2699e4c2f324
+Elisa Antonia Mendoza de Lobo	60f1cb3f43c95600705ddace
+Erika Lobo	608ff9b5f6c0960069a84240
+Natalia Suarez	6228d82b14cd2400690be4f4
+Robert Rivas	62e81f8550bd9783f62a8149
+Juan Manuel Amaya	6092f468a56f2f006f3d9bf4
+Leticia Faliero	6269a854494f17007056bae1
+Marcela Fitz Herbert	5ec3f1586c50620c1c967b77
+Mariana Andrea Lopez	6228d7b4932f0f00716abd0d
+Mariela Moreno	6228d7f715521d00726e4595
+Norma Beltran	6086c3a05426330072b90c61
+Pablo Pitaluga	70121:8a7c03ea-cee7-411e-a47b-8b74c480bd18
+Tatiana Goldberg Mansur	5e8b1e8e8764110b816a935b
+Vanesa Costabile	6228d87e8a4bb60068f5bee9
+Gabriel Varela	62b22ad3b065974c3e2416c1
+Alfredo Pucheta	6193c7d0ebce470067aca7d0
+Giselle Garcia	61c4a22e90cfd200716a4bcb
+Laureano Julian Fachado	61dda85f68926d0068b61b48
+Maria Antonela Zenoni	6228d7bb932f0f00716abd10
+Mariana Fernandez	612d37bba0dfd100688b97e4
+Noelia Apaza	60d9f3f97fcd820073bc990a
+Daniela Luz Troyelli	62681e93d364ae0068095be5
+Juan Cruz Loiotile	6228d779a1245000688b0ff5
+Julian Barrales	62b22ad40c77011bdfdc99a6
+Natacha Sola	6228d8299c3cce00694efefc
+Alejandra Texis	6228d6a449c9000070230e6e
+Juan Pablo Spagnuolo	70121:71f56d88-82e1-489e-8f44-1fcf83a4c7ee
+Matias Gabriel Barreto	6228d7c3302c6b006af5de63
+Matias Moralez Caviglia	6228d7f4b7e7c700715a6ac1
+Maximiliano Juan Millan	62476153258562006fa50037
+Chventura	70121:73641e7e-f43a-4144-83ce-90c014220360
+dmonti	61e5717d6b1ad900699e5877
+Ivanna Kopelzon	62b3233284d73c720168211f
+Leandro Martin Colli	62ea77fee50f2f2a3954ec0c
+Emanuel Dami�n Chura Flores	60480a06b020eb006843b1de
+Gonzalo Martin Orellana	60956737afcdb700694cc06d
+Juan Pablo Maggi	6127ffa2da0c1a0068a0c81c
+Sa�l Alexander Mata Vel�squez	616d8fb35800630069ec69a3
+Dardo Gotuzzo	61390ad983d2ad006a750cbc
+Leandro Paredes	604ab10f58aa8d00722fd17f
+Martin Villarreal	613908d37eb35f00693b3453
+Pablo Nicolas Escobar	6228d8356a4c4c0070b1abad
+Vanesa Elizabeth San Pedro	61840bb1a989710070eb71ab
+Celsa Barraza	6228d6e349c9000070230e90
+Ignacio Esteban Gonzalez	70121:3a289b3e-23c1-4eda-8c46-4b56ac48af5c
+Sebastian Cuevas	616ec016bcb574006806aca3
+Luciano Velazquez	6228d7ae9c3cce00694efec7
+Eliana Metzler	6228d7299c3cce00694efe7a
+Emiliano Sibilia	6228d72e4160640069ca55d9
+Fernando Tschernigoi	6228d7448a4bb60068f5be48
+Gisela Monaco	6228d75749c9000070230ed1
+Melisa Chambilla Alarcon	6228d7cba687c5006a6256c6
+Santiago Bianchi	6228d85c302c6b006af5dea3
+Usuario de Servicio	6228d8734160640069ca5686
+Cecilia Giuliani	6228d6e814cd2400690be43a
+Enrique Diaz	6228d71ddb58c100687d17b7
+Giselle Nieves	6228d7588a4bb60068f5be52
+Leonardo Munoz	6228d79359c0740069db9f85
+Lorena Castrillo	6228d78f9c3cce00694efeb0
+Luis Francisco Cicioni	617705cf209722007110f67e
+Marianela Poleschi	6228d7ffc4d0fe0069569160
+Rodrigo Monteagudo	6228d84c4160640069ca5669
+Valeria Lembeye	6228d8846a4c4c0070b1abd6
+Agustin Farola	6228d6a5f1e55c0070f248f5
+Emiliano Clergue	6228d71a94f7e2006901d516
+Fatima Rold�n	6228d73fc4d0fe006956910d
+Flavia Zanuzzi	6228d7418a4bb60068f5be45
+Martin Mendizabal	6228d7f1c88f100068325665
+Patricio Cohen	6228d832c88f100068325681
+Agust�n Moragues Beckar	631610a08d88ec800fbf513e
+Clockwork Automated Timesheets Free	5d710216522f790d9c773bce
+Pablo Galian	6329aca1748d1bfcb85646d4
+Cecilia Olejarczyk	633de9ca8b75455be458dcfe
+gbeyrne	6352bf6bf7ad721e784ce836
+Solange Altilio	609568e1cc7830006a893de9
+Proforma Migrator	63a22fb348b367d78a14c15b
+Sabrina Torrillas	6418d47c4b23217e558cd432
+Rocio Belen Nu�ez	712020:5879a888-b4e1-453b-8459-ad81d42b575f
+Atlas for Jira Cloud	630db2cd9796033b256bc349
+Nicol�s Rivanera	712020:faf61986-8ac1-47e7-9c28-8dac9ad497b8

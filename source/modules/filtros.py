@@ -1,7 +1,7 @@
 def filtrarProyectos(data: list) -> list:
     newName: str = ''
     lekeadData: list = []
-    names: list = ['GDD', 'GT', 'GP0007', 'RDG', 'SP000BN']
+    names: list = ['GDD','GT', 'GP0007', 'RDG', 'SP000BN'] #, 'GT', 'GP0007', 'RDG', 'SP000BN'
     for project in data:
         for name in names:
             if (project.get('key')== name):

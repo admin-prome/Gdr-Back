@@ -1,0 +1,5 @@
+bold_text = "*texto en negrita*"
+italic_text = "_texto en cursiva_"
+bulleted_list = "* Elemento 1\n* Elemento 2\n* Elemento 3"
+numbered_list = "1. Elemento 1\n2. Elemento 2\n3. Elemento 3"
+headers = "# Encabezado de nivel 1\n## Encabezado de nivel 2\n### Encabezado de nivel 3"
