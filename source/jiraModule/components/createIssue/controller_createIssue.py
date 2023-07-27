@@ -232,6 +232,7 @@ def createIssue(dataIssue: dict) -> json:
     destinatarios = []
     status = '400'
     response = {}
+    issue: object = None
 
     try:
         try:
