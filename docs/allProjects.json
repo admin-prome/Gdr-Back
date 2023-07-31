@@ -1,0 +1,182 @@
+[
+    {
+        "id": "10048",
+        "key": "TPDN",
+        "name": "Template Proyectos de Negocio"
+    },
+    {
+        "id": "10049",
+        "key": "ICO",
+        "name": "ICO - Inteligencia Comercial"
+    },
+    {
+        "id": "10050",
+        "key": "SP",
+        "name": "SP - Segmentos y Productos"
+    },
+    {
+        "id": "10051",
+        "key": "MA",
+        "name": "MA - Marketing"
+    },
+    {
+        "id": "10052",
+        "key": "CCAC",
+        "name": "CCAC - Cartera Centralizada"
+    },
+    {
+        "id": "10053",
+        "key": "LEG",
+        "name": "LEG - Legales"
+    },
+    {
+        "id": "10054",
+        "key": "CF",
+        "name": "CF - Contabilidad y Finanzas"
+    },
+    {
+        "id": "10055",
+        "key": "SUC",
+        "name": "SUC - Gesti\u00f3n de Sucursales"
+    },
+    {
+        "id": "10056",
+        "key": "SZA",
+        "name": "SZA - Subgerencia Zona AMBA"
+    },
+    {
+        "id": "10057",
+        "key": "SZI",
+        "name": "SZI - Subgerencia Zona Interior"
+    },
+    {
+        "id": "10059",
+        "key": "GP0007",
+        "name": "GP0007_PE - Nuevo Workflow de Colegiatura"
+    },
+    {
+        "id": "10061",
+        "key": "SP000BN",
+        "name": "SCORE PROME "
+    },
+    {
+        "id": "10064",
+        "key": "RDG",
+        "name": "Rendici\u00f3n de Gastos"
+    },
+    {
+        "id": "10074",
+        "key": "BDR",
+        "name": "Backlog de Requerimientos"
+    },
+    {
+        "id": "10082",
+        "key": "BIYGE",
+        "name": "BIGE - BI y Gesti\u00f3n Estrat\u00e9gica"
+    },
+    {
+        "id": "10084",
+        "key": "GE",
+        "name": "GE - Gesti\u00f3n Estrat\u00e9gica"
+    },
+    {
+        "id": "10085",
+        "key": "REP",
+        "name": "REP - Reporting"
+    },
+    {
+        "id": "10086",
+        "key": "GPN",
+        "name": "GPN - Gerencia de Personas Y Negocio"
+    },
+    {
+        "id": "10087",
+        "key": "G0RDSP0",
+        "name": "GIT 004 Redise\u00f1o del Servicio Prome 04"
+    },
+    {
+        "id": "10089",
+        "key": "GGDI",
+        "name": "GIC Gesti\u00f3n de Incidencias"
+    },
+    {
+        "id": "10026",
+        "key": "TGE",
+        "name": "T\u00e9mplate de Gesti\u00f3n de Equipos"
+    },
+    {
+        "id": "10029",
+        "key": "GDT",
+        "name": "Template Gesti\u00f3n de Tecno"
+    },
+    {
+        "id": "10032",
+        "key": "BI",
+        "name": "BI - Business Intelligence"
+    },
+    {
+        "id": "10034",
+        "key": "GYS",
+        "name": "GYS - Gerencias y Staff"
+    },
+    {
+        "id": "10035",
+        "key": "PP",
+        "name": "PP - Gesti\u00f3n de Procesos"
+    },
+    {
+        "id": "10036",
+        "key": "CP",
+        "name": "CP - Gesti\u00f3n de Compliance"
+    },
+    {
+        "id": "10037",
+        "key": "COR",
+        "name": "COR - Cultura Organizativa"
+    },
+    {
+        "id": "10038",
+        "key": "SAP",
+        "name": "SAP - Servicios al Personal"
+    },
+    {
+        "id": "10039",
+        "key": "DDC",
+        "name": "DDC - Desarrollo de Carrera"
+    },
+    {
+        "id": "10040",
+        "key": "IC",
+        "name": "IC- Investigaci\u00f3n y Capacitaci\u00f3n"
+    },
+    {
+        "id": "10041",
+        "key": "CI",
+        "name": "CI - Comunicaci\u00f3n Institucional"
+    },
+    {
+        "id": "10042",
+        "key": "IDR",
+        "name": "IDR - Inteligencia de Riesgo"
+    },
+    {
+        "id": "10043",
+        "key": "RDD",
+        "name": "RDD - Gesti\u00f3n de Recupero Deudas"
+    },
+    {
+        "id": "10044",
+        "key": "ARC",
+        "name": "ARC - An\u00e1lisis de Riesgo Crediticio"
+    },
+    {
+        "id": "10045",
+        "key": "GDD",
+        "name": "GDD - Gesti\u00f3n de la Demanda"
+    },
+    {
+        "id": "10047",
+        "key": "GT",
+        "name": "GIT - Gesti\u00f3n de Tecnolog\u00eda"
+    }
+]

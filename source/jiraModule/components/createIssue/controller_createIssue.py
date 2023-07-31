@@ -57,7 +57,6 @@ def updateValueDb(categoria, subcategoria):
     return numerador.valor
 
 
-
 def getValue(category: str, subcategory: str, objectList : list):
     """_summary_
 
@@ -258,21 +257,10 @@ def createIssue(dataIssue: dict) -> json:
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
         MapeoDeRequerimientos(issue, issueDict, 'PROD')
 
-        # Verificar si ya existe un requerimiento con el mismo summary
-        #existing_issues = jira.search_issues(f'summary ~ "{issueDict["summary"]}"')
-        # if existing_issues:
-        #     existing_link = f'https://{domain}.atlassian.net/browse/{existing_issues[0].key}'
-        #     response = {"link": existing_link, "status": "409"}
-
-        #     # Restablecer el número anterior en issuesId.json
-        #     if dataIssue['issueType'] != 'FIX':
-        #         primary_key = dataIssue['issueType']
-        #         secondary_key = dataIssue.get('subIssueType')
-               
-        #     return jsonify(response)
         
         #Aca se envia el requerimiento a JIRA
         newIssue = jira.create_issue(issueDict)
+        
 
         print(f'creando requerimiento: {newIssue}')
         status = '200'
