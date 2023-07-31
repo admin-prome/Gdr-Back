@@ -259,9 +259,8 @@ def createIssue(dataIssue: dict) -> json:
 
         
         #Aca se envia el requerimiento a JIRA
-        #newIssue = jira.create_issue(issueDict)
+        newIssue = jira.create_issue(issueDict)
         
-
         print(f'creando requerimiento: {newIssue}')
         status = '200'
         enviarCorreoDeError(dataIssue['summary'], str(issueDict))
