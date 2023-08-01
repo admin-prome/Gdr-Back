@@ -115,4 +115,4 @@ def getAllProjects() -> list:
     
     # print(data)
     #return jsonify({"projects":data})
-    return{"project": {"key": "GDD", "name": "GDD - Gesti\u00f3n de la Demanda"}}
+    #return{"project": {"key": "GDD", "name": "GDD - Gesti\u00f3n de la Demanda"}}

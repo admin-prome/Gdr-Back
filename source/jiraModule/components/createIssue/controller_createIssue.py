@@ -257,9 +257,9 @@ def createIssue(dataIssue: dict) -> json:
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
         MapeoDeRequerimientos(issue, issueDict, 'PROD')
 
-        
+        input('pausa')
         #Aca se envia el requerimiento a JIRA
-        newIssue = jira.create_issue(issueDict)
+        #newIssue = jira.create_issue(issueDict)
         
 
         print(f'creando requerimiento: {newIssue}')

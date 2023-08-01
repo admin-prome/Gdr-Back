@@ -9,6 +9,7 @@ from source.jiraModule.utils.conexion import conexion
 import requests
 from source.settings.settings import settings
 
+
 ENVIROMENT: str = settings.ENVIROMENT
 domain: str = settings.DOMAIN
 mail: str = settings.MAIL
@@ -29,7 +30,6 @@ def extraer_elementos(lista_original):
         nueva_lista.append(nuevo_elemento)
     return nueva_lista
 
-import requests
 
 def get_project_fields(project_key, base_url, auth):
     project_url = f"{base_url}/rest/api/2/project/{project_key}"
@@ -58,12 +58,12 @@ def get_project_fields(project_key, base_url, auth):
     return project_fields
 
 # Ejemplo de uso
-base_url = "https://your-jira-instance.atlassian.net"
-auth = ("username", "api_key_or_password")
+base_url = f"https://{domain}.atlassian.net"
+auth = (mail, tokenId)
 project_key = "YOUR_PROJECT_KEY"
 
-fields = get_project_fields(project_key, base_url, auth)
-print(fields)
+#fields = get_project_fields(project_key, base_url, auth)
+#print(fields)
 
 
 @getIssues_bp.route('/getissues', methods=['GET'])
@@ -101,7 +101,7 @@ def GetIssuesInformation() -> json:
                 projectId = project['id']
                 print(projectId)
                 base_url = f"https://{domain}.atlassian.net/"
-                get_project_fields(projectId, base_url, auth)
+                #get_project_fields(projectId, base_url, auth)
                 
                 # url = f"https://{domain}.atlassian.net/rest/api/2/project/{projectId}"
                 # response = requests.request(
@@ -110,7 +110,7 @@ def GetIssuesInformation() -> json:
                 # headers=headers,
                 # auth=auth
                 # )
-                print(response.json())
+                #print(response.json())
         
         # hola = requests.request(
         #         "GET",
