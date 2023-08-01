@@ -49,6 +49,7 @@ def updateValueDb(categoria, subcategoria):
             db.session.commit()
             
     except Exception as e: 
+        db.session.rollback()
         print(f'Ocurrio un error al actualizar valor en BD: {e}')
             
     # finally: 
@@ -94,12 +95,15 @@ def getNumberId(category: str, subcategory: str)->int:
       
         #Obtengo el ultimo valor 
         #valor = getValue(category, subcategory, resultados)
-
+        db.session.commit()
+        
     except Exception as e:
+        db.session.rollback()
         print(e)
         idNumber = "Ocurrio un error en la consulta a la tabla GDR_Contador"
         enviarCorreoDeError(idNumber, f"error: {e} / idReq: {str(valorActualizado)}")
-        
+    
+      
     print(f'esto es id number: {valorActualizado}')
     
     return int(valorActualizado)

@@ -30,9 +30,11 @@ def getApprovers() -> dict:
             }
             approvers[resultado.id] = approver
 
+        db.session.commit()
         return approvers
 
     except Exception as e:
+        db.session.rollback()  # Deshacer cualquier transacción activa
         print(e)
         error = {
         "approvers": {
