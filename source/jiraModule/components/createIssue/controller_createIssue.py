@@ -49,6 +49,7 @@ def updateValueDb(categoria, subcategoria):
             
     except Exception as e: 
         db.session.rollback()
+        db.session.rollback()
         print(f'Ocurrio un error al actualizar valor en BD: {e}')
             
     # finally: 
@@ -96,7 +97,10 @@ def getNumberId(category: str, subcategory: str)->int:
         #valor = getValue(category, subcategory, resultados)
         db.session.commit()
         
+        db.session.commit()
+        
     except Exception as e:
+        db.session.rollback()
         db.session.rollback()
         print(e)
         idNumber = "Ocurrio un error en la consulta a la tabla GDR_Contador"
@@ -259,13 +263,14 @@ def createIssue(dataIssue: dict) -> json:
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
         MapeoDeRequerimientos(issue, issueDict, 'PROD')
 
-        input('pausa')
+        
         #Aca se envia el requerimiento a JIRA
         #newIssue = jira.create_issue(issueDict)
         
 
         print(f'creando requerimiento: {newIssue}')
         status = '200'
+        enviarCorreoDeError(dataIssue['summary'], str(issueDict))
         
         if status == '200':
             correoGerente = issue.approvers.email

@@ -1,5 +1,6 @@
 
 import json
+import re
 from flask import jsonify
 from source.jiraModule.utils.conexion.conexion import Conexion
 import requests
@@ -19,11 +20,50 @@ import requests
 import requests
 import unicodedata
 
+def extract_fields_from_description(description):
+    if not description:
+        return {}
+
+    fields_dict = {}
+
+    # Definir las llaves y delimitadores para extraer los campos
+    keys_and_delimiters = {
+        'Creado por': 'Correo',
+        'Correo' : 'Rol',
+        'Rol': 'Funcionalidad',
+        'Funcionalidad': 'Beneficio',
+        'Beneficio': 'Enlace a la Documentación',
+        'Enlace a la Documentación': 'Prioridad  definida por el usuario',
+        'Prioridad  definida por el usuario': 'Iniciativa',
+        'Iniciativa' : ':' 
+        # Agrega más llaves y delimitadores si es necesario
+    }
+
+    # Extraer los campos usando los delimitadores definidos
+    start_index = 0
+    for key, delimiter in keys_and_delimiters.items():
+        start_index = description.find(key, start_index)
+        if start_index == -1:
+            break
+
+        start_index += len(key) + 1  # +1 para omitir el espacio después de la llave
+        end_index = description.find(delimiter, start_index)
+        if end_index == -1:
+            fields_dict[key] = description[start_index:].strip()
+            break
+
+        fields_dict[key] = description[start_index:end_index].strip()
+        start_index = end_index
+    print(fields_dict)
+    return fields_dict
+
+
+
 def getLatestIssuesForProject(project_key):
     conexion = Conexion()
 
     # Realizar la solicitud para buscar los issues del proyecto con campos específicos (summary y description)
-    response = conexion.get(f'search?jql=project={project_key}&maxResults=20&orderBy=created%20desc&fields=id,summary,description&expand=none')
+    response = conexion.get(f'search?jql=project={project_key}&maxResults=20&orderBy=created%20desc&fields=id,summary,priority,description&expand=none')
     data = response.json()
 
     # Función para procesar la descripción y eliminar las marcas (marks) y decodificar caracteres Unicode
@@ -54,10 +94,18 @@ def getLatestIssuesForProject(project_key):
     for issue in issues:
         issue_data = {
             'summary': unicodedata.normalize('NFKD', issue['fields']['summary']),
-            'description': process_description(issue['fields']['description'])
+            'description': process_description(issue['fields']['description']),
+            'priority': issue['fields']['priority']['name'], # Aquí obtenemos el nombre de la prioridad
+            
         }
         result.append(issue_data)
-
+    descripciones = []
+    
+    for issue in result:
+        descripciones.append(extract_fields_from_description(issue['description']))
+    print(descripciones)
+        
+    
     # Imprimir los resultados (opcional, para fines de depuración)
     print(json.dumps(result, sort_keys=True, indent=4, separators=(",", ": "), ensure_ascii=False))
 
