@@ -1,11 +1,13 @@
+from source.settings.settings import settings
 from source.jiraModule.components.createIssue.model_createIssue import Issue
 
+ENVIROMENT: str = settings.ENVIROMENT
 
 def mapeoGerencia(issue: Issue)->str:
     
     posicion: int = 1
     gerencia: str = issue.approvers.management
-    ENVIROMENT = 'PROD'
+    #ENVIROMENT = 'PROD'
     gerencias: dict = {
                         "Administracion y Finanzas": "10028",
                         "Red de Sucursales": "10034",

@@ -57,10 +57,7 @@ def get_project_fields(project_key, base_url, auth):
     
     return project_fields
 
-# Ejemplo de uso
-base_url = f"https://{domain}.atlassian.net"
-auth = (mail, tokenId)
-project_key = "YOUR_PROJECT_KEY"
+
 
 #fields = get_project_fields(project_key, base_url, auth)
 #print(fields)

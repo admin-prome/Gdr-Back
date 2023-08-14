@@ -18,18 +18,13 @@ createIssue_bp = Blueprint("createIssue_bp", __name__)
 
 @createIssue_bp.route('/createissue', methods=['POST'])
 def CreateNewIssue() -> json:  
-    
-    data = request.json
-    dataIssue = request.json        
-    
-    # response = controller_createIssue.getNumberId('REQ','GDR')
-    
-   
-    
-    
-    response = controller_createIssue.createIssue(dataIssue)
-    print(response)
-    
+    try:
+        print('------------------POR RESPONSE-----------------')
+        response = controller_createIssue.createIssue(request)     
+        print(response)
+    except Exception as e:
+        print(f'Ocurrio un error en la creación de la incidencia: {e}')
+        
     # response.headers.add('Access-Control-Allow-Origin', '*')  # Permitir solicitudes desde cualquier origen
     # response.headers.add('Content-Type', 'application/json')  # Establecer el tipo de contenido como JSON
    

@@ -31,6 +31,7 @@ def getApprovers() -> dict:
             approvers[resultado.id] = approver
 
         db.session.commit()
+        db.session.close()
         return approvers
 
     except Exception as e:
@@ -117,6 +118,7 @@ def getApprovers() -> dict:
             }
             }
         }
+        db.session.close()
         return error
 
 

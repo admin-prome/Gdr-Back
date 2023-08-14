@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from source.jiraModule.components.getLatestIssuesForProject.view_getLatestIssuesForProject import getLatestIssuesForProject_bp
 from source.jiraModule.components.getAllProjects.view_getAllProjects import getAllProjects_bp
@@ -32,7 +32,9 @@ app.register_blueprint(loginJira_bp)
 app.static_folder = 'static'
 app.template_folder='templates'
 
- 
+
+
+
 if __name__ == '__main__':
     
     try:    

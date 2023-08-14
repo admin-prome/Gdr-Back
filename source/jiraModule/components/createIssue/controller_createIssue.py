@@ -1,7 +1,8 @@
 import json, requests, re, os
+import time
 import traceback
 from jira import JIRA
-from flask import jsonify
+from flask import jsonify, request
 from source.modules.mapeoDeRequerimientos import MapeoDeRequerimientos
 from source.jiraModule.utils.conexion.jiraConectionServices import JiraService
 from source.jiraModule.components.createIssue.model_createIssue import Numerador
@@ -14,7 +15,8 @@ from source.settings.settings import settings
 from source.modules.obtenerIdRequerimiento import get_req_id
 from source.jiraModule.components.createIssue.model_createIssue import Issue
 from source.modules.enviarCorreo import *
-
+from werkzeug.utils import secure_filename
+from datetime import datetime
 
 
 jiraServices = JiraService()
@@ -23,6 +25,28 @@ ENVIROMENT: str = settings.ENVIROMENT
 domain: str = settings.DOMAIN
 mail: str = settings.MAIL
 tokenId: str = settings.APIKEY
+
+
+def wait_until_closed(path:str) -> None:
+    while os.path.isfile(path):
+        timeout: int = 60
+        start_time = time.time()
+        while True:
+            try:
+                with open(path, 'r'):
+                    pass  # Intenta abrir el archivo en modo lectura (si se puede abrir, está desbloqueado)
+                    os.remove(path)
+                    
+            except PermissionError as e:
+                print('Error de permisos', e)
+                pass  # Si hay un error de permisos, el archivo está bloqueado por otro proceso
+            
+            except Exception as e:
+                print('-----------')
+                print(e)
+            
+            if time.time() - start_time >= timeout:
+                return False  # Se alcanzó el tiempo máximo de espera
 
 
 def updateValueDb(categoria, subcategoria):
@@ -110,6 +134,7 @@ def getNumberId(category: str, subcategory: str)->int:
     print(f'esto es id number: {valorActualizado}')
     
     return int(valorActualizado)
+
 
 def clasificarProyecto(dataIssue: dict, issueDict: dict) -> str:
     """Clasificar proyecto
@@ -227,7 +252,7 @@ def mapearRespuestaAlFront(newIssue, dataIssue: dict, issueDict: dict) -> dict:
     return response
 
 
-def createIssue(dataIssue: dict) -> json:
+def createIssue(dataRequest: request) -> json:
     link = ''
     newIssue = None
     correoGerente = ''
@@ -238,16 +263,32 @@ def createIssue(dataIssue: dict) -> json:
     status = '400'
     response = {}
     issue: object = None
+    archivo: object = None
+    
+    try:
+        
+        print('------------- INICIANDO CREAR REQUERIMIENTO  ---------------')          
+        dataIssue_str = dataRequest.form['myJson']
+        dataIssue = json.loads(dataIssue_str)                
+        print(dataIssue)
+        
+    except:
+        print('No se pudo mapear el archivo correctamente')
+    
 
     try:
-        try:
+        
+        try:            
             issue = Issue(dataIssue)
+            
             print(issue)
+                     
+                    
         except Exception as e : 
             print('------------------- NO se pudo MApear-----------------')
             print(e)
             print('------------------- NO se pudo MApear-----------------')
-        print(f'Esto es lo que llega del front: {json.dumps(dataIssue, indent=4)}')
+        # print(f'Esto es lo que llega del front: {json.dumps(dataIssue, indent=4)}')
         
         jiraOptions = {'server': "https://"+domain+".atlassian.net"}
         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))
@@ -259,17 +300,49 @@ def createIssue(dataIssue: dict) -> json:
 
 
         print(f"Esto es el ID del ultimo requerimiento: {str(idUltimoRequerimiento).zfill(3)}")
-
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
-        MapeoDeRequerimientos(issue, issueDict, 'PROD')
+        MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)
 
+        archivo_adjunto = dataRequest.files['myFile']
         
-        #Aca se envia el requerimiento a JIRA
-        #newIssue = jira.create_issue(issueDict)
+        # Obtén el nombre de archivo original de manera segura
+        nombre_archivo_original = secure_filename(archivo_adjunto.filename)
         
+        # Genera un timestamp con formato año-mes-día-hora-minuto-segundo
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 
+        # Construye el nombre del archivo de salida con la extensión original
+        nombre_archivo_salida = f'{timestamp}_{nombre_archivo_original}'
+      
+        # Guarda el archivo con el nombre de archivo de salida
+        archivo_adjunto.save(f'docs/tmpFilesReceived/{nombre_archivo_salida}')
+    
+     
+        files = {"file": (archivo_adjunto.filename, open(f'docs/tmpFilesReceived/{nombre_archivo_salida}',"rb"), "application-type")}
+        
+        issueDict["project"] = {"key":"TSTGDR"}
+        input('ingrese enter')
+        #newIssue =jira.create_issue(fields=issueDict)
+        
+        
+        # Ruta completa del archivo que deseas adjuntar
+        ruta_archivo_adjunto = f'docs/tmpFilesReceived/{nombre_archivo_salida}'
+
+        # Nombre que deseas dar al archivo adjunto
+        nombre_archivo = nombre_archivo_salida
+
+        # Adjunta el archivo al problema (issue) recién creado
+        jira.add_attachment(issue=newIssue, attachment=ruta_archivo_adjunto, filename=nombre_archivo)
+        
+        jira.close()
         print(f'creando requerimiento: {newIssue}')
+        
+        
+        os.remove(ruta_archivo_adjunto)
+        
+        
         status = '200'
+                
         enviarCorreoDeError(dataIssue['summary'], str(issueDict))
         
         if status == '200':
@@ -288,6 +361,8 @@ def createIssue(dataIssue: dict) -> json:
             dataIssue['summary'] = f"ERROR al crear: {dataIssue['summary']}"
             enviarCorreoDeError(dataIssue['summary'], str(status))
             response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
+            
+        #wait_until_closed(ruta_archivo_adjunto)
 
     except requests.exceptions.HTTPError as e:
         
@@ -303,7 +378,7 @@ def createIssue(dataIssue: dict) -> json:
         enviarCorreo(destinatarios, 'ERROR EN GDR: NO SE PUDO CREAR SU REQUERIMIENTO', armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
     
    
-        
+    
     print('-----------------------------')
     print(f'esto es el response: {response}')
     print('-----------------------------')
