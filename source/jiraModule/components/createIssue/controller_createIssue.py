@@ -321,7 +321,7 @@ def createIssue(dataRequest: request) -> json:
         files = {"file": (archivo_adjunto.filename, open(f'docs/tmpFilesReceived/{nombre_archivo_salida}',"rb"), "application-type")}
         
         issueDict["project"] = {"key":"TSTGDR"}
-        #input('ingrese enter')
+        print('Creando Requerimiento')
         newIssue =jira.create_issue(fields=issueDict)
         
         
@@ -330,11 +330,11 @@ def createIssue(dataRequest: request) -> json:
 
         # Nombre que deseas dar al archivo adjunto
         nombre_archivo = nombre_archivo_salida
-
+        print('Adjuntando archivo')
         # Adjunta el archivo al problema (issue) recién creado
         jira.add_attachment(issue=newIssue, attachment=ruta_archivo_adjunto, filename=nombre_archivo)
         
-        jira.close()
+       
         print(f'creando requerimiento: {newIssue}')
         
         
