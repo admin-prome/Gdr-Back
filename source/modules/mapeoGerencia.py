@@ -23,7 +23,7 @@ def mapeoGerencia(issue: Issue)->str:
                         }
 
     
-    if( ENVIROMENT == 'PROD'):
+    if( (ENVIROMENT == 'PROD') or (ENVIROMENT == 'TST')):
         posicion = 0
    
     if gerencia in gerencias:
@@ -52,7 +52,7 @@ def mapeoDeGerente(gerente:str, ENVIROMENT: str) -> str:
         }
    
 
-    if( ENVIROMENT == 'PROD'):
+    if( (ENVIROMENT == 'PROD') or (ENVIROMENT == 'TST')):
         
         if gerente in gerentes:
             idGerente = gerentes[gerente]    

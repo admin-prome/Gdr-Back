@@ -1,6 +1,7 @@
 from jira import JIRA
 import requests
 from source.modules.mapeoDeRequerimientos import MapeoDeRequerimientos
+from source.modules import borrarDirectorio
 from source.jiraModule.utils.conexion.conexion import Conexion
 from flask import Blueprint, jsonify, request
 import json
@@ -32,5 +33,5 @@ def CreateNewIssue() -> json:
     
     #jira.add_attachment(issue=new_issue, attachment='C:/Users/Colaborador/Documents/logo-icon.png')
 
-
+    borrarDirectorio.clear_directory('docs/tmpFilesReceived/')
     return response

@@ -321,8 +321,8 @@ def createIssue(dataRequest: request) -> json:
         files = {"file": (archivo_adjunto.filename, open(f'docs/tmpFilesReceived/{nombre_archivo_salida}',"rb"), "application-type")}
         
         issueDict["project"] = {"key":"TSTGDR"}
-        input('ingrese enter')
-        #newIssue =jira.create_issue(fields=issueDict)
+        #input('ingrese enter')
+        newIssue =jira.create_issue(fields=issueDict)
         
         
         # Ruta completa del archivo que deseas adjuntar
@@ -338,7 +338,7 @@ def createIssue(dataRequest: request) -> json:
         print(f'creando requerimiento: {newIssue}')
         
         
-        os.remove(ruta_archivo_adjunto)
+        # os.remove(ruta_archivo_adjunto)
         
         
         status = '200'
