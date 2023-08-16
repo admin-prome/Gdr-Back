@@ -26,12 +26,13 @@ class Issue:
         self.finalDate = data['finalDate']
         self.normativeDate = data['normativeDate']
         self.userCredential = SimpleNamespace(**data['userCredential']) if 'approvers' in data else None 
+        self.reporter = {"accountId": "","accountType": "atlassian"}
+        
+    # def __str__(self):
+    #     return f"Summary: {self.summary}, Type: {self.type}, Priority: {self.priority}"
 
-    def __str__(self):
-        return f"Summary: {self.summary}, Type: {self.type}, Priority: {self.priority}"
-
-    def __repr__(self):
-        return f"MyObject({self.__dict__})"
+    # def __repr__(self):
+    #     return f"MyObject({self.__dict__})"
 
     def format_approvers(self):
         if self.approvers:
@@ -43,6 +44,7 @@ class Issue:
     def __str__(self):
         
         content: str = f'''
+            Usuario informador: {self.reporter}
             Creado por: {self.userCredential.name}
             Email: {self.userCredential.email}
             Nombre del proyecto: {self.key} 
@@ -79,6 +81,11 @@ class Issue:
     def setKey(self, key: str) -> None:
         self.key = key
 
+    def setReporter(self, reporter: str) -> None:
+        self.reporter['accountId'] = reporter
+        
+        
+        
 class IDRequerimientos(db.Base):
     __tablename__ = 'dbo.GDR_REQUERIMIENTOS'
     

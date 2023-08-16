@@ -3,6 +3,7 @@ import time
 import traceback
 from jira import JIRA
 from flask import jsonify, request
+from source.jiraModule.components.getAllProjects.model_GDR import JiraUsersId, NominaUsersIds
 from source.modules.mapeoDeRequerimientos import MapeoDeRequerimientos
 from source.jiraModule.utils.conexion.jiraConectionServices import JiraService
 from source.jiraModule.components.createIssue.model_createIssue import Numerador
@@ -17,7 +18,8 @@ from source.jiraModule.components.createIssue.model_createIssue import Issue
 from source.modules.enviarCorreo import *
 from werkzeug.utils import secure_filename
 from datetime import datetime
-
+from sqlalchemy.orm import joinedload
+from sqlalchemy import cast, String
 
 jiraServices = JiraService()
 conexion = Conexion()
@@ -25,6 +27,23 @@ ENVIROMENT: str = settings.ENVIROMENT
 domain: str = settings.DOMAIN
 mail: str = settings.MAIL
 tokenId: str = settings.APIKEY
+
+
+def getIdJiraUser(email: str) -> str:
+    jiraId: str = ''
+    print('Iniciando consulta de id de jira')
+    try:
+        result = db.session.query(JiraUsersId.idJiraUser).join(NominaUsersIds, NominaUsersIds.id == JiraUsersId.idUser).filter(cast(NominaUsersIds.email, String) == email).all()
+
+        
+        jiraId = result[0][0] # Extract the value from the tuple
+    
+    
+    except Exception as e:
+        print(f'Ocurrio un error al consultar tabla id jira: {e}')
+    
+    # 'result' contiene los registros con los idJiraUser correspondientes al email dado
+    return str(jiraId)
 
 
 def wait_until_closed(path:str) -> None:
@@ -202,6 +221,7 @@ def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: s
         
         issueDict['summary'] = tituloDelRequerimiento
         issue.summary = tituloDelRequerimiento
+        issueDict["reporter"] = issue.reporter
         
         description = f"""
             *Creado por:* {issue.userCredential.name}
@@ -252,6 +272,8 @@ def mapearRespuestaAlFront(newIssue, dataIssue: dict, issueDict: dict) -> dict:
     return response
 
 
+
+
 def createIssue(dataRequest: request) -> json:
     link = ''
     newIssue = None
@@ -264,8 +286,9 @@ def createIssue(dataRequest: request) -> json:
     response = {}
     issue: object = None
     archivo: object = None
-    
+    print('----')
     try:
+        
         
         print('------------- INICIANDO CREAR REQUERIMIENTO  ---------------')          
         dataIssue_str = dataRequest.form['myJson']
@@ -279,16 +302,24 @@ def createIssue(dataRequest: request) -> json:
     try:
         
         try:            
-            issue = Issue(dataIssue)
-            
-            print(issue)
-                     
+            issue = Issue(dataIssue)            
+           
+                           
                     
         except Exception as e : 
             print('------------------- NO se pudo MApear-----------------')
             print(e)
             print('------------------- NO se pudo MApear-----------------')
         # print(f'Esto es lo que llega del front: {json.dumps(dataIssue, indent=4)}')
+        
+        try: 
+            print(issue.userCredential.email)           
+            issue.setReporter(getIdJiraUser(issue.userCredential.email))
+            print(issue.reporter)
+            
+        except: print('fallo getID')
+        
+        print(issue)      
         
         jiraOptions = {'server': "https://"+domain+".atlassian.net"}
         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))

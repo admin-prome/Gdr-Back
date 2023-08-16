@@ -67,7 +67,7 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
             if issue.key == 'TSTGDR':
                 
                 issue_dict["issuetype"] = {"id":"10096"} #Tipo de requerimiento (tarea) 
-                issue_dict["reporter"] = {"accountId": "6228d7c3302c6b006af5de63","accountType": "atlassian"} #Reportado por:                   
+                #issue_dict["reporter"] = {"accountId": "6228d7c3302c6b006af5de63","accountType": "atlassian"} #Reportado por:                   
                 issue_dict["customfield_10083"] = f'{issue.userCredential.name} - {issue.userCredential.email}' #Creado por (nombre - correo)
                 #issue_dict["assignee"] = {"accountId": "712020:faf61986-8ac1-47e7-9c28-8dac9ad497b8"} #Responsable de la tarea
                 #issue_dict["creator"] = {"accountId": "712020:faf61986-8ac1-47e7-9c28-8dac9ad497b8","accountType": "atlassian"}
