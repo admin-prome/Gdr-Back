@@ -5,13 +5,14 @@ from source.modules.mapeoGerencia import *
 
 def mapearPrioridadCliente(prioridad: str) -> str:
 
+    print(f'Iniciando mapeo de prioridades: {prioridad}')
     prioridades: dict = {
-    "Estandár" : "10070",
+    "Estándar" : "10070",
     "Media" : "10071",
     "Alta" : "10072",
     "Muy Alta" : "10073",
     "Normativa" : "10074" }
-    
+    print(f'cod. Prioridad: {prioridades[prioridad]}')
     return  prioridades[prioridad]
 
 
@@ -65,7 +66,8 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
                 # issue_dict["status"] =  { "id": "10199"}
                 
             if issue.key == 'TSTGDR':
-                
+               
+                #issue_dict["customfield_100
                 issue_dict["issuetype"] = {"id":"10096"} #Tipo de requerimiento (tarea) 
                 #issue_dict["reporter"] = {"accountId": "6228d7c3302c6b006af5de63","accountType": "atlassian"} #Reportado por:                   
                 issue_dict["customfield_10083"] = f'{issue.userCredential.name} - {issue.userCredential.email}' #Creado por (nombre - correo)
@@ -76,7 +78,7 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
                 issue_dict["customfield_10089"] = issue.managment #Rol
                 issue_dict["customfield_10090"] = issue.description #Funcionalidad
                 issue_dict["customfield_10091"] = issue.impact #Beneficio
-                
+               
                 #issue_dict["customfield_10093"] = [{"accountId": "631610a08d88ec800fbf513e","accountType": "atlassian"}] #                
                 issue_dict["customfield_10084"] = {"id" : mapearPrioridadCliente(issue.priority)} #Prioridad del cliente
                 

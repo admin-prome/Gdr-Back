@@ -203,6 +203,7 @@ def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: s
         issueDict (dict): Datos formateados para enviar a JIRA
         idUltimoRequerimiento(str|list): ID del ultimo requerimiento encontrado
     """
+    
     tituloDelRequerimiento: str = ''
     description: str = ''
     print('---------------------------------------------')
@@ -272,6 +273,40 @@ def mapearRespuestaAlFront(newIssue, dataIssue: dict, issueDict: dict) -> dict:
     return response
 
 
+def attachFiles(data: request, newIssue, jiraServices):
+    
+    try:
+        print('Comienzo adjuntar arhivos')
+        
+        archivo_adjunto = data.files['myFile']
+        
+        # Obtén el nombre de archivo original de manera segura
+        nombre_archivo_original = secure_filename(archivo_adjunto.filename)
+        
+        # Genera un timestamp con formato año-mes-día-hora-minuto-segundo
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+
+        # Construye el nombre del archivo de salida con la extensión original
+        nombre_archivo_salida = f'{timestamp}_{nombre_archivo_original}'
+        
+        # Guarda el archivo con el nombre de archivo de salida
+        archivo_adjunto.save(f'docs/tmpFilesReceived/{nombre_archivo_salida}')
+
+        
+        files = {"file": (archivo_adjunto.filename, open(f'docs/tmpFilesReceived/{nombre_archivo_salida}',"rb"), "application-type")}
+        
+        # Ruta completa del archivo que deseas adjuntar
+        ruta_archivo_adjunto = f'docs/tmpFilesReceived/{nombre_archivo_salida}'
+
+        # Nombre que deseas dar al archivo adjunto
+        nombre_archivo = nombre_archivo_salida
+        print('Adjuntando archivo')
+        
+        # Adjunta el archivo al problema (issue) recién creado
+        jiraServices.add_attachment(issue=newIssue, attachment=ruta_archivo_adjunto, filename=nombre_archivo)
+    
+    except Exception as e:
+        print('No se encontraron archivos para adjuntar')
 
 
 def createIssue(dataRequest: request) -> json:
@@ -334,38 +369,20 @@ def createIssue(dataRequest: request) -> json:
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
         MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)
 
-        archivo_adjunto = dataRequest.files['myFile']
-        
-        # Obtén el nombre de archivo original de manera segura
-        nombre_archivo_original = secure_filename(archivo_adjunto.filename)
-        
-        # Genera un timestamp con formato año-mes-día-hora-minuto-segundo
-        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-
-        # Construye el nombre del archivo de salida con la extensión original
-        nombre_archivo_salida = f'{timestamp}_{nombre_archivo_original}'
-      
-        # Guarda el archivo con el nombre de archivo de salida
-        archivo_adjunto.save(f'docs/tmpFilesReceived/{nombre_archivo_salida}')
-    
-     
-        files = {"file": (archivo_adjunto.filename, open(f'docs/tmpFilesReceived/{nombre_archivo_salida}',"rb"), "application-type")}
-        
-        issueDict["project"] = {"key":"TSTGDR"}
-        print('Creando Requerimiento')
-        newIssue =jira.create_issue(fields=issueDict)
-        
-        
-        # Ruta completa del archivo que deseas adjuntar
-        ruta_archivo_adjunto = f'docs/tmpFilesReceived/{nombre_archivo_salida}'
-
-        # Nombre que deseas dar al archivo adjunto
-        nombre_archivo = nombre_archivo_salida
-        print('Adjuntando archivo')
-        # Adjunta el archivo al problema (issue) recién creado
-        jira.add_attachment(issue=newIssue, attachment=ruta_archivo_adjunto, filename=nombre_archivo)
         
        
+        issueDict["project"] = {"key":"TSTGDR"}
+        print('Creando Requerimiento')
+        
+        newIssue =jira.create_issue(fields=issueDict)        
+        print('g')
+        try:
+            attachFiles(dataRequest, newIssue, jira)
+            print('hola')
+        except: 
+            print('No hay archivos adjuntos') 
+            
+        
         print(f'creando requerimiento: {newIssue}')
         
         
