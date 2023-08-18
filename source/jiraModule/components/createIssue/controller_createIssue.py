@@ -46,7 +46,7 @@ def getIdJiraUser(email: str) -> str:
     return str(jiraId)
 
 
-def wait_until_closed(path:str) -> None:
+def waitUntilClosed(path:str) -> None:
     while os.path.isfile(path):
         timeout: int = 60
         start_time = time.time()
@@ -68,7 +68,7 @@ def wait_until_closed(path:str) -> None:
                 return False  # Se alcanzó el tiempo máximo de espera
 
 
-def updateValueDb(categoria, subcategoria):
+def updateValueDb(categoria: str, subcategoria: str = None):
     """_summary_
 
     Args:
@@ -130,7 +130,10 @@ def getNumberId(category: str, subcategory: str)->int:
     
     try:
         #Actualizo el valor en la BD
-        valorActualizado = updateValueDb(category, subcategory)   
+        if category == 'FIX':
+            valorActualizado = updateValueDb(category) 
+        else:
+            valorActualizado = updateValueDb(category, subcategory)   
         
         #Obtengo la tabla como un objeto Numerador    
         consulta = db.session.query(Numerador)        
@@ -140,13 +143,12 @@ def getNumberId(category: str, subcategory: str)->int:
         #valor = getValue(category, subcategory, resultados)
         db.session.commit()
         
-        db.session.commit()
         
     except Exception as e:
         db.session.rollback()
-        db.session.rollback()
         print(e)
         idNumber = "Ocurrio un error en la consulta a la tabla GDR_Contador"
+        
         enviarCorreoDeError(idNumber, f"error: {e} / idReq: {str(valorActualizado)}")
     
       
@@ -185,7 +187,7 @@ def clasificarProyecto(dataIssue: dict, issueDict: dict) -> str:
                 dataIssue["key"] = "GDD"
                 issueDict["priority"] = {"id": '3'}
             
-            return str(dataIssue['key'])
+        return str(dataIssue['key'])
         
     except Exception as e:   
         print(f'Ocurrio un error al mapear proyecto: {e}')
@@ -203,7 +205,7 @@ def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: s
     
     tituloDelRequerimiento: str = ''
     description: str = ''
-    print('---------------------------------------------')
+    print('-------------Mapeando campos para JIRA------------------')
     print(issue.summary)
     try:
         
@@ -335,14 +337,13 @@ def createIssue(dataRequest: request) -> json:
     try:
         
         try:            
-            issue = Issue(dataIssue)            
-           
-                           
+            issue = Issue(dataIssue)    
                     
         except Exception as e : 
             print('------------------- NO se pudo MApear-----------------')
             print(e)
             print('------------------- NO se pudo MApear-----------------')
+        
         # print(f'Esto es lo que llega del front: {json.dumps(dataIssue, indent=4)}')
         
         try:                 
@@ -355,16 +356,12 @@ def createIssue(dataRequest: request) -> json:
         jiraOptions = {'server': "https://"+domain+".atlassian.net"}
         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))
         jira = jiraServices.getConection()
-
         issue.setKey(clasificarProyecto(dataIssue, issueDict))
-
         idUltimoRequerimiento = getNumberId(dataIssue['issueType'], dataIssue.get('subIssueType'))
-        print(f"Esto es el ID del ultimo requerimiento: {str(idUltimoRequerimiento).zfill(3)}")
-        
+        print(f"Esto es el ID del ultimo requerimiento: {str(idUltimoRequerimiento).zfill(3)}")        
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
-        MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)       
-        
-        issueDict["project"] = issue.key
+        MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)          
+        #issueDict["project"] = issue.key
         
         print('Creando Requerimiento')
         

@@ -29,7 +29,7 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
         print(f'esto es el issue.key: {issue.key}')
         
         #MAPEO DE CAMPOS EN PROYECTO GESTIÓN DE LA DEMANDA
-        if (issue.key == 'GDD'):
+        if ((issue.key == 'GDD') or (issue.key == 'FIX')):
         
             issue_dict["customfield_10003"] = [{'accountId':str(issue.approvers.value)}]     
                     
@@ -42,7 +42,9 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
 
             if((issue.normativeDate != 'None') and (issue.normativeDate != '')):
                 issue_dict['customfield_10039']=str((issue.normativeDate[0:10]))  
-
+                
+            issue_dict["reporter"] = issue.reporter
+            
         #MAPEO DE CAMPOS EN PROYECTO GESTIÓN DE TECNOLOGÍA
         elif (issue.key == 'GT'):
 
