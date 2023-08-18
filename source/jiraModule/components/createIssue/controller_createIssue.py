@@ -20,8 +20,7 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 from sqlalchemy.orm import joinedload
 from sqlalchemy import cast, String
-from source.modules.time import obtenerFecha
-
+from source.modules.time import *
 jiraServices = JiraService()
 conexion = Conexion()
 ENVIROMENT: str = settings.ENVIROMENT
@@ -223,7 +222,7 @@ def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: s
         issueDict["reporter"] = issue.reporter
         
         description = f"""
-            *Fecha de Creación:* {str(obtenerFecha())}
+            *Fecha de Creación:* {str(obtenerFechaHoraBsAs())}
             *Creado por:* {issue.userCredential.name}
             *Correo:* {issue.userCredential.email}
             *Rol:* {issue.managment}
