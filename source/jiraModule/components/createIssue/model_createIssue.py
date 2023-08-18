@@ -59,6 +59,7 @@ class Issue:
             Iniciativa: {self.initiative}
             Fecha de implementación: {self.finalDate} 
             Fecha normativa: {self.normativeDate}
+            Proyecto: {self.key}
             
             
         '''

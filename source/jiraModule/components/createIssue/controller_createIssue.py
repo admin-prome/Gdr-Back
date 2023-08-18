@@ -20,6 +20,7 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 from sqlalchemy.orm import joinedload
 from sqlalchemy import cast, String
+from source.modules.time import obtenerFecha
 
 jiraServices = JiraService()
 conexion = Conexion()
@@ -174,16 +175,13 @@ def clasificarProyecto(dataIssue: dict, issueDict: dict) -> str:
             if (dataIssue["issueType"] == "INF"): #Mapeo el requerimiento al tablero GIT
                 issueDict["project"] = "GT"
                 dataIssue["key"] = "GT"
-                #destinatarios = ["infra_tecno@provinciamicrocreditos.com"]
                 issueDict["priority"] = {"id": '3'}
 
             elif ( dataIssue["issueType"] == 'INC'):
                 issueDict["project"] = "GGDI"
                 dataIssue["key"] = "GGDI"
-                #destinatarios = ["analisis@provinciamicrocreditos.com"]
 
             else:
-                #destinatarios = ["analisis@provinciamicrocreditos.com"]
                 issueDict["project"] = "GDD"
                 dataIssue["key"] = "GDD"
                 issueDict["priority"] = {"id": '3'}
@@ -225,6 +223,7 @@ def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: s
         issueDict["reporter"] = issue.reporter
         
         description = f"""
+            *Fecha de Creación:* {str(obtenerFecha())}
             *Creado por:* {issue.userCredential.name}
             *Correo:* {issue.userCredential.email}
             *Rol:* {issue.managment}
@@ -321,7 +320,7 @@ def createIssue(dataRequest: request) -> json:
     response = {}
     issue: object = None
     archivo: object = None
-    print('----')
+   
     try:
         
         
@@ -347,12 +346,10 @@ def createIssue(dataRequest: request) -> json:
             print('------------------- NO se pudo MApear-----------------')
         # print(f'Esto es lo que llega del front: {json.dumps(dataIssue, indent=4)}')
         
-        try: 
-            print(issue.userCredential.email)           
+        try:                 
             issue.setReporter(getIdJiraUser(issue.userCredential.email))
-            print(issue.reporter)
-            
-        except: print('fallo getID')
+           
+        except Exception as e: print('fallo getIdJiraUser(): {e}')
         
         print(issue)      
         
@@ -363,22 +360,20 @@ def createIssue(dataRequest: request) -> json:
         issue.setKey(clasificarProyecto(dataIssue, issueDict))
 
         idUltimoRequerimiento = getNumberId(dataIssue['issueType'], dataIssue.get('subIssueType'))
-
-
         print(f"Esto es el ID del ultimo requerimiento: {str(idUltimoRequerimiento).zfill(3)}")
-        mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
-        MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)
-
         
-       
-        issueDict["project"] = {"key":"TSTGDR"}
+        mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
+        MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)       
+        
+        issueDict["project"] = issue.key
+        
         print('Creando Requerimiento')
         
         newIssue =jira.create_issue(fields=issueDict)        
-        print('g')
+        
         try:
             attachFiles(dataRequest, newIssue, jira)
-            print('hola')
+            
         except: 
             print('No hay archivos adjuntos') 
             
