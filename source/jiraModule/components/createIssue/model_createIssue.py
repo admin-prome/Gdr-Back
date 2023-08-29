@@ -26,10 +26,15 @@ class Issue:
         self.finalDate = data['finalDate']
         self.normativeDate = data['normativeDate']
         self.userCredential = self.userCredential = UserCredential(data['userCredential'])
-        self.reporter = {"accountId": data['userCredential']['idJIRA'],"accountType": "atlassian"}
-        
+        self.reporter = self.setReporter(data)
     
-
+    def setReporter(self, data):
+        try:
+            self.reporter = {"accountId": data['userCredential']['idJIRA'],"accountType": "atlassian"}
+        except Exception as e:
+            print(f'No se encontro el id de JIRA {e}')
+            self.reporter = {"accountId": "6228d8734160640069ca5686","accountType": "atlassian"}
+    
     def format_approvers(self):
         if self.approvers:
             return f"Aprobado por: {self.approvers.name} - {self.approvers.management}"
