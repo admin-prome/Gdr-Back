@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import pyodbc  
 
-print(pyodbc.drivers())
+#print(pyodbc.drivers())
 USER: str = settings.DBUSER
 PASS: str = settings.DBPASS
 SERVER: str = settings.DBSERVER

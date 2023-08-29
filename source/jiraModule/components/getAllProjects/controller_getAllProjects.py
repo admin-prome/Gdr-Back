@@ -16,26 +16,29 @@ conexion = Conexion()
 
 def getApprovers() -> dict:
     try:
+        print('Comienzo de obtener aprobados por')
         approvers = {}
-        consulta = db.session.query(AprobadoPor)
-        resultados = consulta.all()
         
-        for resultado in resultados:          
-            approver = {
-                "id": resultado.id,
-                "email": str(resultado.email),
-                "value": str(resultado.idJIRA),
-                "name": str(resultado.nombre),
-                "management": str(resultado.area)
-            }
-            approvers[resultado.id] = approver
-
-        db.session.commit()
-        db.session.close()
+        with db.Session() as session:  # Crea una nueva sesión dentro de un contexto 'with'
+            consulta = session.query(AprobadoPor)
+            resultados = consulta.all()
+            
+            for resultado in resultados:
+                approver = {
+                    "id": resultado.id,
+                    "email": resultado.email,
+                    "value": resultado.idJIRA,
+                    "name": resultado.nombre,
+                    "management": resultado.area
+                }
+                approvers[resultado.id] = approver
+            db.session.close()
+        print('Fin de obtener aprobados por')
+        
         return approvers
 
     except Exception as e:
-        db.session.rollback()  # Deshacer cualquier transacción activa
+        db.session.close()
         print(e)
         error = {
         "approvers": {
@@ -118,8 +121,10 @@ def getApprovers() -> dict:
             }
             }
         }
-        db.session.close()
         return error
+    
+    #finally:  db.session.close()
+        
 
 
     
@@ -144,8 +149,11 @@ def getInitiatives()->list:
             initiatives[resultado.Id] = initiative            
             initiative = {}
         
+        db.session.close()
+        
     except Exception as e:
         print(e)
+        db.session.close()
         initiatives = "Ocurrio un error en la consulta a la tabla del campo Iniciativas"
     
     

@@ -3,7 +3,8 @@ import time
 import traceback
 from jira import JIRA
 from flask import jsonify, request
-from source.jiraModule.components.getAllProjects.model_GDR import JiraUsersId, NominaUsersIds
+#from source.jiraModule.components.getAllProjects.model_GDR import JiraUsersId, NominaUsersIds
+from source.modules.getUserIdForJIRA.controller_getUserIdForJIRA import getIdJiraUser
 from source.modules.mapeoDeRequerimientos import MapeoDeRequerimientos
 from source.jiraModule.utils.conexion.jiraConectionServices import JiraService
 from source.jiraModule.components.createIssue.model_createIssue import Numerador
@@ -29,21 +30,7 @@ mail: str = settings.MAIL
 tokenId: str = settings.APIKEY
 
 
-def getIdJiraUser(email: str) -> str:
-    jiraId: str = ''
-    print('Iniciando consulta de id de jira')
-    try:
-        result = db.session.query(JiraUsersId.idJiraUser).join(NominaUsersIds, NominaUsersIds.id == JiraUsersId.idUser).filter(cast(NominaUsersIds.email, String) == email).all()
 
-        
-        jiraId = result[0][0] # Extract the value from the tuple
-    
-    
-    except Exception as e:
-        print(f'Ocurrio un error al consultar tabla id jira: {e}')
-    
-    # 'result' contiene los registros con los idJiraUser correspondientes al email dado
-    return str(jiraId)
 
 
 def waitUntilClosed(path:str) -> None:
@@ -235,6 +222,7 @@ def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: s
             *Iniciativa:* {issue.initiative}
             """
         issueDict["description"] = description
+        
 
     except Exception as e:
         print(f'Ocurrio un error en el mapeo de issueDict: {e}')
@@ -346,10 +334,7 @@ def createIssue(dataRequest: request) -> json:
         
         # print(f'Esto es lo que llega del front: {json.dumps(dataIssue, indent=4)}')
         
-        try:                 
-            issue.setReporter(getIdJiraUser(issue.userCredential.email))
-           
-        except Exception as e: print('fallo getIdJiraUser(): {e}')
+       
         
         print(issue)      
         
@@ -361,7 +346,7 @@ def createIssue(dataRequest: request) -> json:
         print(f"Esto es el ID del ultimo requerimiento: {str(idUltimoRequerimiento).zfill(3)}")        
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
         MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)          
-        #issueDict["project"] = issue.key
+        issueDict["project"] = issue.key
         
         print('Creando Requerimiento')
         

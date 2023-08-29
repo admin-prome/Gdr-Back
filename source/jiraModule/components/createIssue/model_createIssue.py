@@ -16,7 +16,7 @@ class Issue:
         self.type = data['type']
         self.issueType = data['issueType']
         self.subIssueType = data['subIssueType']
-        self.approvers = SimpleNamespace(**data['approvers']) if 'approvers' in data else None
+        self.approvers = Approver(data['approvers'])
         self.impact = data['impact']
         self.attached = data['attached']
         self.managment = data['managment']
@@ -25,14 +25,10 @@ class Issue:
         self.normativeRequirement = data['normativeRequirement']
         self.finalDate = data['finalDate']
         self.normativeDate = data['normativeDate']
-        self.userCredential = SimpleNamespace(**data['userCredential']) if 'approvers' in data else None 
-        self.reporter = {"accountId": "","accountType": "atlassian"}
+        self.userCredential = self.userCredential = UserCredential(data['userCredential'])
+        self.reporter = {"accountId": data['userCredential']['idJIRA'],"accountType": "atlassian"}
         
-    # def __str__(self):
-    #     return f"Summary: {self.summary}, Type: {self.type}, Priority: {self.priority}"
-
-    # def __repr__(self):
-    #     return f"MyObject({self.__dict__})"
+    
 
     def format_approvers(self):
         if self.approvers:
@@ -84,8 +80,26 @@ class Issue:
 
     def setReporter(self, reporter: str) -> None:
         self.reporter['accountId'] = reporter
-        
-        
+
+
+class Approver:
+    def __init__(self, data):
+        self.email = data['email']
+        self.id = data['id']
+        self.management = data['management']
+        self.name = data['name']
+        self.value = data['value']
+
+class UserCredential:
+    def __init__(self, data):
+        self.email = data['email']
+        self.name = data['name']
+        self.exp = data['exp']
+        self.picture = data['picture']
+        self.idJIRA = data['idJIRA']
+        self.timestamp = data['timestamp']
+        self.userSession = data['userSession']
+
         
 class IDRequerimientos(db.Base):
     __tablename__ = 'dbo.GDR_REQUERIMIENTOS'
