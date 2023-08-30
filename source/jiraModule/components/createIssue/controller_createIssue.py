@@ -268,8 +268,9 @@ def attachFiles(data: request, newIssue, jiraServices):
         print('Comienzo adjuntar arhivos')
         print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
         print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
-        os.mkdir('docs/tmpFilesReceived/')
+        
         cwd = os.getcwd()  # Get the current working directory (cwd)
+        os.mkdir(f'{cwd}/docs/tmpFilesReceived/')
         files = os.listdir(cwd)  # Get all the files in that directory
         print("Files in %r: %s" % (cwd, files))
         print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
