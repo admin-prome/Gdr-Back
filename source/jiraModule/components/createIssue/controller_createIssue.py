@@ -3,6 +3,7 @@ import time
 import traceback
 from jira import JIRA
 from flask import jsonify, request
+from source.modules import borrarDirectorio
 #from source.jiraModule.components.getAllProjects.model_GDR import JiraUsersId, NominaUsersIds
 from source.modules.getUserIdForJIRA.controller_getUserIdForJIRA import getIdJiraUser
 from source.modules.mapeoDeRequerimientos import MapeoDeRequerimientos
@@ -292,6 +293,7 @@ def attachFiles(data: request, newIssue, jiraServices):
         
         # Adjunta el archivo al problema (issue) recién creado
         jiraServices.add_attachment(issue=newIssue, attachment=ruta_archivo_adjunto, filename=nombre_archivo)
+        borrarDirectorio.clear_directory(ruta_archivo_adjunto)
     
     except Exception as e:
         print('No se encontraron archivos para adjuntar')
@@ -356,6 +358,7 @@ def createIssue(dataRequest: request) -> json:
         
         try:
             attachFiles(dataRequest, newIssue, jira)
+            
             
         except: 
             print('No hay archivos adjuntos') 
