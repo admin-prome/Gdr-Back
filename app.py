@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
@@ -59,6 +60,7 @@ app.template_folder='templates'
 if __name__ == '__main__':
     
     try:    
+        os.mkdir('docs/tmpFilesReceived/')
         app.run()
     except Exception as e:
         print(f'Ocurrio un error en la ejecución: {e}') 

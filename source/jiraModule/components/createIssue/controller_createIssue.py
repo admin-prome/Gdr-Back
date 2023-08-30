@@ -354,7 +354,7 @@ def createIssue(dataRequest: request) -> json:
         
         print('Creando Requerimiento')
         
-        newIssue =jira.create_issue(fields=issueDict)        
+        newIssue = jira.create_issue(fields=issueDict)        
         
         try:
             attachFiles(dataRequest, newIssue, jira)
