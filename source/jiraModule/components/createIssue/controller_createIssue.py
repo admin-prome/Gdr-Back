@@ -1,4 +1,4 @@
-import json, requests, re, os
+import json, requests, re, os, logging
 import time
 import traceback
 from jira import JIRA
@@ -317,7 +317,7 @@ def createIssue(dataRequest: request) -> json:
         dataIssue_str = dataRequest.form['myJson']
         dataIssue = json.loads(dataIssue_str)                
         print(dataIssue)
-        
+        logging.info(dataIssue)
     except:
         print('No se pudo mapear el archivo correctamente')
     
