@@ -11,7 +11,7 @@ class Issue:
     def __init__(self, data):
         # self.project = data['project']        
         self.key = data['key']
-        self.summary = data['summary']
+        self.summary = str(data['summary'])
         self.description = data['description']
         self.type = data['type']
         self.issueType = data['issueType']
