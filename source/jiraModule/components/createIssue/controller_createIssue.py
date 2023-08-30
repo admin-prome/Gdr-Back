@@ -326,7 +326,8 @@ def createIssue(dataRequest: request) -> json:
         
         try:            
             issue = Issue(dataIssue)    
-                    
+              
+            
         except Exception as e : 
             print('------------------- NO se pudo MApear-----------------')
             print(e)
@@ -337,15 +338,16 @@ def createIssue(dataRequest: request) -> json:
        
         
         print(issue)      
-        
+        #issue.setReporter(dataIssue) 
         jiraOptions = {'server': "https://"+domain+".atlassian.net"}
         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))
         jira = jiraServices.getConection()
-        issue.setKey(clasificarProyecto(dataIssue, issueDict))
+        #issue.setKey(clasificarProyecto(dataIssue, issueDict))
         idUltimoRequerimiento = getNumberId(dataIssue['issueType'], dataIssue.get('subIssueType'))
         print(f"Esto es el ID del ultimo requerimiento: {str(idUltimoRequerimiento).zfill(3)}")        
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
         MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)          
+        
         issueDict["project"] = issue.key
         
         print('Creando Requerimiento')

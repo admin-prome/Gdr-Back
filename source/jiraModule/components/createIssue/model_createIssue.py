@@ -26,15 +26,21 @@ class Issue:
         self.finalDate = data['finalDate']
         self.normativeDate = data['normativeDate']
         self.userCredential = self.userCredential = UserCredential(data['userCredential'])
+
         self.reporter = self.setReporter(data)
     
-    def setReporter(self, data):
+    def setReporter(self, data) -> dict:
         try:
-            self.reporter = {"accountId": data['userCredential']['idJIRA'],"accountType": "atlassian"}
+            print('inicio de set reporter')
+            reporter = {"accountId": data['userCredential']['idJIRA'],"accountType": "atlassian"}
+            print(reporter)
         except Exception as e:
             print(f'No se encontro el id de JIRA {e}')
-            self.reporter = {"accountId": "6228d8734160640069ca5686","accountType": "atlassian"}
+            reporter = {"accountId": "6228d8734160640069ca5686","accountType": "atlassian"}
+            print(reporter)
     
+        return reporter
+        
     def format_approvers(self):
         if self.approvers:
             return f"Aprobado por: {self.approvers.name} - {self.approvers.management}"
@@ -83,8 +89,8 @@ class Issue:
     def setKey(self, key: str) -> None:
         self.key = key
 
-    def setReporter(self, reporter: str) -> None:
-        self.reporter['accountId'] = reporter
+    # def setReporter(self, reporter: str) -> None:
+    #     self.reporter['accountId'] = reporter
 
 
 class Approver:
