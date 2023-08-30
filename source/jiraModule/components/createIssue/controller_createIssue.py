@@ -273,16 +273,16 @@ def attachFiles(data: request, newIssue, jiraServices):
         nombre_archivo_original = secure_filename(archivo_adjunto.filename)
         
         # Genera un timestamp con formato año-mes-día-hora-minuto-segundo
-        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-
+        timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        print(timestamp)
+        
         # Construye el nombre del archivo de salida con la extensión original
         nombre_archivo_salida = f'{timestamp}_{nombre_archivo_original}'
         
         # Guarda el archivo con el nombre de archivo de salida
         archivo_adjunto.save(f'docs/tmpFilesReceived/{nombre_archivo_salida}')
-
         
-        files = {"file": (archivo_adjunto.filename, open(f'docs/tmpFilesReceived/{nombre_archivo_salida}',"rb"), "application-type")}
+        #files = {"file": (archivo_adjunto.filename, open(f'docs/tmpFilesReceived/{nombre_archivo_salida}',"rb"), "application-type")}
         
         # Ruta completa del archivo que deseas adjuntar
         ruta_archivo_adjunto = f'docs/tmpFilesReceived/{nombre_archivo_salida}'
@@ -296,7 +296,7 @@ def attachFiles(data: request, newIssue, jiraServices):
         borrarDirectorio.clear_directory(ruta_archivo_adjunto)
     
     except Exception as e:
-        print('No se encontraron archivos para adjuntar')
+        print(f'No se encontraron archivos para adjuntar {e}')
 
 
 def createIssue(dataRequest: request) -> json:
@@ -331,9 +331,9 @@ def createIssue(dataRequest: request) -> json:
               
             
         except Exception as e : 
-            print('------------------- NO se pudo MApear-----------------')
+            print('------------------- NO se pudo Mapear-----------------')
             print(e)
-            print('------------------- NO se pudo MApear-----------------')
+            print('------------------- NO se pudo Mapear-----------------')
         
         # print(f'Esto es lo que llega del front: {json.dumps(dataIssue, indent=4)}')
         

@@ -1,13 +1,10 @@
 import os
-import shutil
 
 
-def clear_directory(directory_path):
+def clear_directory(directory_file):
     try:
-        # Borra todo el contenido del directorio
-        shutil.rmtree(directory_path)
-        # Crea el directorio vacío nuevamente
-        os.mkdir(directory_path)
+        os.remove(directory_file)
+    
         return True
     except Exception as e:
         print("Error:", str(e))

@@ -96,7 +96,7 @@ class Issue:
 class Approver:
     def __init__(self, data):
         self.email = data['email']
-        self.id = data['id']
+        #self.id = data['id']
         self.management = data['management']
         self.name = data['name']
         self.value = data['value']
