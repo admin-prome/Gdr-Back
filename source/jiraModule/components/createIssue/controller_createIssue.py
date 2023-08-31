@@ -224,6 +224,8 @@ def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: s
             """
         issueDict["description"] = description
         
+        
+        
 
     except Exception as e:
         print(f'Ocurrio un error en el mapeo de issueDict: {e}')

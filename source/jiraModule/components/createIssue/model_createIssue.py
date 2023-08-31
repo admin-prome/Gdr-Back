@@ -32,9 +32,12 @@ class Issue:
     
     def setReporter(self, data) -> dict:
         try:
-            print('inicio de set reporter')
-            reporter = {"accountId": data['userCredential']['idJIRA'],"accountType": "atlassian"}
-            print(reporter)
+            if (data['userCredential']['idJIRA']):
+                print('inicio de set reporter')
+                reporter = {"accountId": data['userCredential']['idJIRA'],"accountType": "atlassian"}
+            else: 
+                reporter = {"accountId": "6228d8734160640069ca5686","accountType": "atlassian"}
+                print(reporter)
         except Exception as e:
             print(f'No se encontro el id de JIRA {e}')
             reporter = {"accountId": "6228d8734160640069ca5686","accountType": "atlassian"}
