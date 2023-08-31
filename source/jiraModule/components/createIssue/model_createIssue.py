@@ -26,6 +26,7 @@ class Issue:
         self.finalDate = data['finalDate']
         self.normativeDate = data['normativeDate']
         self.userCredential = self.userCredential = UserCredential(data['userCredential'])
+        self.isTecno = data['isTecno']
 
         self.reporter = self.setReporter(data)
     

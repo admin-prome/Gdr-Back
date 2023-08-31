@@ -59,14 +59,8 @@ app.template_folder='templates'
 
 if __name__ == '__main__':
     
-    try:    
-        print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
-        os.mkdir('docs/tmpFilesReceived/')
-        cwd = os.getcwd()  # Get the current working directory (cwd)
-        files = os.listdir(cwd)  # Get all the files in that directory
-        print("Files in %r: %s" % (cwd, files))
-        print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
-        
+    try:            
         app.run()
+        
     except Exception as e:
         print(f'Ocurrio un error en la ejecución: {e}') 

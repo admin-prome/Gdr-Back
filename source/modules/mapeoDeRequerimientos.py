@@ -35,7 +35,11 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
                     
             issue_dict["customfield_10054"] = [{'id':mapeoGerencia(issue)}]
             
-            issue_dict["issuetype"] = {"id":"10001"}                         
+            issue_dict["issuetype"] = {"id":"10001"}      
+            
+            if (issue.isTecno == "si"):
+                issue_dict['customfield_10096'] = { "key" :"10103"}
+            else: issue_dict['customfield_10096'] = { "key" :"10102"}
 
             if((issue.finalDate != 'None') and (issue.finalDate != '')):
                 issue_dict['customfield_10038']= str((issue.finalDate[0:10]))
@@ -50,9 +54,14 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
 
             issue_dict["issuetype"] = {"id":"10003"} 
             
+            if(issue.isTecno == 'si'): 
+                issue.isTecno = 'InternoTech'
+            else: issue.isTecno = 'Usuario'
+            
             issue_dict['description'] = f"""{issue_dict['description']} 
                                             *Aprobado por:* {issue.approvers.name}
-                                            *Gerencia:* {issue.approvers.management}"""
+                                            *Gerencia:* {issue.approvers.management}
+                                            *Origen:* {issue.isTecno}"""
 
             if((issue.finalDate != 'None') and (issue.finalDate != ' ')):
                 issue_dict['description'] = issue_dict['description'] + '\n'  + '*Fecha de implementación:* '+ str(issue.finalDate[0:10])     
@@ -65,9 +74,21 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
             
             if issue.key == 'GGDI':
                 issue_dict["issuetype"] = {"id":"10090"} 
+            
+            if(issue.isTecno == 'si'): 
+                issue.isTecno = 'InternoTech'                
+            else: issue.isTecno = 'Usuario'
+            
+            issue_dict['description'] = f"""{issue_dict['description']}                                           
+                                            *Origen:* {issue.isTecno}"""
+            
                 # issue_dict["status"] =  { "id": "10199"}
                 
             if issue.key == 'TSTGDR':
+                
+                if(issue.isTecno == 'si'): 
+                    issue.isTecno = 'InternoTech'
+                else: issue.isTecno = 'Usuario'
                
                 #issue_dict["customfield_100
                 issue_dict["issuetype"] = {"id":"10096"} #Tipo de requerimiento (tarea) 
@@ -87,7 +108,8 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
                 
             issue_dict['description'] = f"""{issue_dict['description']} 
                                             *Aprobado por:* {issue.approvers.name}
-                                            *Gerencia:* {issue.approvers.management}"""
+                                            *Gerencia:* {issue.approvers.management}
+                                            *Origen:* {issue.isTecno}"""
 
             if((issue.finalDate != 'None') and (issue.finalDate != ' ')):
                 issue_dict['description'] = issue_dict['description'] + '\n'  + '*Fecha de implementación:* '+ str(issue.finalDate[0:10])     
