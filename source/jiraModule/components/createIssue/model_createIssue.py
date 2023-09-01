@@ -110,10 +110,17 @@ class UserCredential:
         self.email = data['email']
         self.name = data['name']
         self.exp = data['exp']
-        self.picture = data['picture']
+        self.picture = self.setPicture(data)
         self.idJIRA = data['idJIRA']
         self.timestamp = data['timestamp']
         self.userSession = data['userSession']
+        
+    
+    def setPicture(self, data):        
+        try:
+            self.picture = data['picture']
+        except:
+            self.picture = 'https://requerimientos.prome.ar/assets/logoColorP.png'
 
         
 class IDRequerimientos(db.Base):

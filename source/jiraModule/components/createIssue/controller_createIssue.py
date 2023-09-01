@@ -269,8 +269,7 @@ def attachFiles(data: request, newIssue, jiraServices):
     try:
         print('Comienzo adjuntar arhivos')
         print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
-        print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
-        
+        print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')        
         cwd = os.getcwd()  # Get the current working directory (cwd)
         os.mkdir(f'{cwd}/docs/tmpFilesReceived/')
         files = os.listdir(cwd)  # Get all the files in that directory
@@ -307,7 +306,7 @@ def attachFiles(data: request, newIssue, jiraServices):
         borrarDirectorio.clear_directory(ruta_archivo_adjunto)
     
     except Exception as e:
-        print(f'No se encontraron archivos para adjuntar {e}')
+        print(f'No se encontraron archivos para adjuntar: {e}')
 
 
 def createIssue(dataRequest: request) -> json:
