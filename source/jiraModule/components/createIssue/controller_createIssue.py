@@ -330,6 +330,7 @@ def createIssue(dataRequest: request) -> json:
         dataIssue = json.loads(dataIssue_str)                
         print(dataIssue)
         logging.info(dataIssue)
+        
     except:
         print('No se pudo mapear el archivo correctamente')
     
@@ -363,7 +364,7 @@ def createIssue(dataRequest: request) -> json:
         issueDict["project"] = issue.key
         
         print('Creando Requerimiento')
-        
+       
         newIssue = jira.create_issue(fields=issueDict)        
         
         try:

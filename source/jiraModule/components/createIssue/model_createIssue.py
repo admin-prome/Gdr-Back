@@ -2,6 +2,7 @@
 from types import SimpleNamespace
 from source.jiraModule.utils.conexion import db
 from sqlalchemy import Column, Integer, String
+import json
 
 
 class Issue:
@@ -28,13 +29,13 @@ class Issue:
         self.userCredential = self.userCredential = UserCredential(data['userCredential'])
         self.isTecno = data['isTecno']
 
-        self.reporter = self.setReporter(data)
+        self.reporter = self.setReporter(data['userCredential'])
     
     def setReporter(self, data) -> dict:
         try:
-            if (data['userCredential']['idJIRA']):
+            if (data['idJIRA']):
                 print('inicio de set reporter')
-                reporter = {"accountId": data['userCredential']['idJIRA'],"accountType": "atlassian"}
+                reporter = {"accountId": data['idJIRA'],"accountType": "atlassian"}
             else: 
                 reporter = {"accountId": "6228d8734160640069ca5686","accountType": "atlassian"}
                 print(reporter)
@@ -107,13 +108,16 @@ class Approver:
 
 class UserCredential:
     def __init__(self, data):
-        self.email = data['email']
-        self.name = data['name']
-        self.exp = data['exp']
-        self.picture = self.setPicture(data)
-        self.idJIRA = data['idJIRA']
-        self.timestamp = data['timestamp']
-        self.userSession = data['userSession']
+        try:
+           
+            self.email = data['email']
+            self.name = data['name']
+            self.exp = data['exp']
+            self.picture = self.setPicture(data)
+            self.idJIRA = data['idJIRA']
+            self.timestamp = data['timestamp']
+            self.userSession = data['userSession']
+        except Exception as e: print(f'Ocurrio un error al mapear UserCredential: {e}')
         
     
     def setPicture(self, data):        
