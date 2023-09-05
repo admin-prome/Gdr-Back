@@ -220,8 +220,9 @@ def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: s
             *Beneficio:* {issue.impact}
             *Enlace a la Documentación:* {issue.attached}.
             *Prioridad* definida por el usuario: {issue.priority}
-            *Iniciativa:* {issue.initiative}
             """
+            # *Iniciativa:* {issue.initiative}
+            
         issueDict["description"] = description
         
         
@@ -271,7 +272,9 @@ def attachFiles(data: request, newIssue, jiraServices):
         print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
         print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')        
         cwd = os.getcwd()  # Get the current working directory (cwd)
-        os.mkdir(f'{cwd}/docs/tmpFilesReceived/')
+        if not os.path.exists(f'{cwd}/docs/tmpFilesReceived/'):
+            os.mkdir(f'{cwd}/docs/tmpFilesReceived/')
+       
         files = os.listdir(cwd)  # Get all the files in that directory
         print("Files in %r: %s" % (cwd, files))
         print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
@@ -355,7 +358,7 @@ def createIssue(dataRequest: request) -> json:
         jiraOptions = {'server': "https://"+domain+".atlassian.net"}
         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))
         jira = jiraServices.getConection()
-        #issue.setKey(clasificarProyecto(dataIssue, issueDict))
+        issue.setKey(clasificarProyecto(dataIssue, issueDict))
         idUltimoRequerimiento = getNumberId(dataIssue['issueType'], dataIssue.get('subIssueType'))
         print(f"Esto es el ID del ultimo requerimiento: {str(idUltimoRequerimiento).zfill(3)}")        
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
