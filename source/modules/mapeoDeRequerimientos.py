@@ -35,7 +35,9 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
                     
             issue_dict["customfield_10054"] = [{'id':mapeoGerencia(issue)}]
             
-            issue_dict["issuetype"] = {"id":"10001"}      
+            issue_dict["issuetype"] = {"id":"10001"}    
+              
+            
             
             if (issue.isTecno == "si"):
                     issue_dict['customfield_10096'] = [{"id" :"10103"}]
@@ -109,7 +111,7 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
                
                 #issue_dict["customfield_10093"] = [{"accountId": "631610a08d88ec800fbf513e","accountType": "atlassian"}] #                
                 issue_dict["customfield_10084"] = {"id" : mapearPrioridadCliente(issue.priority)} #Prioridad del cliente
-                
+                issue_dict["reporter"] = issue.reporter
                 
             issue_dict['description'] = f"""{issue_dict['description']} 
                                             *Aprobado por:* {issue.approvers.name}
