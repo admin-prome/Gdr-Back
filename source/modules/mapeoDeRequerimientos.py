@@ -38,8 +38,8 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
             issue_dict["issuetype"] = {"id":"10001"}      
             
             if (issue.isTecno == "si"):
-                issue_dict['customfield_10096'] = [{ "key" :"10103"}]
-            else: issue_dict['customfield_10096'] = [{ "key" :"10102"}]
+                    issue_dict['customfield_10096'] = [{"id" :"10103"}]
+            else: issue_dict['customfield_10096'] = [{"id" :"10102"}]
 
             if((issue.finalDate != 'None') and (issue.finalDate != '')):
                 issue_dict['customfield_10038']= str((issue.finalDate[0:10]))
