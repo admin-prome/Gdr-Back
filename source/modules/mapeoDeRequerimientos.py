@@ -53,6 +53,8 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
             
         #MAPEO DE CAMPOS EN PROYECTO GESTIÓN DE TECNOLOGÍA
         elif (issue.key == 'GT'):
+            
+            
 
             issue_dict["issuetype"] = {"id":"10003"} 
             
@@ -70,7 +72,8 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
             
             if((issue.normativeDate != 'None') and (issue.normativeDate != ' ')):
                 issue_dict['description'] = issue_dict['description'] + '\n' + '*Fecha normativa:* '+ str(issue.normativeDate[0:10])               
-
+            
+            del issue_dict['reporter']
         
         else:
             
