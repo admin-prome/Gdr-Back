@@ -366,13 +366,15 @@ def createIssue(dataRequest: request) -> json:
         MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)          
         
         issueDict["project"] = issue.key
+        print(f'esto es el issue.key: {issue.key}')
         
         print('Creando Requerimiento')
-        
+        print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
         if (issueDict["project"] !='GDD' or issueDict["project"] != 'TSTGDR'):
+            print('eliminando reporter')
             del issueDict["reporter"]
             print(issueDict)
-            
+        print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
         newIssue = jira.create_issue(fields=issueDict)        
         
         try:
