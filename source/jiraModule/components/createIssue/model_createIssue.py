@@ -2,6 +2,7 @@
 from types import SimpleNamespace
 from source.jiraModule.utils.conexion import db
 from sqlalchemy import Column, Integer, String
+import json
 
 
 class Issue:
@@ -11,12 +12,12 @@ class Issue:
     def __init__(self, data):
         # self.project = data['project']        
         self.key = data['key']
-        self.summary = data['summary']
+        self.summary = str(data['summary'])
         self.description = data['description']
         self.type = data['type']
         self.issueType = data['issueType']
         self.subIssueType = data['subIssueType']
-        self.approvers = SimpleNamespace(**data['approvers']) if 'approvers' in data else None
+        self.approvers = Approver(data['approvers'])
         self.impact = data['impact']
         self.attached = data['attached']
         self.managment = data['managment']
@@ -25,14 +26,26 @@ class Issue:
         self.normativeRequirement = data['normativeRequirement']
         self.finalDate = data['finalDate']
         self.normativeDate = data['normativeDate']
-        self.userCredential = SimpleNamespace(**data['userCredential']) if 'approvers' in data else None 
+        self.userCredential = self.userCredential = UserCredential(data['userCredential'])
+        self.isTecno = data['isTecno']
 
-    def __str__(self):
-        return f"Summary: {self.summary}, Type: {self.type}, Priority: {self.priority}"
-
-    def __repr__(self):
-        return f"MyObject({self.__dict__})"
-
+        self.reporter = self.setReporter(data['userCredential'])
+    
+    def setReporter(self, data) -> dict:
+        try:
+            if (data['idJIRA']):
+                print('inicio de set reporter')
+                reporter = {"accountId": data['idJIRA'],"accountType": "atlassian"}
+            else: 
+                reporter = {"accountId": "6228d8734160640069ca5686","accountType": "atlassian"}
+                print(reporter)
+        except Exception as e:
+            print(f'No se encontro el id de JIRA {e}')
+            reporter = {"accountId": "6228d8734160640069ca5686","accountType": "atlassian"}
+            print(reporter)
+    
+        return reporter
+        
     def format_approvers(self):
         if self.approvers:
             return f"Aprobado por: {self.approvers.name} - {self.approvers.management}"
@@ -43,6 +56,7 @@ class Issue:
     def __str__(self):
         
         content: str = f'''
+            Usuario informador: {self.reporter}
             Creado por: {self.userCredential.name}
             Email: {self.userCredential.email}
             Nombre del proyecto: {self.key} 
@@ -57,6 +71,7 @@ class Issue:
             Iniciativa: {self.initiative}
             Fecha de implementación: {self.finalDate} 
             Fecha normativa: {self.normativeDate}
+            Proyecto: {self.key}
             
             
         '''
@@ -79,6 +94,39 @@ class Issue:
     def setKey(self, key: str) -> None:
         self.key = key
 
+    # def setReporter(self, reporter: str) -> None:
+    #     self.reporter['accountId'] = reporter
+
+
+class Approver:
+    def __init__(self, data):
+        self.email = data['email']
+        #self.id = data['id']
+        self.management = data['management']
+        self.name = data['name']
+        self.value = data['value']
+
+class UserCredential:
+    def __init__(self, data):
+        try:
+           
+            self.email = data['email']
+            self.name = data['name']
+            self.exp = data['exp']
+            self.picture = self.setPicture(data)
+            self.idJIRA = data['idJIRA']
+            self.timestamp = data['timestamp']
+            self.userSession = data['userSession']
+        except Exception as e: print(f'Ocurrio un error al mapear UserCredential: {e}')
+        
+    
+    def setPicture(self, data):        
+        try:
+            self.picture = data['picture']
+        except:
+            self.picture = 'https://requerimientos.prome.ar/assets/logoColorP.png'
+
+        
 class IDRequerimientos(db.Base):
     __tablename__ = 'dbo.GDR_REQUERIMIENTOS'
     

@@ -1,11 +1,13 @@
+from source.settings.settings import settings
 from source.jiraModule.components.createIssue.model_createIssue import Issue
 
+ENVIROMENT: str = settings.ENVIROMENT
 
 def mapeoGerencia(issue: Issue)->str:
     
     posicion: int = 1
     gerencia: str = issue.approvers.management
-    ENVIROMENT = 'PROD'
+    #ENVIROMENT = 'PROD'
     gerencias: dict = {
                         "Administracion y Finanzas": "10028",
                         "Red de Sucursales": "10034",
@@ -21,7 +23,7 @@ def mapeoGerencia(issue: Issue)->str:
                         }
 
     
-    if( ENVIROMENT == 'PROD'):
+    if( (ENVIROMENT == 'PROD') or (ENVIROMENT == 'TST')):
         posicion = 0
    
     if gerencia in gerencias:
@@ -50,7 +52,7 @@ def mapeoDeGerente(gerente:str, ENVIROMENT: str) -> str:
         }
    
 
-    if( ENVIROMENT == 'PROD'):
+    if( (ENVIROMENT == 'PROD') or (ENVIROMENT == 'TST')):
         
         if gerente in gerentes:
             idGerente = gerentes[gerente]    

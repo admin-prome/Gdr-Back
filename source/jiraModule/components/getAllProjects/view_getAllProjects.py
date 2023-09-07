@@ -1,7 +1,7 @@
 import json
 from flask import Blueprint, jsonify
 from source.jiraModule.components.getAllProjects import controller_getAllProjects
-
+#from source.modules.getUserIdForJIRA.controller_getUserIdForJIRA import getIdJiraUser
 
 getAllProjects_bp = Blueprint("getAllProjects_bp", __name__)
 
@@ -13,6 +13,7 @@ def GetProjects() -> json:
     response: dict = {}
     try:
         approvers = controller_getAllProjects.getApprovers()
+        
         print(type(approvers))
         #projects = controller_getAllProjects.getAllProjects()
         #initiatives = controller_getAllProjects.getInitiatives()
@@ -21,9 +22,10 @@ def GetProjects() -> json:
         #response['projects']= projects
         #response['initiatives'] = {"initiatives": "0"}
         # print(projects)
-     
+        #userJiraId = getIdJiraUser()
         response = jsonify({"approvers": approvers})
         #print(f'Esto es lo que llega del front: {json.dumps(response, indent=4)}')
+        
         print('-----------------------------------------------')
         print(response)
         print('-----------------------------------------------')

@@ -34,9 +34,9 @@ def mapearCuerpoDeCorreo(dataIssue: dict, idUltimoRequerimiento: str):
                     <p><b>Funcionalidad: </b>{dataIssue['description']}</p>
                     <p><b>Beneficio: </b>{dataIssue['impact']}</p>
                     <p><b>Enlace a la Documentación: </b>{dataIssue['attached']}</p>
-                    <p><b>Prioridad definida por el usuario: </b>{dataIssue['priority']}</p>                   
-                    <p><b>Iniciativa: </b>{dataIssue['initiative']}</p>                                       
+                    <p><b>Prioridad definida por el usuario: </b>{dataIssue['priority']}</p>  
                     """)
+        #<p><b>Iniciativa: </b>{dataIssue['initiative']}</p> 
 
     except Exception as e: 
         print(f'Ocurrio un error al mapear cuerpo del correo: {e}')        

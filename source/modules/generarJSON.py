@@ -2,18 +2,20 @@ import json
 import os
 
 def generate_and_save_json(data, filename):
-    # Generar el JSON
-    #json_data = json.dumps(data, indent=4)
-    
+    # Verificar y crear el directorio 'BackGDR/docs' si no existe
+    target_dir = 'gdrback/docs'
+    if not os.path.exists(target_dir):
+        os.makedirs(target_dir)
+
     # Obtener la ruta del directorio padre
     parent_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
     
     # Combinar la ruta del directorio objetivo con el nombre del archivo
-    file_path = os.path.join(parent_dir, 'BackGDR/docs', filename)
-    #print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))
+    file_path = os.path.join(parent_dir, target_dir, filename)
+    
     # Guardar el JSON en un archivo
     with open(file_path, 'w') as file:
-        file.write(str(data))
+        json.dump(data, file, indent=4)
     
     print(f"Archivo JSON guardado como {file_path}")
 
