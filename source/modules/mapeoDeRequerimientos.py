@@ -77,7 +77,6 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
         
         else:
             
-            del issue_dict['reporter']
             
             if issue.key == 'GGDI':
                 issue_dict["issuetype"] = {"id":"10090"} 

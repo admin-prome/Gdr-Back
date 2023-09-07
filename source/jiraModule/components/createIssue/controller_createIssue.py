@@ -369,7 +369,10 @@ def createIssue(dataRequest: request) -> json:
         
         print('Creando Requerimiento')
         
-        if (issueDict["project"] !='GDD' or issueDict["project"] != 'TSTGDR'): del issueDict["reporter"]
+        if (issueDict["project"] !='GDD' or issueDict["project"] != 'TSTGDR'):
+            del issueDict["reporter"]
+            print(issueDict)
+            
         newIssue = jira.create_issue(fields=issueDict)        
         
         try:
