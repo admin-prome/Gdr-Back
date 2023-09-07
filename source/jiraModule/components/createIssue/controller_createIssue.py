@@ -370,11 +370,14 @@ def createIssue(dataRequest: request) -> json:
         
         print('Creando Requerimiento')
         print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
-        if (issueDict["project"] !='GDD' or issueDict["project"] != 'TSTGDR'):
+        if issueDict["project"] not in ('GDD', 'TSTGDR'):
             print('eliminando reporter')
-            del issueDict["reporter"]
+            reporter_value = issueDict.pop("reporter", None)  # Elimina "reporter" si existe, o devuelve None si no existe
+            if reporter_value is not None:
+                print(f"Valor eliminado de 'reporter': {reporter_value}")
             print(issueDict)
         print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
+
         newIssue = jira.create_issue(fields=issueDict)        
         
         try:
