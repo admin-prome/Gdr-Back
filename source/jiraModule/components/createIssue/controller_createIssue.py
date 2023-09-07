@@ -209,7 +209,8 @@ def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: s
         
         issueDict['summary'] = tituloDelRequerimiento
         issue.summary = tituloDelRequerimiento
-        issueDict["reporter"] = issue.reporter
+        
+        #issueDict["reporter"] = issue.reporter
         
         description = f"""
             *Fecha de Creación:* {str(obtenerFechaHoraBsAs())}
@@ -365,9 +366,18 @@ def createIssue(dataRequest: request) -> json:
         MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)          
         
         issueDict["project"] = issue.key
+        print(f'esto es el issue.key: {issue.key}')
         
         print('Creando Requerimiento')
-       
+        print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
+        if issueDict["project"] not in ('GDD', 'TSTGDR'):
+            print('eliminando reporter')
+            reporter_value = issueDict.pop("reporter", None)  # Elimina "reporter" si existe, o devuelve None si no existe
+            if reporter_value is not None:
+                print(f"Valor eliminado de 'reporter': {reporter_value}")
+            print(issueDict)
+        print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
+
         newIssue = jira.create_issue(fields=issueDict)        
         
         try:
