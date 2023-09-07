@@ -86,9 +86,7 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
                 issue.isTecno = 'InternoTech'                
             else: issue.isTecno = 'Usuario'
             
-            if (issue.isTecno == "si"):
-                    issue_dict['customfield_10096'] = [{"id" :"10103"}]
-            else: issue_dict['customfield_10096'] = [{"id" :"10102"}]
+           
             
             
             issue_dict['description'] = f"""{issue_dict['description']}                                           

@@ -209,7 +209,8 @@ def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: s
         
         issueDict['summary'] = tituloDelRequerimiento
         issue.summary = tituloDelRequerimiento
-        issueDict["reporter"] = issue.reporter
+        
+        #issueDict["reporter"] = issue.reporter
         
         description = f"""
             *Fecha de Creación:* {str(obtenerFechaHoraBsAs())}

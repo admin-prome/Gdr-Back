@@ -19,6 +19,7 @@ from source.jiraModule.components.userHandler.getUserForEmail.view_getUserForEma
 from source.jiraModule.components.userHandler.getAllUsers.view_getAllUsers import getAllUsers_bp
 from source.jiraModule.components.userHandler.getUserSession.view_getUserSession import getUserSession_bp
 
+from source.jiraModule.components.userHandler.getProjectsForUser.view_getProjectsForUser import getProjectsForUser_bp
 # USER: str = settings.DBUSER
 # PASS: str = settings.DBPASS
 # SERVER: str = settings.DBSERVER
@@ -53,6 +54,8 @@ app.register_blueprint(getAllUsers_bp)
 app.register_blueprint(loginJira_bp)
 app.register_blueprint(getUserSession_bp)
 
+app.register_blueprint(getProjectsForUser_bp)
+
 app.static_folder = 'static'
 app.template_folder='templates'
 
@@ -60,7 +63,7 @@ app.template_folder='templates'
 if __name__ == '__main__':
     
     try:            
-        app.run()
+        app.run(debug=True)
         
     except Exception as e:
         print(f'Ocurrio un error en la ejecución: {e}') 

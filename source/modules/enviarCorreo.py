@@ -141,15 +141,19 @@ def armarCuerpoDeCorreo(data: dict, id: str):
     return body
 
 
-def enviarCorreo(destinatarios: list, asunto: str, _mensaje: str):
-   
-   
+def enviarCorreo(destinatarios: list, asunto: str, _mensaje: str, bcc_destinatarios: list = []):
     cuerpo_mensaje = _mensaje
     mensaje = MIMEMultipart()
     mensaje['From'] = EMAIL_REMITENTE
-    mensaje['To'] = ",".join(destinatarios)
     mensaje['Subject'] = asunto
-    mensaje.attach(MIMEText(cuerpo_mensaje, 'html', 'utf-8'))    
+    mensaje.attach(MIMEText(cuerpo_mensaje, 'html', 'utf-8'))
+
+    # Establecer destinatarios en el encabezado To
+    mensaje['To'] = ",".join(destinatarios)
+
+    # Agregar destinatarios en el encabezado Bcc
+    if bcc_destinatarios:
+        mensaje['Bcc'] = ",".join(bcc_destinatarios)
 
     try:
         smtp_server = 'smtp.gmail.com'
@@ -158,19 +162,19 @@ def enviarCorreo(destinatarios: list, asunto: str, _mensaje: str):
         server.starttls()
         # print('Conexion exitosa al servidor de GMAIL')
     except Exception as e:
-        print(f'Error al conectarse al servidor de gmail: {e}')
-    
+        print(f'Error al conectarse al servidor de Gmail: {e}')
+
     try:
-        # se loguea
+        # Se loguea
         server.login(EMAIL_REMITENTE, EMAIL_PASSWORD)
         # Enviar mensaje
         texto = mensaje.as_string()
-        server.sendmail(EMAIL_REMITENTE, destinatarios, texto)
+        server.sendmail(EMAIL_REMITENTE, destinatarios + bcc_destinatarios, texto)
         server.quit()
         print("Email enviado exitosamente")
         
     except Exception as e:
-        print('Error en el envio de mail',e)
+        print('Error en el envío de correo', e)
 
 def enviarCorreoDeError(_asunto: str, error:str):
     
@@ -184,7 +188,7 @@ def enviarCorreoDeError(_asunto: str, error:str):
     print(error)
     print(type(_asunto))
     print(type(error))
-    enviarCorreo(correosDeError, asunto, mensaje)
+    enviarCorreo(correosDeError, asunto, mensaje, ['mbarreto@provinciamicrocreditos.com','mjmillan@fi.uba.ar'])
     
     
 if __name__ == "__main__":
