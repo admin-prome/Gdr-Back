@@ -408,7 +408,10 @@ def createIssue(dataRequest: request) -> json:
                 destinatarios = [dataIssue['userCredential']['email']]
 
             destinatarios.append(correoGerente)
+            
             if dataIssue['issueType'] == 'INF': destinatarios.append('infra_tecno@provinciamicrocreditos.com')
+            if dataIssue['issueType'] == 'INC': destinatarios.append('gdi@provinciamicrocreditos.com')
+            
             response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
             enviarCorreo(destinatarios, asunto, armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
         else:
