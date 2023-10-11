@@ -63,7 +63,7 @@ app.template_folder='templates'
 if __name__ == '__main__':
     
     try:            
-        app.run(debug=True)
+        app.run()
         
     except Exception as e:
         print(f'Ocurrio un error en la ejecución: {e}') 
