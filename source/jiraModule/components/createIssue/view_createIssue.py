@@ -21,6 +21,8 @@ createIssue_bp = Blueprint("createIssue_bp", __name__)
 def CreateNewIssue() -> json:  
     try:
         print('------------------POR RESPONSE-----------------')
+        #print(request.form)
+        
         response = controller_createIssue.createIssue(request)     
         print(response)
     except Exception as e:

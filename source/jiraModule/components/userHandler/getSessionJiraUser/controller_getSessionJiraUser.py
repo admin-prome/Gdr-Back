@@ -19,7 +19,8 @@ def getSessionJiraUser(data: json):
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/json"
-    }
+    } 
+   
     
     payload = {
         'oauth_token': token_respuesta,

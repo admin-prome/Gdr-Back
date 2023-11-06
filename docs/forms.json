@@ -1,0 +1,964 @@
+{
+    "traditionalTecno": {
+        "order": {
+            "1": "summary",
+            "2": "issuetype",
+            "3": "subissuetype",
+            "4": "priority",
+            "5": "approvers",
+            "6": "normativeDate",
+            "7": "finalDate",
+            "8": "finalDate",
+            "9": "managment",
+            "10": "impact",
+            "11": "description",
+            "12": "file",
+            "13": "attached"
+        },
+        "form": {
+            "file": {
+                "type": "file",
+                "key": "file",
+                "label": "Adjuntar archivo",
+                "name": "archivo",
+                "placeholder": "Ingrese un titulo descriptivo",
+                "required": false,
+                "value": "",
+                "validators": {
+                    "required": false,
+                    "requiredTrue": false
+                },
+                "accept": ".pdf,.doc,.jpg,.png,.tiff,.xls",
+                "maxFileSize": 2
+            },
+            "attached": {
+                "type": "input",
+                "key": "attached",
+                "label": "Ingrese el enlace a la",
+                "name": "Documentación",
+                "placeholder": "Ingrese un enlace",
+                "required": false,
+                "value": "",
+                "validators": {},
+                "return": "string"
+            },
+            "isTecno": {
+                "type": "radio",
+                "key": "isTecno",
+                "label": "¿Es un requerimiento interno de Tecnología?",
+                "name": "origen",
+                "options": {
+                    "TEC": {
+                        "value": "Si",
+                        "label": "Si"
+                    },
+                    "NOTEC": {
+                        "value": "No",
+                        "label": "No"
+                    }
+                },
+                "value": "no",
+                "validators": {
+                    "required": true,
+                    "nullValidator": true
+                },
+                "return": "string"
+            },
+            "summary": {
+                "type": "input",
+                "key": "summary",
+                "label": "Ingrese el",
+                "name": "Titulo",
+                "placeholder": "Ingrese un titulo descriptivo",
+                "required": true,
+                "value": "",
+                "validators": {
+                    "required": true,
+                    "requiredTrue": true
+                },
+                "return": "string"
+            },
+            "issuetype": {
+                "type": "select",
+                "key": "issuetype",
+                "label": "Elija el",
+                "name": "tipo de incidencia",
+                "placeholder": "Elije el tipo de incidencia",
+                "options": {
+                    "REQ": [
+                        {
+                            "value": "REQ",
+                            "label": "Requerimiento de Desarrollo"
+                        }
+                    ],
+                    "INC": [
+                        {
+                            "value": "INC",
+                            "label": "Incidencia"
+                        }
+                    ],
+                    "INF": [
+                        {
+                            "value": "INF",
+                            "label": "Infraestructura"
+                        }
+                    ],
+                    "SEG": [
+                        {
+                            "value": "SEG",
+                            "label": "Seguridad Informática"
+                        }
+                    ]
+                },
+                "required": true,
+                "value": "",
+                "validators": {
+                    "required": true,
+                    "minLength": 8
+                },
+                "condition": true,
+                "dependentOn": false,
+                "dependencies": [],
+                "dependents": [
+                    "subIssueType"
+                ],
+                "return": "string"
+            },
+            "subissuetype": {
+                "type": "select",
+                "key": "subissuetype",
+                "label": "Elija el",
+                "name": "subtipo de incidencia",
+                "placeholder": "Elije el subtipo de incidencia",
+                "options": {
+                    "INF": [
+                        {
+                            "value": "INF",
+                            "label": "Infraestructura"
+                        },
+                        {
+                            "value": "SEG",
+                            "label": "Seguridad Informática"
+                        }
+                    ],
+                    "REQ": [
+                        {
+                            "value": "CRM",
+                            "label": "C.R.M"
+                        },
+                        {
+                            "value": "SCP",
+                            "label": "Score PROME"
+                        },
+                        {
+                            "value": "NLO",
+                            "label": "Calculadora/Nosis lote"
+                        },
+                        {
+                            "value": "WWW",
+                            "label": "Web institucional"
+                        },
+                        {
+                            "value": "REN",
+                            "label": "Rendición de viáticos"
+                        },
+                        {
+                            "value": "GDR",
+                            "label": "Gestor de requerimientos"
+                        },
+                        {
+                            "value": "PPR",
+                            "label": "Portal PROME"
+                        },
+                        {
+                            "value": "CPR",
+                            "label": "Comunidad PROME"
+                        },
+                        {
+                            "value": "HLC",
+                            "label": "Hace la Cuenta"
+                        }
+                    ],
+                    "INC": [
+                        {
+                            "value": "CRM",
+                            "label": "C.R.M"
+                        },
+                        {
+                            "value": "SCP",
+                            "label": "Score PROME"
+                        },
+                        {
+                            "value": "NLO",
+                            "label": "Calculadora/Nosis lote"
+                        },
+                        {
+                            "value": "WWW",
+                            "label": "Web institucional"
+                        },
+                        {
+                            "value": "REN",
+                            "label": "Rendición de viáticos"
+                        },
+                        {
+                            "value": "GDR",
+                            "label": "Gestor de requerimientos"
+                        },
+                        {
+                            "value": "PPR",
+                            "label": "Portal PROME"
+                        },
+                        {
+                            "value": "CPR",
+                            "label": "Comunidad PROME"
+                        },
+                        {
+                            "value": "HLC",
+                            "label": "Hace la Cuenta"
+                        }
+                    ],
+                    "FIX": [
+                        {
+                            "value": "FIX",
+                            "label": "Correción"
+                        }
+                    ]
+                },
+                "required": true,
+                "value": "",
+                "validators": {},
+                "condition": true,
+                "dependentOn": "issuetype",
+                "dependencies": {},
+                "return": "string"
+            },
+            "priority": {
+                "type": "select",
+                "key": "priority",
+                "label": "Elija la",
+                "name": "Prioridad",
+                "placeholder": "Elije la prioridad",
+                "options": {
+                    "key": [
+                        {
+                            "value": "Normativa",
+                            "label": "Normativa"
+                        },
+                        {
+                            "value": "Muy Alta",
+                            "label": "Muy Alta"
+                        },
+                        {
+                            "value": "Alta",
+                            "label": "Alta"
+                        },
+                        {
+                            "value": "Media",
+                            "label": "Media"
+                        },
+                        {
+                            "value": "Estándar",
+                            "label": "Estándar"
+                        }
+                    ]
+                },
+                "required": true,
+                "value": "",
+                "validators": {},
+                "dependents": "",
+                "condition": true,
+                "return": "string"
+            },
+            "approvers": {
+                "type": "select",
+                "key": "approvers",
+                "label": "Elija la",
+                "name": "Aprobado por",
+                "placeholder": "Elije quien aprueba el requerimiento o incidente",
+                "options": {
+                    "key": [
+                        {
+                            "email": "abermann@provinciamicrocreditos.com",
+                            "value": "6228d69b4160640069ca557b",
+                            "label": "Alejandro Daniel Bermann",
+                            "management": "Administracion y Finanzas"
+                        },
+                        {
+                            "email": "acosentino@provinciamicrocreditos.com",
+                            "value": "616872d97a6be400718d74b2",
+                            "label": "Ariel Cosentino",
+                            "management": "Red de Sucursales"
+                        },
+                        {
+                            "email": "crojas@provinciamicrocreditos.com",
+                            "value": "70121:5207ec8f-c9f4-456f-9116-2699e4c2f324",
+                            "label": "Carmen Eugenia Rojas Jaramillo",
+                            "management": "Cumplimiento y Procesos"
+                        },
+                        {
+                            "email": "efernandez@provinciamicrocreditos.co",
+                            "value": "615e66da289a54006a2ca1e3",
+                            "label": "Emiliano Fernandez",
+                            "management": "Inteligencia de Negocios y Gestion estrategica"
+                        },
+                        {
+                            "email": "gmarino@provinciamicrocreditos.com",
+                            "value": "61bbafde08e4e00069aef74e",
+                            "label": "Gisela Elin Marino",
+                            "management": "Comercial"
+                        },
+                        {
+                            "email": "istella@provinciamicrocreditos.com",
+                            "value": "6171a81dbcb57400682d861e",
+                            "label": "Ignacio Fernando Stella",
+                            "management": "Personas"
+                        },
+                        {
+                            "email": "jcanepa@provinciamicrocreditos.com",
+                            "value": "5cb0e51cfb6145589296296a",
+                            "label": "Juan Carlos Canepa",
+                            "management": "Tecnologia"
+                        },
+                        {
+                            "email": "lottone@provinciamicrocreditos.co",
+                            "value": "6228d79dc88f10006832563a",
+                            "label": "Leandro Martin Ottone",
+                            "management": "Direccion Ejecutiva"
+                        },
+                        {
+                            "email": "mluna@provinciamicrocreditos.com",
+                            "value": "60b55e675fa6f1006f93d22b",
+                            "label": "Mariela Alejandra Luna",
+                            "management": "Riesgo"
+                        },
+                        {
+                            "email": "mcgomez@provinciamicrocreditos.co",
+                            "value": "61aa6bb06d002b006b02630e",
+                            "label": "Mar­ia Carolina Gomez",
+                            "management": "Comunicacion Institucional"
+                        },
+                        {
+                            "email": "srosanovich@provinciamicrocreditos.co",
+                            "value": "6228d870a1245000688b1065",
+                            "label": "Sergio Andres Rosanovich",
+                            "management": "Investigacion y Capacitacion"
+                        }
+                    ]
+                },
+                "required": true,
+                "value": "",
+                "validators": {},
+                "condition": true,
+                "dependents": "",
+                "return": "json"
+            },
+            "normativeDate": {
+                "type": "datepicker",
+                "key": "normativeDate",
+                "label": "Elija la fecha del",
+                "name": "Incidente o requerimiento normativo",
+                "placeholder": "Elija la fecha normativa de implementación",
+                "required": false,
+                "value": "",
+                "validators": {},
+                "return": "string"
+            },
+            "finalDate": {
+                "type": "datepicker",
+                "key": "finalDate",
+                "label": "Elija la fecha del",
+                "name": "Incidente o requerimiento",
+                "placeholder": "Elija la fecha estimada de implementación",
+                "value": "",
+                "return": "string",
+                "required": false
+            },
+            "managment": {
+                "type": "textarea",
+                "key": "managment",
+                "label": "Ingrese el",
+                "name": "Para (Beneficio)",
+                "placeholder": "Ingrese el beneficio",
+                "required": true,
+                "value": "",
+                "validators": {
+                    "required": true,
+                    "minLength": 10
+                },
+                "return": "string"
+            },
+            "impact": {
+                "type": "textarea",
+                "key": "impact",
+                "label": "Ingrese el",
+                "name": "Impacto",
+                "placeholder": "Ingrese las areas, sistemas, etc donde impacta",
+                "required": true,
+                "value": "",
+                "validators": {
+                    "required": true,
+                    "minLength": 15
+                },
+                "return": "string"
+            },
+            "description": {
+                "type": "textarea",
+                "key": "description",
+                "label": "Ingrese la",
+                "name": "Funcionalidad",
+                "placeholder": "Por favor, no escatime en palabras",
+                "required": true,
+                "value": "",
+                "validators": {
+                    "required": true,
+                    "minLength": 15,
+                    "maxLength": 25
+                },
+                "return": "string"
+            }
+        }
+    },
+    "traditional": {
+        "order": {
+            "1": "summary",
+            "2": "issuetype",
+            "3": "subissuetype",
+            "4": "priority",
+            "5": "approvers",
+            "6": "normativeDate",
+            "7": "finalDate",
+            "8": "finalDate",
+            "9": "managment",
+            "10": "impact",
+            "11": "description",
+            "12": "file",
+            "13": "attached"
+        },
+        "form": {
+            "summary": {
+                "type": "input",
+                "key": "summary",
+                "label": "Ingrese el",
+                "name": "Titulo",
+                "placeholder": "Ingrese un titulo descriptivo",
+                "required": true,
+                "value": "",
+                "validators": {
+                    "required": true,
+                    "requiredTrue": true
+                },
+                "return": "string"
+            },
+            "issuetype": {
+                "type": "select",
+                "key": "issuetype",
+                "label": "Elija el",
+                "name": "tipo de incidencia",
+                "placeholder": "Elije el tipo de incidencia",
+                "options": {
+                    "REQ": [
+                        {
+                            "value": "REQ",
+                            "label": "Requerimiento de Desarrollo"
+                        }
+                    ],
+                    "INF": [
+                        {
+                            "value": "INF",
+                            "label": "Infraestructura"
+                        }
+                    ]
+                },
+                "required": true,
+                "value": "",
+                "validators": {
+                    "required": true,
+                    "minLength": 8
+                },
+                "condition": true,
+                "dependentOn": false,
+                "dependencies": [],
+                "dependents": [
+                    "subIssueType"
+                ],
+                "return": "string"
+            },
+            "subissuetype": {
+                "type": "select",
+                "key": "subissuetype",
+                "label": "Elija el",
+                "name": "subtipo de incidencia",
+                "placeholder": "Elije el subtipo de incidencia",
+                "options": {
+                    "INF": [
+                        {
+                            "value": "INF",
+                            "label": "Infraestructura"
+                        },
+                        {
+                            "value": "SEG",
+                            "label": "Seguridad Informática"
+                        }
+                    ],
+                    "REQ": [
+                        {
+                            "value": "CRM",
+                            "label": "C.R.M"
+                        },
+                        {
+                            "value": "SCP",
+                            "label": "Score PROME"
+                        },
+                        {
+                            "value": "NLO",
+                            "label": "Calculadora/Nosis lote"
+                        },
+                        {
+                            "value": "WWW",
+                            "label": "Web institucional"
+                        },
+                        {
+                            "value": "REN",
+                            "label": "Rendición de viáticos"
+                        },
+                        {
+                            "value": "GDR",
+                            "label": "Gestor de requerimientos"
+                        },
+                        {
+                            "value": "PPR",
+                            "label": "Portal PROME"
+                        },
+                        {
+                            "value": "CPR",
+                            "label": "Comunidad PROME"
+                        },
+                        {
+                            "value": "HLC",
+                            "label": "Hace la Cuenta"
+                        }
+                    ],
+                    "INC": [
+                        {
+                            "value": "CRM",
+                            "label": "C.R.M"
+                        },
+                        {
+                            "value": "SCP",
+                            "label": "Score PROME"
+                        },
+                        {
+                            "value": "NLO",
+                            "label": "Calculadora/Nosis lote"
+                        },
+                        {
+                            "value": "WWW",
+                            "label": "Web institucional"
+                        },
+                        {
+                            "value": "REN",
+                            "label": "Rendición de viáticos"
+                        },
+                        {
+                            "value": "GDR",
+                            "label": "Gestor de requerimientos"
+                        },
+                        {
+                            "value": "PPR",
+                            "label": "Portal PROME"
+                        },
+                        {
+                            "value": "CPR",
+                            "label": "Comunidad PROME"
+                        },
+                        {
+                            "value": "HLC",
+                            "label": "Hace la Cuenta"
+                        }
+                    ]
+                },
+                "required": true,
+                "value": "",
+                "validators": {},
+                "condition": true,
+                "dependentOn": "issuetype",
+                "dependencies": {},
+                "return": "string"
+            },
+            "priority": {
+                "type": "select",
+                "key": "priority",
+                "label": "Elija la",
+                "name": "Prioridad",
+                "placeholder": "Elije la prioridad",
+                "options": {
+                    "key": [
+                        {
+                            "value": "Normativa",
+                            "label": "Normativa"
+                        },
+                        {
+                            "value": "Muy Alta",
+                            "label": "Muy Alta"
+                        },
+                        {
+                            "value": "Alta",
+                            "label": "Alta"
+                        },
+                        {
+                            "value": "Media",
+                            "label": "Media"
+                        },
+                        {
+                            "value": "Estándar",
+                            "label": "Estándar"
+                        }
+                    ]
+                },
+                "required": true,
+                "value": "",
+                "validators": {},
+                "dependents": "",
+                "condition": true,
+                "return": "string"
+            },
+            "approvers": {
+                "type": "select",
+                "key": "approvers",
+                "label": "Elija la",
+                "name": "Aprobado por",
+                "placeholder": "Elije quien aprueba el requerimiento o incidente",
+                "options": {
+                    "key": [
+                        {
+                            "email": "abermann@provinciamicrocreditos.com",
+                            "value": "6228d69b4160640069ca557b",
+                            "label": "Alejandro Daniel Bermann",
+                            "management": "Administracion y Finanzas"
+                        },
+                        {
+                            "email": "acosentino@provinciamicrocreditos.com",
+                            "value": "616872d97a6be400718d74b2",
+                            "label": "Ariel Cosentino",
+                            "management": "Red de Sucursales"
+                        },
+                        {
+                            "email": "crojas@provinciamicrocreditos.com",
+                            "value": "70121:5207ec8f-c9f4-456f-9116-2699e4c2f324",
+                            "label": "Carmen Eugenia Rojas Jaramillo",
+                            "management": "Cumplimiento y Procesos"
+                        },
+                        {
+                            "email": "efernandez@provinciamicrocreditos.co",
+                            "value": "615e66da289a54006a2ca1e3",
+                            "label": "Emiliano Fernandez",
+                            "management": "Inteligencia de Negocios y Gestion estrategica"
+                        },
+                        {
+                            "email": "gmarino@provinciamicrocreditos.com",
+                            "value": "61bbafde08e4e00069aef74e",
+                            "label": "Gisela Elin Marino",
+                            "management": "Comercial"
+                        },
+                        {
+                            "email": "istella@provinciamicrocreditos.com",
+                            "value": "6171a81dbcb57400682d861e",
+                            "label": "Ignacio Fernando Stella",
+                            "management": "Personas"
+                        },
+                        {
+                            "email": "jcanepa@provinciamicrocreditos.com",
+                            "value": "5cb0e51cfb6145589296296a",
+                            "label": "Juan Carlos Canepa",
+                            "management": "Tecnologia"
+                        },
+                        {
+                            "email": "lottone@provinciamicrocreditos.co",
+                            "value": "6228d79dc88f10006832563a",
+                            "label": "Leandro Martin Ottone",
+                            "management": "Direccion Ejecutiva"
+                        },
+                        {
+                            "email": "mluna@provinciamicrocreditos.com",
+                            "value": "60b55e675fa6f1006f93d22b",
+                            "label": "Mariela Alejandra Luna",
+                            "management": "Riesgo"
+                        },
+                        {
+                            "email": "mcgomez@provinciamicrocreditos.co",
+                            "value": "61aa6bb06d002b006b02630e",
+                            "label": "Mar­ia Carolina Gomez",
+                            "management": "Comunicacion Institucional"
+                        },
+                        {
+                            "email": "srosanovich@provinciamicrocreditos.co",
+                            "value": "6228d870a1245000688b1065",
+                            "label": "Sergio Andres Rosanovich",
+                            "management": "Investigacion y Capacitacion"
+                        }
+                    ]
+                },
+                "required": true,
+                "value": "",
+                "validators": {},
+                "condition": true,
+                "dependents": "",
+                "return": "json"
+            },
+            "normativeDate": {
+                "type": "datepicker",
+                "key": "normativeDate",
+                "label": "Elija la fecha del",
+                "name": "Incidente o requerimiento normativo",
+                "placeholder": "Elija la fecha normativa de implementación",
+                "options": {},
+                "required": false,
+                "value": "",
+                "validators": {},
+                "condition": true,
+                "dependentOn": "issuetype",
+                "dependencies": {},
+                "return": "string"
+            },
+            "finalDate": {
+                "type": "datepicker",
+                "key": "finalDate",
+                "label": "Elija la fecha del",
+                "name": "Incidente o requerimiento",
+                "placeholder": "Elija la fecha estimada de implementación",
+                "value": "",
+                "return": "string",
+                "required": false
+            },
+            "managment": {
+                "type": "textarea",
+                "key": "managment",
+                "label": "Ingrese el",
+                "name": "Para (Beneficio)",
+                "placeholder": "Ingrese el beneficio",
+                "required": true,
+                "value": "",
+                "validators": {
+                    "required": true,
+                    "minLength": 10
+                },
+                "return": "string"
+            },
+            "impact": {
+                "type": "textarea",
+                "key": "impact",
+                "label": "Ingrese el",
+                "name": "Impacto",
+                "placeholder": "Ingrese las areas, sistemas, etc donde impacta",
+                "required": true,
+                "value": "",
+                "validators": {
+                    "required": true,
+                    "minLength": 15
+                },
+                "return": "string"
+            },
+            "description": {
+                "type": "textarea",
+                "key": "description",
+                "label": "Ingrese la",
+                "name": "Funcionalidad",
+                "placeholder": "Por favor, no escatime en palabras",
+                "required": true,
+                "value": "",
+                "validators": {
+                    "required": true,
+                    "minLength": 15,
+                    "maxLength": 25
+                },
+                "return": "string"
+            },
+            "file": {
+                "type": "file",
+                "key": "file",
+                "label": "Adjuntar archivo",
+                "name": "archivo",
+                "placeholder": "Ingrese un titulo descriptivo",
+                "required": false,
+                "value": "",
+                "validators": {
+                    "required": false,
+                    "requiredTrue": false
+                },
+                "accept": ".pdf,.doc,.jpg,.png,.tiff,.xls",
+                "maxFileSize": 2
+            },
+            "attached": {
+                "type": "input",
+                "key": "attached",
+                "label": "Ingrese el enlace a la",
+                "name": "Documentación",
+                "placeholder": "Ingrese un enlace",
+                "required": false,
+                "value": "",
+                "validators": {},
+                "return": "string"
+            }
+        }
+    },
+    "personas": {
+        "order": {
+            "1": "nombre",
+            "2": "apellido",
+            "3": "telefono",
+            "4": "cuil",
+            "5": "barrio",
+            "6": "localidad",
+            "7": "estudios",
+            "8": "remuneracion",
+            "9": "puesto"
+        },
+        "form": {
+            "nombre": {
+                "type": "input",
+                "key": "nombre",
+                "label": "Ingrese el",
+                "name": "Nombre",
+                "placeholder": "Ingrese su nombre",
+                "required": true,
+                "value": "",
+                "validators": {
+                    "required": true
+                },
+                "return": "string"
+            },
+            "apellido": {
+                "type": "input",
+                "key": "apellido",
+                "label": "Ingrese el",
+                "name": "Apellido",
+                "placeholder": "Ingrese su apellido",
+                "required": true,
+                "value": "",
+                "validators": {
+                    "required": true
+                },
+                "return": "string"
+            },
+            "telefono": {
+                "type": "input",
+                "key": "telefono",
+                "label": "Ingrese el",
+                "name": "Teléfono",
+                "placeholder": "Ingrese su teléfono",
+                "required": true,
+                "value": "",
+                "validators": {
+                    "required": true
+                },
+                "return": "string"
+            },
+            "cuil": {
+                "type": "input",
+                "key": "cuil",
+                "label": "Ingrese el",
+                "name": "Cuil",
+                "placeholder": "Ingrese su CUIL",
+                "required": true,
+                "value": "",
+                "validators": {
+                    "required": true,
+                    "requiredTrue": true
+                },
+                "return": "string"
+            },
+            "barrio": {
+                "type": "input",
+                "key": "barrio",
+                "label": "Ingrese el",
+                "name": "Barrio",
+                "placeholder": "Ingrese su barrio",
+                "required": false,
+                "value": "",
+                "return": "string"
+            },
+            "localidad": {
+                "type": "input",
+                "key": "localidad",
+                "label": "Ingrese la",
+                "name": "Localidad",
+                "placeholder": "Ingrese su localidad",
+                "required": false,
+                "value": "",
+                "return": "string"
+            },
+            "estudios": {
+                "type": "input",
+                "key": "estudios",
+                "label": "Ingrese el nivel de",
+                "name": "Estudios",
+                "placeholder": "Ingrese su nivel de estudios",
+                "required": false,
+                "value": "",
+                "return": "string"
+            },
+            "remuneracion": {
+                "type": "input",
+                "key": "remuneracion",
+                "label": "Ingrese la",
+                "name": "Remuneración",
+                "placeholder": "Ingrese su remuneración",
+                "required": false,
+                "value": "",
+                "return": "string"
+            },
+            "puesto": {
+                    "type": "select",
+                    "key": "puesto",
+                    "label": "Elija la",
+                    "name": "Puesto",
+                    "placeholder": "Elije quien aprueba el requerimiento o incidente",
+                    "options": {
+                        "key": [
+                                {
+                                    "value": "REQ",
+                                    "label": "Personas"
+                                },
+                                {
+                                    "value": "REQ",
+                                    "label": "Personas"
+                                },
+                            
+                                {
+                                    "value": "TEC",
+                                    "label": "Tecnologia"
+                                },
+                       
+                                {
+                                    "value": "INF",
+                                    "label": "Comercial"
+                                },
+                         
+                                {
+                                    "value": "MKT",
+                                    "label": "Marketing"
+                                },
+                        
+                                {
+                                    "value": "RIE",
+                                    "label": "Riesgo"
+                                },
+                        
+                                {
+                                    "value": "SEG",
+                                    "label": "Segmentos"
+                                }                           
+                        ]                        
+                    },
+                    "required": true,
+                    "value": "",
+                    "validators": {},
+                    "condition": true,
+                    "dependents": "",
+                    "return": "string"
+                
+                
+            }
+        }
+    }
+}

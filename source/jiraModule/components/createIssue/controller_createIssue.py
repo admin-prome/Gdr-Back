@@ -154,19 +154,19 @@ def clasificarProyecto(dataIssue: dict, issueDict: dict) -> str:
     """
     try: 
         print('Iniciando Clasificación de proyecto')
-        if (dataIssue['issueType'] == "FIX"):
+        if (dataIssue['issuetype'] == "FIX"):
             
             issueDict["project"] = "GDD"
             dataIssue["key"] = "GDD"
             
         else:
 
-            if (dataIssue["issueType"] == "INF"): #Mapeo el requerimiento al tablero GIT
+            if (dataIssue["issuetype"] == "INF"): #Mapeo el requerimiento al tablero GIT
                 issueDict["project"] = "GT"
                 dataIssue["key"] = "GT"
                 issueDict["priority"] = {"id": '3'}
 
-            elif ( dataIssue["issueType"] == 'INC'):
+            elif ( dataIssue["issuetype"] == 'INC'):
                 issueDict["project"] = "GGDI"
                 dataIssue["key"] = "GGDI"
 
@@ -203,9 +203,9 @@ def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: s
                 issue.summary= issue.summary.replace("'",' ')
                 
         if (issue.summary == "FIX"):
-            tituloDelRequerimiento: str = f'[{issue.issueType}-{issue.subIssueType}] {issue.summary}'
+            tituloDelRequerimiento: str = f'[{issue.issuetype}-{issue.subissuetype}] {issue.summary}'
         else:
-            tituloDelRequerimiento = f'[{issue.issueType}-{issue.subIssueType} {str(idUltimoRequerimiento).zfill(3)}] {issue.summary}'
+            tituloDelRequerimiento = f'[{issue.issuetype}-{issue.subissuetype} {str(idUltimoRequerimiento).zfill(3)}] {issue.summary}'
         
         issueDict['summary'] = tituloDelRequerimiento
         issue.summary = tituloDelRequerimiento
@@ -333,6 +333,11 @@ def createIssue(dataRequest: request) -> json:
         dataIssue_str = dataRequest.form['myJson']
         dataIssue = json.loads(dataIssue_str)                
         print(dataIssue)
+        print(type(dataIssue))
+       
+        #attachFiles(dataRequest, newIssue, jira)
+       
+        
         logging.info(dataIssue)
         
     except:
@@ -355,12 +360,12 @@ def createIssue(dataRequest: request) -> json:
        
         
         print(issue)      
-        #issue.setReporter(dataIssue) 
+        issue.setReporter(dataIssue) 
         jiraOptions = {'server': "https://"+domain+".atlassian.net"}
         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))
         jira = jiraServices.getConection()
         issue.setKey(clasificarProyecto(dataIssue, issueDict))
-        idUltimoRequerimiento = getNumberId(dataIssue['issueType'], dataIssue.get('subIssueType'))
+        idUltimoRequerimiento = getNumberId(dataIssue['issuetype'], dataIssue.get('subissuetype'))
         print(f"Esto es el ID del ultimo requerimiento: {str(idUltimoRequerimiento).zfill(3)}")        
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
         MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)          
@@ -369,6 +374,7 @@ def createIssue(dataRequest: request) -> json:
         print(f'esto es el issue.key: {issue.key}')
         
         print('Creando Requerimiento')
+        
         print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
         if issueDict["project"] not in ('GDD', 'TSTGDR'):
             print('eliminando reporter')
@@ -377,7 +383,7 @@ def createIssue(dataRequest: request) -> json:
                 print(f"Valor eliminado de 'reporter': {reporter_value}")
             print(issueDict)
         print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
-
+       
         newIssue = jira.create_issue(fields=issueDict)        
         
         try:
@@ -409,8 +415,8 @@ def createIssue(dataRequest: request) -> json:
 
             destinatarios.append(correoGerente)
             
-            if dataIssue['issueType'] == 'INF': destinatarios.append('infra_tecno@provinciamicrocreditos.com')
-            if dataIssue['issueType'] == 'INC': destinatarios.append('gdi@provinciamicrocreditos.com')
+            if dataIssue['issuetype'] == 'INF': destinatarios.append('infra_tecno@provinciamicrocreditos.com')
+            if dataIssue['issuetype'] == 'INC': destinatarios.append('gdi@provinciamicrocreditos.com')
             
             response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
             enviarCorreo(destinatarios, asunto, armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
