@@ -21,11 +21,9 @@ from source.jiraModule.components.userHandler.getUserSession.view_getUserSession
 
 from source.jiraModule.components.userHandler.getProjectsForUser.view_getProjectsForUser import getProjectsForUser_bp
 from source.jiraModule.components.getForm.view_getForm import getForm_bp
+from source.settings.settings import settings
 
-# USER: str = settings.DBUSER
-# PASS: str = settings.DBPASS
-# SERVER: str = settings.DBSERVER
-# NAME: str = settings.DBNAME
+KEY: str = settings.KEY_GDR_FRONT
 
 # # getUserForProject_bp = Blueprint("getUserForProject_bp", __name__)
 # conn_str = str(f"mssql+pyodbc://{USER}:{PASS}@{SERVER}/{NAME}?driver=ODBC+Driver+17+for+SQL+Server")
@@ -73,14 +71,11 @@ def middleware_de_autorizacion():
         # Verifica la clave y el origen de la solicitud en los encabezados
         authorization_key = request.headers.get('Authorization-Key')
         origin = request.headers.get('Origin')
-        print("este es el endpoint: %s" %request.endpoint)
-        print("este es method: %s" %request.method)
+      
         currentRoute = request.path
-        print(authorization_key)
-        print(origin)
-        print(currentRoute)
+      
         if currentRoute == '/GetForm':
-            if authorization_key != 'KarmaxBB647dbb40dd978ea5d10df8c07c7e6bba998ba2b373efcb83111e82cdc068ff87da89cdacf4e30f7946c8e8a6217568a0323dc28ec1c8a49f29f8833eba9396a6':
+            if authorization_key != KEY:
                 # Si la clave o el origen son inválidos, retorna una respuesta de error
                 return jsonify({'error': 'Acceso denegado'}), 403
     pass

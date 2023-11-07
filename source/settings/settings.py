@@ -17,11 +17,14 @@ class Settings:
     DEVCLIENSECRET: str
     EMAIL_REMITENTE: str
     EMAIL_PASSWORD: str    
-    DBUSER_TST: str
-    DBPASS_TST: str
-    DBIP_TST: str
-    DBIPPRIVATE_TST: str
-    DBNAME_TST: str
+    DB_USER_TST: str
+    DB_PASS_TST: str
+    DB_IP_TST: str
+    DB_IP_PRIVATE_TST: str
+    DB_NAME_TST: str
+    KEY_USER_DETAILS: str
+    URL_SERVICIOS_TECNO: str
+    KEY_GDR_FRONT: str
     
 load_dotenv()
 
@@ -39,14 +42,15 @@ settings = Settings(
     DEVCLIENSECRET= os.getenv('DEVCLIENSECRET'),
     EMAIL_REMITENTE= os.getenv('EMAIL_REMITENTE'),
     EMAIL_PASSWORD= os.getenv('EMAIL_PASSWORDT'),
-    DBUSER_TST= os.getenv('DBUSER-TST'),
-    DBPASS_TST= os.getenv('DBPASS-TST'),
-    DBIP_TST=   os.getenv('DBIP-TST'),
-    DBIPPRIVATE_TST=  os.getenv('DBIPPRIVATE-TST'),
-    DBNAME_TST= os.getenv('DBNAME-TST')
-    
-    
-    
+    DB_USER_TST= os.getenv('DB_USER_TST'),
+    DB_PASS_TST= os.getenv('DB_PASS_TST'),
+    DB_IP_TST=   os.getenv('DBIP-TST'),
+    DB_IP_PRIVATE_TST=  os.getenv('DB_IP_PRIVATE_TST'),
+    DB_NAME_TST= os.getenv('DB_NAME_TST'),
+    KEY_USER_DETAILS = os.getenv('KEY_USER_DETAILS'),
+    URL_SERVICIOS_TECNO= os.getenv('URL_SERVICIOS_TECNO'),
+    KEY_GDR_FRONT= os.getenv('KEY_GDR_FRONT')
+        
     )
 
 

@@ -14,7 +14,7 @@ def getIdJiraUser(email: str) -> str:
     try:
         with db.Session() as session:
             result = session.query(JiraUsersId.idJiraUser).join(NominaUsersIds, NominaUsersIds.id == JiraUsersId.idUser).filter(cast(NominaUsersIds.email, String) == email).all()
-            jiraId = result[0][0] # Extract the value from the tuple
+            jiraId = result[0][0] 
             
             #db.session.close()
             print(f'Este es el id de JIRA {jiraId}')

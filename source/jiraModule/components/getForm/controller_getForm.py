@@ -110,6 +110,7 @@ def getForm(dataRequest: request):
     data = dataRequest.json
     datajson = data  
     formData =  getFormByIDAndUser(datajson['formId'], datajson['email'])
+    print(formData)
     
     print(f'esto es la respuesta del form: {formData}')
     return  jsonify({"formData": formData})
@@ -120,5 +121,5 @@ if __name__ == '__main__':
     user_email = 'mmillan@provinciamicrocreditos.com'
     form_id = 'traditional'
     formulario = getFormByIDAndUser(form_id, user_email)
-    print(formulario)
+    
     

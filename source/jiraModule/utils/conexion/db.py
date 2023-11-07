@@ -9,10 +9,10 @@ USER: str = settings.DBUSER
 PASS: str = settings.DBPASS
 SERVER: str = settings.DBSERVER
 NAME: str = settings.DBNAME
-# TST_USER: str = settings.DBUSER_TST
-# TST_PASS: str = settings.DBPASS_TST
-# TST_NAME: str = settings.DBNAME_TST
-# TST_IP: str = settings.DBIP_TST
+# TST_USER: str = settings.DB_USER_TST
+# TST_PASS: str = settings.DB_PASS_TST
+# TST_NAME: str = settings.DB_NAME_TST
+# TST_IP: str = settings.DB_IP_TST
 
 
 #conn_str = str(f"mssql+pyodbc://{TST_USER}:{TST_PASS}@{TST_IP}/{TST_NAME}?driver=ODBC+Driver+17+for+SQL+Server")

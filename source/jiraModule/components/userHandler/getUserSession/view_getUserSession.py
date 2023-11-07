@@ -1,5 +1,4 @@
 from flask import Blueprint, request, jsonify
-
 from source.jiraModule.components.userHandler.getUserSession.controller_getUserSession import getUserSession
 
 getUserSession_bp = Blueprint("getUserSession_bp", __name__)
@@ -7,16 +6,15 @@ getUserSession_bp = Blueprint("getUserSession_bp", __name__)
 @getUserSession_bp.route('/users/getsession', methods=['POST'])
 def getSession():
     try:
-        print('Inicio de getSession')
-        print(request)
-        userCredential = request.json  # Obtener los datos del cuerpo de la solicitud JSON
-        print('esto')
+        print('Inicio de getSession')      
+        userCredential = request.get_json()  # Obtener los datos del cuerpo de la solicitud JSON
+        
+        print('Datos del usuario:')
         print(userCredential)
-        print('sdsdas')
         
         session = getUserSession(userCredential)
         # session = session
-        print('--------------- Datos de la sesion inciada ------------')
+        print('--------------- Datos de la sesion inciada -------------')
         print(session)
         
         return jsonify(session)
