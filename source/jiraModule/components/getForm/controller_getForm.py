@@ -1,4 +1,5 @@
 #from source.jiraModule.components.getForm.model_getForm import Formulario
+import pprint
 from source.jiraModule.components.getForm.forms_getForm import *
 from flask import jsonify, request
 
@@ -108,11 +109,11 @@ def getForm(dataRequest: request):
     '''
     
     data = dataRequest.json
+    
     datajson = data  
     formData =  getFormByIDAndUser(datajson['formId'], datajson['email'])
-    print(formData)
     
-    print(f'esto es la respuesta del form: {formData}')
+    
     return  jsonify({"formData": formData})
     
     

@@ -9,13 +9,12 @@ def getSession():
         print('Inicio de getSession')      
         userCredential = request.get_json()  # Obtener los datos del cuerpo de la solicitud JSON
         
-        print('Datos del usuario:')
-        print(userCredential)
+      
         
         session = getUserSession(userCredential)
         # session = session
         print('--------------- Datos de la sesion inciada -------------')
-        print(session)
+     
         
         return jsonify(session)
     

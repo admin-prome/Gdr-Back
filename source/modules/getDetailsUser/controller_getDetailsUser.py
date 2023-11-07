@@ -19,14 +19,13 @@ def getUserDetails(email: str) -> dict:
         # Realizar la solicitud GET al endpoint
         response = requests.get(url, params={"Email": email}, headers=headers)
         response.raise_for_status()  # Genera una excepción si el código de estado no es 2xx
-        print(response.json())
+       
         # Parsear la respuesta JSON a un diccionario
         response_data = response.json()
 
         # Crear una instancia de UserDetails a partir del JSON
         user_details = model_getDetailsUser.UserDetails.from_json(response_data['result'])
-        print('esto es user_details')
-        print(user_details)
+   
         return user_details.__dict__
     
     except requests.exceptions.RequestException as e:

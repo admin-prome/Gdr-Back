@@ -17,7 +17,6 @@ def getIdJiraUser(email: str) -> str:
             jiraId = result[0][0] 
             
             #db.session.close()
-            print(f'Este es el id de JIRA {jiraId}')
         
     except Exception as e:
         db.session.close()

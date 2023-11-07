@@ -20,7 +20,7 @@ def getUserSession(userSession):
 
         # Establece el ID de JIRA en la instancia de SessionModel
         user_session.setUserIdJIRA(idJIRA)
-        print(f'esto es userSession: {user_session}')
+     
         # Iniciar un hilo para obtener los detalles del usuario de forma paralela
         with concurrent.futures.ThreadPoolExecutor() as executor:
             user_details_future = executor.submit(get_user_details_async, email)

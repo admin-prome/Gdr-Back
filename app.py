@@ -71,7 +71,7 @@ def middleware_de_autorizacion():
         # Verifica la clave y el origen de la solicitud en los encabezados
         authorization_key = request.headers.get('Authorization-Key')
         origin = request.headers.get('Origin')
-      
+        
         currentRoute = request.path
       
         if currentRoute == '/GetForm':
@@ -84,7 +84,7 @@ def middleware_de_autorizacion():
 if __name__ == '__main__':
     
     try:            
-        app.run(debug=True)
+        app.run()
         
     except Exception as e:
         print(f'Ocurrio un error en la ejecución: {e}') 

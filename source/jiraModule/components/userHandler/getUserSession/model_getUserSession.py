@@ -7,19 +7,19 @@ from source.modules.getRandomToken import generateRandomToken
 class SessionModel:
     
     def __init__(self, userSession):
-        self.userEmail: str = userSession['email'].title() 
+        self.userEmail: str = userSession['email'] 
         self.userName: str = userSession['name'].title()
         self.userIdJIRA: str = ''
         self.userSessionToken: str = self.setUserSessionToken()
         self.timestamp: str = self.get_timestamp()
-        self.userDetails: dict = {}
+        
         self.session: dict = {
             'timestamp': self.timestamp,
             'userSession': self.userSessionToken,
             'name': self.userName,
             'idJIRA': self.userIdJIRA,
             'email': self.userEmail,
-            'details': self.userDetails
+            
         }
     
     def get_timestamp(self):
