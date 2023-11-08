@@ -112,7 +112,7 @@ def getForm(dataRequest: request):
     
     datajson = data  
     formData =  getFormByIDAndUser(datajson['formId'], datajson['email'])
-    
+    print(datajson['formId'])
     
     return  jsonify({"formData": formData})
     

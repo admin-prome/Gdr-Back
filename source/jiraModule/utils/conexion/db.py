@@ -2,39 +2,29 @@ from sqlalchemy import create_engine
 from source.settings.settings import settings
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-import pyodbc  
 
-#print(pyodbc.drivers())
+
 USER: str = settings.DBUSER
 PASS: str = settings.DBPASS
 SERVER: str = settings.DBSERVER
 NAME: str = settings.DBNAME
-# TST_USER: str = settings.DB_USER_TST
-# TST_PASS: str = settings.DB_PASS_TST
-# TST_NAME: str = settings.DB_NAME_TST
-# TST_IP: str = settings.DB_IP_TST
 
+# Crear la cadena de conexión
+conn_str = f"mssql+pyodbc://{USER}:{PASS}@{SERVER}/{NAME}?driver=ODBC+Driver+17+for+SQL+Server"
 
-#conn_str = str(f"mssql+pyodbc://{TST_USER}:{TST_PASS}@{TST_IP}/{TST_NAME}?driver=ODBC+Driver+17+for+SQL+Server")
-conn_str = str(f"mssql+pyodbc://{USER}:{PASS}@{SERVER}/{NAME}?driver=ODBC+Driver+17+for+SQL+Server")
-
-
+# Crear el motor de SQLAlchemy
 engine = create_engine(conn_str)
+
+# Crear una fábrica de sesiones
 Session = sessionmaker(bind=engine)
+
+# Inicializar la sesión
 session = Session()
 
+# Declarar la base de datos SQLAlchemy
 Base = declarative_base()
 
-
-
-
-
+# Imprimir un mensaje de inicio de conexión
 print(f'Inicio de Conexión con BD: {NAME}')
-
-
-# db = SQLAlchemy()
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = f'mssql://{USER}:{PASS}@{IP}/pnet'
-
 
 

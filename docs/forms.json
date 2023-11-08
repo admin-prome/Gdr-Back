@@ -177,7 +177,12 @@
                         {
                             "value": "HLC",
                             "label": "Hace la Cuenta"
+                        },
+                        {
+                            "value": "GDD",
+                            "label": "Gestión de la Demanda"
                         }
+
                     ],
                     "INC": [
                         {
@@ -215,6 +220,10 @@
                         {
                             "value": "HLC",
                             "label": "Hace la Cuenta"
+                        },
+                        {
+                            "value": "GDD",
+                            "label": "Gestión de la Demanda"
                         }
                     ],
                     "FIX": [
@@ -296,7 +305,7 @@
                             "management": "Cumplimiento y Procesos"
                         },
                         {
-                            "email": "efernandez@provinciamicrocreditos.co",
+                            "email": "efernandez@provinciamicrocreditos.com",
                             "value": "615e66da289a54006a2ca1e3",
                             "label": "Emiliano Fernandez",
                             "management": "Inteligencia de Negocios y Gestion estrategica"
@@ -320,7 +329,7 @@
                             "management": "Tecnologia"
                         },
                         {
-                            "email": "lottone@provinciamicrocreditos.co",
+                            "email": "lottone@provinciamicrocreditos.com",
                             "value": "6228d79dc88f10006832563a",
                             "label": "Leandro Martin Ottone",
                             "management": "Direccion Ejecutiva"
@@ -332,17 +341,24 @@
                             "management": "Riesgo"
                         },
                         {
-                            "email": "mcgomez@provinciamicrocreditos.co",
+                            "email": "mcgomez@provinciamicrocreditos.com",
                             "value": "61aa6bb06d002b006b02630e",
                             "label": "Mar­ia Carolina Gomez",
                             "management": "Comunicacion Institucional"
                         },
                         {
-                            "email": "srosanovich@provinciamicrocreditos.co",
+                            "email": "srosanovich@provinciamicrocreditos.com",
                             "value": "6228d870a1245000688b1065",
                             "label": "Sergio Andres Rosanovich",
                             "management": "Investigacion y Capacitacion"
+                        },
+                        {
+                            "email": "nrivanera@provinciamicrocreditos.com",
+                            "value": "712020:faf61986-8ac1-47e7-9c28-8dac9ad497b8",
+                            "label": "Nicolas Rivanera",
+                            "management": "Tecnologia"
                         }
+
                     ]
                 },
                 "required": true,
@@ -536,6 +552,10 @@
                         {
                             "value": "HLC",
                             "label": "Hace la Cuenta"
+                        },
+                        {
+                            "value": "GDD",
+                            "label": "Gestión de la Demanda"
                         }
                     ],
                     "INC": [
@@ -574,6 +594,10 @@
                         {
                             "value": "HLC",
                             "label": "Hace la Cuenta"
+                        },
+                        {
+                            "value": "GDD",
+                            "label": "Gestión de la Demanda"
                         }
                     ]
                 },
@@ -695,6 +719,12 @@
                             "value": "6228d870a1245000688b1065",
                             "label": "Sergio Andres Rosanovich",
                             "management": "Investigacion y Capacitacion"
+                        },
+                        {
+                            "email": "nrivanera@provinciamicrocreditos.com",
+                            "value": "712020:faf61986-8ac1-47e7-9c28-8dac9ad497b8",
+                            "label": "Nicolas Rivanera",
+                            "management": "Tecnologia"
                         }
                     ]
                 },
@@ -961,4 +991,5 @@
             }
         }
     }
+    
 }

@@ -57,36 +57,35 @@ def waitUntilClosed(path:str) -> None:
 
 
 def updateValueDb(categoria: str, subcategoria: str = None):
-    """_summary_
+    """
+    Actualiza el valor en la base de datos y devuelve el valor actualizado.
 
     Args:
-        categoria (_type_): _description_
-        subcategoria (_type_): _description_
+        categoria (str): Categoría.
+        subcategoria (str, opcional): Subcategoría.
 
     Returns:
-        _type_: _description_
+        int: Valor actualizado.
     """
-    
+    numerador = None
+
     try:
-        numerador: Numerador = None
-        if subcategoria is None:
-            numerador =  db.session.query(Numerador).filter(Numerador.categoria == categoria, Numerador.subcategoria.is_(None)).first()
-        else:
-            numerador = db.session.query(Numerador).filter_by(categoria=categoria, subcategoria=subcategoria).first()
+        query = db.session.query(Numerador).filter(
+            Numerador.categoria == categoria,
+            Numerador.subcategoria == subcategoria if subcategoria is not None else Numerador.subcategoria.is_(None)
+        )
+
+        numerador = query.first()
 
         if numerador:
             numerador.valor += 1
             db.session.commit()
-            
-    except Exception as e: 
+
+    except Exception as e:
         db.session.rollback()
-        db.session.rollback()
-        print(f'Ocurrio un error al actualizar valor en BD: {e}')
-            
-    # finally: 
-    #     db.session.close()    
-        
-    return numerador.valor
+        print(f'Ocurrió un error al actualizar el valor en la base de datos: {e}')
+
+    return numerador.valor if numerador else None
 
 
 def getValue(category: str, subcategory: str, objectList : list):
@@ -108,6 +107,7 @@ def getValue(category: str, subcategory: str, objectList : list):
     
 def getNumberId(category: str, subcategory: str)->int:
     '''
+    Pre:
     Pos: comforma un diccionario con las iniciativas de la tabla GDR
     '''
 
@@ -152,66 +152,55 @@ def clasificarProyecto(dataIssue: dict, issueDict: dict) -> str:
         dataIssue (dict): Datos de entrada del formulario (front)
         issueDict (dict): Datos formateados para enviar a JIRA
     """
-    try: 
+    try:
         print('Iniciando Clasificación de proyecto')
-        if (dataIssue['issuetype'] == "FIX"):
-            
+
+        if dataIssue['issuetype'] == "FIX":
             issueDict["project"] = "GDD"
             dataIssue["key"] = "GDD"
-            
         else:
-
-            if (dataIssue["issuetype"] == "INF"): #Mapeo el requerimiento al tablero GIT
+            if dataIssue["issuetype"] == "INF":
                 issueDict["project"] = "GT"
                 dataIssue["key"] = "GT"
                 issueDict["priority"] = {"id": '3'}
-
-            elif ( dataIssue["issuetype"] == 'INC'):
+            elif dataIssue["issuetype"] == 'INC':
                 issueDict["project"] = "GGDI"
                 dataIssue["key"] = "GGDI"
-
             else:
                 issueDict["project"] = "GDD"
                 dataIssue["key"] = "GDD"
                 issueDict["priority"] = {"id": '3'}
-            
+
         return str(dataIssue['key'])
-        
-    except Exception as e:   
-        print(f'Ocurrio un error al mapear proyecto: {e}')
+
+    except Exception as e:
+        print(f'Ocurrió un error al mapear proyecto: {e}')
 
 
-def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: str|list) -> None:
-    """ Mapeo de campos minimos de JIRA
+
+def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: str | list) -> None:
+    """ Mapeo de campos mínimos de JIRA
 
     Args:
-        newIssue (response): respuesta de JIRA
-        dataIssue (dict): Datos de entrada del formulario (front)
-        issueDict (dict): Datos formateados para enviar a JIRA
-        idUltimoRequerimiento(str|list): ID del ultimo requerimiento encontrado
+        issue (Issue): Objeto de Issue con los datos.
+        issueDict (dict): Datos formateados para enviar a JIRA.
+        idUltimoRequerimiento (str | list): ID del último requerimiento encontrado.
     """
+
+    print('------------- Mapeando campos para JIRA ------------------')
     
-    tituloDelRequerimiento: str = ''
-    description: str = ''
-    print('-------------Mapeando campos para JIRA------------------')
-    print(issue.summary)
     try:
-        
-        if '"' in issue.summary:
-                issue.summary= issue.summary.replace('"',' ')
-        if "'" in issue.summary:
-                issue.summary= issue.summary.replace("'",' ')
-                
-        if (issue.summary == "FIX"):
-            tituloDelRequerimiento: str = f'[{issue.issuetype}-{issue.subissuetype}] {issue.summary}'
+        if '"' in issue.summary or "'" in issue.summary:
+            issue.summary = issue.summary.replace('"', ' ').replace("'", ' ')
+
+        if issue.summary == "FIX":
+            tituloDelRequerimiento = f'[{issue.issuetype}-{issue.subissuetype}] {issue.summary}'
         else:
             tituloDelRequerimiento = f'[{issue.issuetype}-{issue.subissuetype} {str(idUltimoRequerimiento).zfill(3)}] {issue.summary}'
-        
+
         issueDict['summary'] = tituloDelRequerimiento
         issue.summary = tituloDelRequerimiento
-        
-        #issueDict["reporter"] = issue.reporter
-        
+
         description = f"""
             *Fecha de Creación:* {str(obtenerFechaHoraBsAs())}
             *Creado por:* {issue.userCredential.name}
@@ -221,17 +210,12 @@ def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: s
             *Beneficio:* {issue.impact}
             *Enlace a la Documentación:* {issue.attached}.
             *Prioridad* definida por el usuario: {issue.priority}
-            """
-            # *Iniciativa:* {issue.initiative}
-            
+        """
         issueDict["description"] = description
-        
-        
-        
 
     except Exception as e:
-        print(f'Ocurrio un error en el mapeo de issueDict: {e}')
-        enviarCorreoDeError('Ocurrio un error en el mapeo de issueDict',  str(e))
+        print(f'Ocurrió un error en el mapeo de issueDict: {e}')
+        enviarCorreoDeError('Ocurrió un error en el mapeo de issueDict', str(e))
 
 
 def mapearRespuestaAlFront(newIssue, dataIssue: dict, issueDict: dict) -> dict:
@@ -327,28 +311,21 @@ def createIssue(dataRequest: request) -> json:
     archivo: object = None
    
     try:
-        
-        
+                
         print('------------- INICIANDO CREAR REQUERIMIENTO  ---------------')          
         dataIssue_str = dataRequest.form['myJson']
         dataIssue = json.loads(dataIssue_str)                
         print(dataIssue)
-        print(type(dataIssue))
-       
-        #attachFiles(dataRequest, newIssue, jira)
-       
-        
+        print(type(dataIssue))       
         logging.info(dataIssue)
         
     except:
-        print('No se pudo mapear el archivo correctamente')
-    
+        print('No se pudo mapear el archivo correctamente')    
 
     try:
         
         try:            
-            issue = Issue(dataIssue)    
-              
+            issue = Issue(dataIssue)                  
             
         except Exception as e : 
             print('------------------- NO se pudo Mapear-----------------')
@@ -356,23 +333,19 @@ def createIssue(dataRequest: request) -> json:
             print('------------------- NO se pudo Mapear-----------------')
         
         # print(f'Esto es lo que llega del front: {json.dumps(dataIssue, indent=4)}')
-        
-       
-        
-        print(issue)      
+          
         issue.setReporter(dataIssue) 
         jiraOptions = {'server': "https://"+domain+".atlassian.net"}
         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))
         jira = jiraServices.getConection()
         issue.setKey(clasificarProyecto(dataIssue, issueDict))
-        idUltimoRequerimiento = getNumberId(dataIssue['issuetype'], dataIssue.get('subissuetype'))
+        idUltimoRequerimiento = getNumberId(dataIssue['issuetype'], dataIssue.get('subissuetype'))        
         print(f"Esto es el ID del ultimo requerimiento: {str(idUltimoRequerimiento).zfill(3)}")        
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
         MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)          
         
         issueDict["project"] = issue.key
-        print(f'esto es el issue.key: {issue.key}')
-        
+        print(f'esto es el issue.key: {issue.key}')        
         print('Creando Requerimiento')
         
         print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
@@ -394,11 +367,7 @@ def createIssue(dataRequest: request) -> json:
             print('No hay archivos adjuntos') 
             
         
-        print(f'creando requerimiento: {newIssue}')
-        
-        
-        # os.remove(ruta_archivo_adjunto)
-        
+        print(f'creando requerimiento: {newIssue}')       
         
         status = '200'
                 

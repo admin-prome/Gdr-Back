@@ -1,5 +1,45 @@
 {
-    "nombre": "John Doe",
-    "edad": 30,
-    "ciudad": "Ejemploville"
+    "key": "",
+    "summary": "Qui consectetur temp",
+    "description": "Elit dolor nostrud ",
+    "type": "Epic",
+    "issuetype": "REQ",
+    "subissuetype": "GDR",
+    "normativeDate": "None",
+    "finalDate": "2023-11-30",
+    "approvers": {
+        "email": "nrivanera@provinciamicrocreditos.com",
+        "id": 12,
+        "management": "Tecnologia",
+        "name": "Nicolas Rivanera",
+        "value": "712020:faf61986-8ac1-47e7-9c28-8dac9ad497b8"
+    },
+    "impact": "Consequatur Possimu",
+    "attached": "Ut corrupti non pra",
+    "managment": "Irure maiores eum qu",
+    "priority": "Estándar",
+    "isTecno": "si",
+    "initiative": "",
+    "normativeRequirement": false,
+    "reporter": "62476153258562006fa50037",
+    "userCredential": {
+        "email": "mmillan@provinciamicrocreditos.com",
+        "name": "Maximiliano Juan Millan",
+        "exp": 1699382110,
+        "picture": "https: //lh3.googleusercontent.com/a/ACg8ocKDAZT-eXO98yF8OttO3QedBAmy7fxe19OZf5O3h7GLsDU=s96-c",
+        "idJIRA": "62476153258562006fa50037",
+        "timestamp": "2023-11-07 14:35:13",
+        "userDetails": {
+            "branch": "Gestion De La Demanda",
+            "branch_zone": "Zona Casa Matriz",
+            "category": "An-J - Analista Junior",
+            "email": "mmillan@provinciamicrocreditos.com",
+            "employee_number": "5946",
+            "full_name": "Millan Maximiliano",
+            "id": "250",
+            "management": "Gerencias De Tecnología",
+            "position": "118 - Gestión De La Demanda"
+        },
+        "userSession": "sO7i10yNhLxPgN1eW9RqoNjtLOWVo0qIa8Lzfj8tZE15bprSsXjgAHLDL7aIYkdlSBDTqbhL4ymppsgNbdaUGKkMl6ZeWAfAPeJ60f9FfURkbw4jYQ8Rsr81"
+    }
 }

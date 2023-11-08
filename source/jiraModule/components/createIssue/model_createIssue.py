@@ -42,7 +42,8 @@ class Issue:
     def setReporter(self, data) -> dict:
         try:
             if (data['idJIRA']):
-                print('inicio de set reporter')              
+                print('inicio de set reporter')   
+                print(data['idJIRA'])           
                 reporter = {"accountId": data['idJIRA'],"accountType": "atlassian"}
                
             else: 
