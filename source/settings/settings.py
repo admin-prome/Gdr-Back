@@ -25,6 +25,9 @@ class Settings:
     KEY_USER_DETAILS: str
     URL_SERVICIOS_TECNO: str
     KEY_GDR_FRONT: str
+    GOOGLE_CLIENT_ID: str
+    GOOGLE_CLIENT_SECRET: str
+    REDIRECT_URI: list
     
 load_dotenv()
 
@@ -49,7 +52,10 @@ settings = Settings(
     DB_NAME_TST= os.getenv('DB_NAME_TST'),
     KEY_USER_DETAILS = os.getenv('KEY_USER_DETAILS'),
     URL_SERVICIOS_TECNO= os.getenv('URL_SERVICIOS_TECNO'),
-    KEY_GDR_FRONT= os.getenv('KEY_GDR_FRONT')
+    KEY_GDR_FRONT= os.getenv('KEY_GDR_FRONT'),
+    GOOGLE_CLIENT_ID= os.getenv('GOOGLE_CLIENT_ID'),
+    GOOGLE_CLIENT_SECRET= os.getenv('GOOGLE_CLIENT_SECRET'),
+    REDIRECT_URI= os.getenv('REDIRECT_URI')
         
     )
 

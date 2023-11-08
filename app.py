@@ -35,9 +35,10 @@ from google.auth.transport.requests import Request
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 KEY: str = settings.KEY_GDR_FRONT
-GOOGLE_CLIENT_ID = '688079392079-3v0vv38kbaqade3of9gaic9sj5k1ma14.apps.googleusercontent.com'
-GOOGLE_CLIENT_SECRET = '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'
-REDIRECT_URI = 'http://localhost:4200/home'
+
+GOOGLE_CLIENT_ID = settings.GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET = settings.GOOGLE_CLIENT_SECRET
+REDIRECT_URI = settings.REDIRECT_URI
 
 # # getUserForProject_bp = Blueprint("getUserForProject_bp", __name__)
 # conn_str = str(f"mssql+pyodbc://{USER}:{PASS}@{SERVER}/{NAME}?driver=ODBC+Driver+17+for+SQL+Server")
@@ -45,13 +46,14 @@ REDIRECT_URI = 'http://localhost:4200/home'
 app = Flask(__name__)
 app.secret_key = "gdrback"
 client_secrets_file = os.path.join(pathlib.Path(__file__).parent, './docs/token.json')
-
+print('-----------------------------------')
+print(client_secrets_file)
 
 flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file,
                                      scopes=["https://www.googleapis.com/auth/userinfo.profile",
                                              "https://www.googleapis.com/auth/userinfo.email",
                                              "openid"], 
-                                     redirect_uri="http://127.0.0.1:5000/callback")
+                                     redirect_uri="https://gdr-back-tst.azurewebsites.net/callback")
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = conn_str
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
