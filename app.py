@@ -44,7 +44,7 @@ REDIRECT_URI = 'http://localhost:4200/home'
 
 app = Flask(__name__)
 app.secret_key = "gdrback"
-client_secrets_file = os.path.join(pathlib.Path(__file__).parent, 'token.json')
+client_secrets_file = os.path.join(pathlib.Path(__file__).parent, './docs/token.json')
 
 
 flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file,
