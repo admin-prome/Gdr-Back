@@ -334,7 +334,7 @@ def createIssue(dataRequest: request) -> json:
         
         # print(f'Esto es lo que llega del front: {json.dumps(dataIssue, indent=4)}')
           
-        issue.setReporter(dataIssue) 
+       
         jiraOptions = {'server': "https://"+domain+".atlassian.net"}
         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))
         jira = jiraServices.getConection()

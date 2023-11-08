@@ -125,13 +125,12 @@ def callback():
         session['google_id'] = id_info.get('sub')
         session['name'] = id_info.get('name')
     
-        return redirect('/protected_area')
-    return redirect('/logout')
-
+        return redirect('/home')
+    return abort(401)
 
 @app.route('/')
 def index():
-    return "hello world <a href='/login'><button>Login</button></a>"
+    return "Por favor inicie sesión con su cuenta corporativa <a href='/login'><button>Login</button></a>"
 
 
 @app.route('/protected_area')

@@ -4,6 +4,8 @@ from source.jiraModule.utils.conexion import db
 from sqlalchemy import Column, Integer, String
 import json
 
+from source.modules.getDetailsUser.model_getDetailsUser import UserDetails
+
 
 class Issue:
     
@@ -130,7 +132,8 @@ class UserCredential:
             self.picture = self.setPicture(data)
             self.idJIRA = data['idJIRA']
             self.timestamp = data['timestamp']
-            self.userSession = data['userSession']
+            self.userSession = UserDetails(data['userSession'])
+            
         except Exception as e: print(f'Ocurrio un error al mapear UserCredential: {e}')
         
     
