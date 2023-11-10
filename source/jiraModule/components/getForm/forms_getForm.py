@@ -28,9 +28,6 @@ traditional = forms['traditional']
 personas =  forms['personas']
 
 
-  
-
-
 formsTecno = {  
     "traditional": traditionalTecno,
     "personas": personas

@@ -1,7 +1,7 @@
 # url = "https://your-domain.atlassian.net/rest/api/2/user/email"
 import json
 from source.jiraModule.utils.conexion.conexion import Conexion
-from  source.modules.generarJSON import generate_and_save_json
+from  source.modules.jsonTools.generarJSON import generate_and_save_json
 from source.jiraModule.components.userHandler.getProjectsForUser.controller_getProjectsForUser import getProjectsForUser
 
 def getTotalUsers():

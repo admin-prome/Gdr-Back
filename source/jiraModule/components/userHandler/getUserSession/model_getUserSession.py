@@ -1,7 +1,7 @@
 from datetime import datetime
 import json
 
-from source.modules.getRandomToken import generateRandomToken
+from source.modules.securityTools.getRandomToken import generateRandomToken
 
 
 class SessionModel:

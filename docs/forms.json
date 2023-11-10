@@ -8,7 +8,7 @@
             "5": "approvers",
             "6": "normativeDate",
             "7": "finalDate",
-            "8": "finalDate",
+            "8": "istecno",
             "9": "managment",
             "10": "impact",
             "11": "description",
@@ -42,9 +42,9 @@
                 "validators": {},
                 "return": "string"
             },
-            "isTecno": {
+            "istecno": {
                 "type": "radio",
-                "key": "isTecno",
+                "key": "istecno",
                 "label": "¿Es un requerimiento interno de Tecnología?",
                 "name": "origen",
                 "options": {

@@ -39,7 +39,8 @@ KEY: str = settings.KEY_GDR_FRONT
 GOOGLE_CLIENT_ID = settings.GOOGLE_CLIENT_ID
 GOOGLE_CLIENT_SECRET = settings.GOOGLE_CLIENT_SECRET
 REDIRECT_URI = settings.REDIRECT_URI
-
+#url: str = "https://gdr-back-tst.azurewebsites.net"
+url = settings.URL_BACK
 # # getUserForProject_bp = Blueprint("getUserForProject_bp", __name__)
 # conn_str = str(f"mssql+pyodbc://{USER}:{PASS}@{SERVER}/{NAME}?driver=ODBC+Driver+17+for+SQL+Server")
 
@@ -53,7 +54,7 @@ flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file,
                                      scopes=["https://www.googleapis.com/auth/userinfo.profile",
                                              "https://www.googleapis.com/auth/userinfo.email",
                                              "openid"], 
-                                     redirect_uri="https://gdr-back-tst.azurewebsites.net/callback")
+                                     redirect_uri=f"{url}/callback")
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = conn_str
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

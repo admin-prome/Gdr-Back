@@ -1,3 +1,5 @@
+from source.modules.stringTools.convertToUnicode import normalizarTexto
+from source.modules.stringTools.searchMatch import buscarCoincidencia, find_max_similarity
 from source.settings.settings import settings
 from source.jiraModule.components.createIssue.model_createIssue import Issue
 
@@ -89,3 +91,58 @@ def mapeoMailGerente(name: str = "Juan Carlos canepa") -> str:
     else: mail = managmentMail['Juan Carlos Canepa']
     
     return mail
+
+
+def clasificarGerencia(texto):
+    gerencias = {
+        "administracion y finanzas": "10028",
+        "red de sucursales": "10034",
+        "cumplimiento y procesos": "10031",
+        "inteligencia de negocios y gestion estrategica": "10036",
+        "comercial": "10030",
+        "personas": "10033",
+        "tecnologia": "10029",
+        "direccion ejecutiva": "10029",
+        "riesgo": "10032",
+        "comunicacion institucional": "10035",
+        "investigacion y capacitacion": "10036"
+    }
+
+    texto_normalizado = normalizarTexto(texto)
+
+    for gerencia, codigo in gerencias.items():
+        palabras_clave = gerencia.split()  # Dividir el nombre de la gerencia en palabras clave
+        if buscarCoincidencia(texto_normalizado, palabras_clave):
+            return {"gerencia": gerencia, "codigo": codigo}
+
+    return {"gerencia": "No se encontró coincidencia", "codigo": None}
+
+
+def normalize_management(management: str) -> str:
+    try:
+        departments = {
+            "administracion y finanzas": "10028",
+            "red de sucursales": "10034",
+            "cumplimiento y procesos": "10031",
+            "inteligencia de negocios y gestion estrategica": "10036",
+            "comercial": "10030",
+            "personas": "10033",
+            "tecnologia": "10029",
+            "direccion ejecutiva": "10029",
+            "riesgo": "10032",
+            "comunicacion institucional": "10035",
+            "investigacion y capacitacion": "10036"
+        }
+        options = departments.keys()
+        keywords_to_ignore = ["gerencia","Gerencías", "gcia", "gerencias", "gerenc", "gerenc"]
+        result = find_max_similarity(management, options, keywords_to_ignore)
+        print("Best match:", result)  
+    
+        return result
+    
+    except Exception as e:
+        print(f'Ocurrio un error al intentar normalizar la gerencia: {e}')
+        return None
+
+
+

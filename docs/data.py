@@ -1,12 +1,25 @@
 import re
-from unidecode import unidecode 
+from unidecode import unidecode
+from difflib import get_close_matches
 
-def buscarCoincidencia(texto, palabras_clave):
-    for palabra_clave in palabras_clave:
-        # Compila el patrón con la bandera re.IGNORECASE para que sea insensible a mayúsculas y minúsculas
-        regex = re.compile(rf'{palabra_clave}', re.IGNORECASE)
-        if regex.search(texto):
-            return True
+def buscarCoincidencia(text, keywords):
+    print(text)
+    # Converts all keywords to lowercase to make them case-insensitive.
+    keywords = [keyword.lower() for keyword in keywords]
+    for i in range(len(keywords)):
+        list = keywords[i].split(' ')
+        print(list)
+        for j in list: 
+            if text in j:
+                print('match')
+                print(j)
+                print(text)
+                return j
+    # Uses the `re.findall()` method to find all matches of the keywords in the text.
+    matches = re.findall(rf"({'|'.join(keywords)})", text.lower())
+    print(matches)
+    
+    # Returns True if any matches are found, False otherwise.
     return False
 
 def normalizarTexto(texto):
@@ -28,18 +41,35 @@ def clasificarGerencia(texto):
         "investigacion y capacitacion": "10036"
     }
 
-    texto_normalizado = normalizarTexto(texto)
+    texto_normalizado = unidecode(texto.lower())
 
-    for gerencia, codigo in gerencias.items():
-        palabras_clave = gerencia.split()  # Dividir el nombre de la gerencia en palabras clave
-        if buscarCoincidencia(texto_normalizado, palabras_clave):
-            return {"gerencia": gerencia, "codigo": codigo}
-
-    return {"gerencia": "No se encontró coincidencia", "codigo": None}
+    textos_normalizados = texto_normalizado.split()
+    
+    for texto in textos_normalizados:
+        list_gerencias = list(gerencias.keys())
+        print(list_gerencias)
+        for gerencia in list_gerencias:
+            print(f'esto es la gerencias: {gerencia} texto: {texto}')
+            if texto in gerencias:
+                print({"gerencia": texto, "codigo": gerencias[texto]})
+                return {"gerencia": texto, "codigo": gerencias[texto]}
+    else:
+        matches = get_close_matches(texto_normalizado, gerencias.keys(), n=1, cutoff=0.8)
+        if matches:
+            gerencia = matches[0]
+            return {"gerencia": gerencia, "codigo": gerencias[gerencia]}
+        else:
+            respuesta = buscarCoincidencia(texto_normalizado, gerencias.keys())
+            if  respuesta!= False:
+                print('hola')
+                for respuesta, codigo in gerencias.items():
+                    if re.search(respuesta, texto_normalizado):
+                        return {"gerencia": gerencia, "codigo": codigo}
+            return {"gerencia": "No se encontró coincidencia", "codigo": None}
 
 if __name__ == '__main__':
    # Ejemplo de uso
-    texto = "Gerencias De Tecnología"
+    texto = "gcia investigacion"
     resultado = clasificarGerencia(texto)
     print("Gerencia:", resultado["gerencia"])
     print("Código:", resultado["codigo"])

@@ -3,7 +3,7 @@ import time
 import traceback
 from jira import JIRA
 from flask import jsonify, request
-from source.modules import borrarDirectorio
+from source.modules.filesTools import borrarDirectorio
 #from source.jiraModule.components.getAllProjects.model_GDR import JiraUsersId, NominaUsersIds
 from source.modules.getUserIdForJIRA.controller_getUserIdForJIRA import getIdJiraUser
 from source.modules.mapeoDeRequerimientos import MapeoDeRequerimientos
@@ -17,12 +17,12 @@ from source.modules.mapeoGerencia import mapeoDeGerente, mapeoMailGerente
 from source.settings.settings import settings
 from source.modules.obtenerIdRequerimiento import get_req_id
 from source.jiraModule.components.createIssue.model_createIssue import Issue
-from source.modules.enviarCorreo import *
+from source.modules.sendMail.enviarCorreo import *
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from sqlalchemy.orm import joinedload
 from sqlalchemy import cast, String
-from source.modules.time import *
+from source.modules.timeTools.time import *
 jiraServices = JiraService()
 conexion = Conexion()
 ENVIROMENT: str = settings.ENVIROMENT

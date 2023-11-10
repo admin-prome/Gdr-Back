@@ -28,6 +28,7 @@ class Settings:
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
     REDIRECT_URI: list
+    URL_BACK: str
     
 load_dotenv()
 
@@ -55,7 +56,8 @@ settings = Settings(
     KEY_GDR_FRONT= os.getenv('KEY_GDR_FRONT'),
     GOOGLE_CLIENT_ID= os.getenv('GOOGLE_CLIENT_ID'),
     GOOGLE_CLIENT_SECRET= os.getenv('GOOGLE_CLIENT_SECRET'),
-    REDIRECT_URI= os.getenv('REDIRECT_URI')
+    REDIRECT_URI= os.getenv('REDIRECT_URI'),
+    URL_BACK= os.getenv('URLBACK')
         
     )
 
