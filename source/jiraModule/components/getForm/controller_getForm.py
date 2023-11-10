@@ -66,14 +66,28 @@ def getFormIDs(role)-> list[str]:
     Pre: recibe el rol.
     Pos: devuelve una lista de los ids de los formulario asociados al rol.
     '''
-        
-    formularios = {
-        'traditional': ['tecnologia', 'procesos', 'admin', 'user'],
-        'personas': ['tecnologia', 'soporte', 'admin'],
-        'form5': ['soporte', 'admin'],
-    }
+    all_department: list = [    
+                                'administracion y finanzas', 
+                                'red de sucursales',
+                                'cumplimiento y procesos',
+                                'inteligencia de negocios y gestion estrategica',
+                                'comercial', 'personas',
+                                'tecnologia', 'direccion ejecutiva',
+                                'riesgo', 'comunicacion institucional',
+                                'investigacion y capacitacion',
+                                'user',
+                                'admin'
+                            ]
+    
+    formularios: dict = { 
+                            'traditional': all_department,
+                            'personas': ['tecnologia', 'soporte', 'admin'],
+                            'form5': ['soporte', 'admin'],
+                        }
+    
     # Busca los IDs de formularios permitidos para el rol
     form_ids = [form_id for form_id, roles in formularios.items() if role in roles]
+    
     return form_ids
 
 
@@ -84,13 +98,9 @@ def getForm(dataRequest: request):
     '''
     
     global data_user
-    data_user = dataRequest.json    
-    
-    print('esto es user details ',data_user['userCredential']['userDetails'])
-      
+    data_user = dataRequest.json          
     formData =  getFormByIDAndUser(data_user)
-    #print(formData)
-    #print(datajson['formId'])
+    
     return  jsonify({"formData": formData})
     
     
