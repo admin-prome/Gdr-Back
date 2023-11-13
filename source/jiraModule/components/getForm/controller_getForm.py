@@ -31,7 +31,6 @@ def getFormByIDAndUser(data_user):
     Pre: Recibe el id de un formulario y el email quien solicita
     Pos: devuelve el formulario requerido asociado al rol del usuario.
     '''
-    print(data_user)
     form_id: str= data_user['formId']
     email: str= data_user['email']
     # Primero, determina el rol del usuario a partir de su correo electrónico

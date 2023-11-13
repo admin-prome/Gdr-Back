@@ -29,7 +29,7 @@ class Issue:
         self.finalDate = self.get_data(data, 'finalDate')
         self.normativeDate = self.get_data(data, 'normativeDate')
             
-        self.userCredential = self.userCredential = UserCredential(data['userCredential'])
+        self.userCredential  = UserCredential(data['userCredential'])
         self.isTecno = self.get_data(data, 'isTecno')
 
         self.reporter = self.setReporter(data['userCredential'])
@@ -132,7 +132,7 @@ class UserCredential:
             self.picture = self.setPicture(data)
             self.idJIRA = data['idJIRA']
             self.timestamp = data['timestamp']
-            self.userSession = UserDetails(data['userSession'])
+            self.userSession =  UserDetails.from_json(data['userSession'])
             
         except Exception as e: print(f'Ocurrio un error al mapear UserCredential: {e}')
         
