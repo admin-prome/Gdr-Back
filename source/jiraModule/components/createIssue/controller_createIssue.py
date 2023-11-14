@@ -239,7 +239,7 @@ def mapearRespuestaAlFront(newIssue, dataIssue: dict, issueDict: dict) -> dict:
 
 
         dataIssue['link'] = link
-        status = '200'
+        status = '201'
         response = {"link": link, "status": status, "issue": issueDict}
 
     except Exception as e:
@@ -254,47 +254,73 @@ def attachFiles(data: request, newIssue, jiraServices):
     
     try:
         print('Comienzo adjuntar arhivos')
-        print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
-        print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')        
-        cwd = os.getcwd()  # Get the current working directory (cwd)
-        if not os.path.exists(f'{cwd}/docs/tmpFilesReceived/'):
-            os.mkdir(f'{cwd}/docs/tmpFilesReceived/')
-       
-        files = os.listdir(cwd)  # Get all the files in that directory
-        print("Files in %r: %s" % (cwd, files))
-        print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
-        print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
+        if data.files['myFile']:
+            print('Se encontro un archivo para adjuntar')
+            print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
+            print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')        
+            cwd = os.getcwd()  # Get the current working directory (cwd)
+            if not os.path.exists(f'{cwd}/docs/tmpFilesReceived/'):
+                os.mkdir(f'{cwd}/docs/tmpFilesReceived/')
         
-        archivo_adjunto = data.files['myFile']
-        
-        # Obtén el nombre de archivo original de manera segura
-        nombre_archivo_original = secure_filename(archivo_adjunto.filename)
-        
-        # Genera un timestamp con formato año-mes-día-hora-minuto-segundo
-        timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        print(timestamp)
-        
-        # Construye el nombre del archivo de salida con la extensión original
-        nombre_archivo_salida = f'{timestamp}_{nombre_archivo_original}'
-        
-        # Guarda el archivo con el nombre de archivo de salida
-        archivo_adjunto.save(f'docs/tmpFilesReceived/{nombre_archivo_salida}')
-        
-        #files = {"file": (archivo_adjunto.filename, open(f'docs/tmpFilesReceived/{nombre_archivo_salida}',"rb"), "application-type")}
-        
-        # Ruta completa del archivo que deseas adjuntar
-        ruta_archivo_adjunto = f'docs/tmpFilesReceived/{nombre_archivo_salida}'
+            files = os.listdir(cwd)  # Get all the files in that directory
+            #print("Files in %r: %s" % (cwd, files))
+            print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
+            print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
+            
+            archivo_adjunto = data.files['myFile']
+            
+            # Obtén el nombre de archivo original de manera segura
+            nombre_archivo_original = secure_filename(archivo_adjunto.filename)
+            
+            # Genera un timestamp con formato año-mes-día-hora-minuto-segundo
+            timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')          
+            
+            # Construye el nombre del archivo de salida con la extensión original
+            nombre_archivo_salida = f'{timestamp}_{nombre_archivo_original}'
+            
+            # Guarda el archivo con el nombre de archivo de salida
+            archivo_adjunto.save(f'docs/tmpFilesReceived/{nombre_archivo_salida}')
+            
+            #files = {"file": (archivo_adjunto.filename, open(f'docs/tmpFilesReceived/{nombre_archivo_salida}',"rb"), "application-type")}
+            
+            # Ruta completa del archivo que deseas adjuntar
+            ruta_archivo_adjunto = f'docs/tmpFilesReceived/{nombre_archivo_salida}'
 
-        # Nombre que deseas dar al archivo adjunto
-        nombre_archivo = nombre_archivo_salida
-        print('Adjuntando archivo')
+            # Nombre que deseas dar al archivo adjunto
+            nombre_archivo = nombre_archivo_salida
+            print('Adjuntando archivo')
+            
+            # Adjunta el archivo al problema (issue) recién creado
+            jiraServices.add_attachment(issue=newIssue, attachment=ruta_archivo_adjunto, filename=nombre_archivo)
+            borrarDirectorio.clear_directory(ruta_archivo_adjunto)
         
-        # Adjunta el archivo al problema (issue) recién creado
-        jiraServices.add_attachment(issue=newIssue, attachment=ruta_archivo_adjunto, filename=nombre_archivo)
-        borrarDirectorio.clear_directory(ruta_archivo_adjunto)
-    
+        else: print(f'No se encontraron archivos para adjuntar')
+        
     except Exception as e:
-        print(f'No se encontraron archivos para adjuntar: {e}')
+        print(f'Ocurrio un error, No se encontraron archivos para adjuntar: {e}')
+
+
+def enviarCorreoRequerimientoCreado(status, issue, issue_dict, data_issue, id_ultimo_requerimiento):
+    if status == '200':
+        correo_gerente = issue.approvers.email
+        asunto = f'Requerimiento creado con GDR: {issue_dict["summary"]} - No responder'
+
+        destinatarios = [data_issue['userCredential']['email']]
+
+        if data_issue['priority'].upper() in ['ALTA', 'MUY ALTA', 'NORMATIVA']:
+            destinatarios.append(correo_gerente)
+
+        if data_issue['issuetype'] == 'INF':
+            destinatarios.append('infra_tecno@provinciamicrocreditos.com')
+        elif data_issue['issuetype'] == 'INC':
+            destinatarios.append('gdi@provinciamicrocreditos.com')
+
+        response = mapearRespuestaAlFront(issue, data_issue, issue_dict)
+        enviarCorreo(destinatarios, asunto, armarCuerpoDeCorreo(data_issue, id_ultimo_requerimiento))
+    else:
+        data_issue['summary'] = f"ERROR al crear: {data_issue['summary']}"
+        enviarCorreoDeError(data_issue['summary'], str(status))
+        response = mapearRespuestaAlFront(issue, data_issue, issue_dict)
 
 
 def createIssue(dataRequest: request) -> json:
@@ -314,88 +340,106 @@ def createIssue(dataRequest: request) -> json:
                 
         print('------------- INICIANDO CREAR REQUERIMIENTO  ---------------')          
         dataIssue_str = dataRequest.form['myJson']
-        dataIssue = json.loads(dataIssue_str)                
+        dataIssue = json.loads(dataIssue_str)    
+               
+        print('--------------------------------------------------------------------')  
+        print('-----------------------REQUERIMIENTO RECIBIDO-----------------------')   
         print(dataIssue)
-        print(type(dataIssue))       
+        print(type(dataIssue))  
+        print('--------------------------------------------------------------------')
+        print('--------------------------------------------------------------------')     
         logging.info(dataIssue)
         
-    except:
-        print('No se pudo mapear el archivo correctamente')    
-
-    try:
+   
         
         try:            
-            issue = Issue(dataIssue)                  
+            print('--------------------------------------------------------------------')
+            print('------------------ INICIO DE MAPEO DEL INCIDENTE -------------------')     
+            issue = Issue(dataIssue)         
+            print('--------------------------------------------------------------------')
+            print('--------------------------------------------------------------------')              
             
         except Exception as e : 
             print('------------------- NO se pudo Mapear-----------------')
             print(e)
             print('------------------- NO se pudo Mapear-----------------')
         
-        # print(f'Esto es lo que llega del front: {json.dumps(dataIssue, indent=4)}')
           
-       
+        ###################### Inicio del conexión con jira api ##############################
         jiraOptions = {'server': "https://"+domain+".atlassian.net"}
         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))
         jira = jiraServices.getConection()
+        #######################################################################################
+        
+        ########################## Mapeo de campos adicionales para JIRA ######################
         issue.setKey(clasificarProyecto(dataIssue, issueDict))
-        idUltimoRequerimiento = getNumberId(dataIssue['issuetype'], dataIssue.get('subissuetype'))        
-        print(f"Esto es el ID del ultimo requerimiento: {str(idUltimoRequerimiento).zfill(3)}")        
+        idUltimoRequerimiento = getNumberId(dataIssue['issuetype'], dataIssue.get('subissuetype'))    
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
-        MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)          
+        MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)         
+        #######################################################################################
         
+        
+        print('--------------------------------------------------------------------')
+        print('---------------- ASIGNANDO LLAVE DE TABLERO DE JIRA ----------------')        
         issueDict["project"] = issue.key
-        print(f'esto es el issue.key: {issue.key}')        
-        print('Creando Requerimiento')
+        print(f'esto es el issue.key: {issue.key}')                      
+        print('--------------------------------------------------------------------')        
+        print('--------------------------------------------------------------------')
         
-        print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
+        ############################# ELIMINANDO REPORTER EN CASO #############################
+        
         if issueDict["project"] not in ('GDD', 'TSTGDR'):
             print('eliminando reporter')
             reporter_value = issueDict.pop("reporter", None)  # Elimina "reporter" si existe, o devuelve None si no existe
             if reporter_value is not None:
                 print(f"Valor eliminado de 'reporter': {reporter_value}")
             print(issueDict)
-        print('-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-')
-       
+        
+        #######################################################################################
+        
+        
+        ############################ ENVIANDO REQUERIMIENTO A JIRA ############################  
+        print('--------------------------------------------------------------------')
+        print('------------------ ENVIANDO REQUERIMIENTO A JIRA -------------------')        
         newIssue = jira.create_issue(fields=issueDict)        
+        print(f'creando requerimiento: {newIssue} \n')  
+        
+        print('--------------------------------------------------------------------')        
+        print('--------------------------------------------------------------------')
+        #######################################################################################
+        
+        ##############################  ADJUNTANDO ARCHIVOS EN JIRA  ##########################
         
         try:
-            attachFiles(dataRequest, newIssue, jira)
-            
+            print('--------------------------------------------------------------------')
+            print('------------------- ADJUNTANDO ARCHIVOS EN JIRA --------------------')
+            attachFiles(dataRequest, newIssue, jira)        
+            print('--------------------------------------------------------------------')        
+            print('--------------------------------------------------------------------')    
             
         except: 
             print('No hay archivos adjuntos') 
             
+        #######################################################################################    
         
-        print(f'creando requerimiento: {newIssue}')       
+             
         
-        status = '200'
-                
-        enviarCorreoDeError(dataIssue['summary'], str(issueDict))
+        status = '201'                
+        #enviarCorreoDeError(dataIssue['summary'], str(issueDict))
         
-        if status == '200':
-            correoGerente = issue.approvers.email
-            asunto = 'Requerimiento creado con GDR: ' + issueDict['summary'] + ' - No responder'
-
-            if dataIssue['priority'].upper() in ['ALTA', 'MUY ALTA', 'NORMATIVA']:
-                destinatarios.append(dataIssue['userCredential']['email'])
-            else:
-                destinatarios = [dataIssue['userCredential']['email']]
-
-            destinatarios.append(correoGerente)
-            
-            if dataIssue['issuetype'] == 'INF': destinatarios.append('infra_tecno@provinciamicrocreditos.com')
-            if dataIssue['issuetype'] == 'INC': destinatarios.append('gdi@provinciamicrocreditos.com')
-            
-            response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
-            enviarCorreo(destinatarios, asunto, armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
+        if status == '201':
+            print(status)
+            enviarCorreoRequerimientoCreado(status, issue, issueDict, dataIssue, idUltimoRequerimiento)
         else:
             dataIssue['summary'] = f"ERROR al crear: {dataIssue['summary']}"
             enviarCorreoDeError(dataIssue['summary'], str(status))
-            response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
+            
+        response = mapearRespuestaAlFront(newIssue, dataIssue, issueDict)
             
         #wait_until_closed(ruta_archivo_adjunto)
-
+        
+        return jsonify(response)
+    
     except requests.exceptions.HTTPError as e:
         
         response_json = e.response.json()
@@ -403,6 +447,7 @@ def createIssue(dataRequest: request) -> json:
         errors = response_json.get("errors", {})
         print(f"Error al crear el issue en JIRA: {error_messages} - {errors}")
         enviarCorreoDeError(issueDict.get('summary', ''), f'{error_messages} -> {errors}')
+        return jsonify(response)
 
     except Exception as e:
         print(f"Error al crear el issue en JIRA: {e}")
@@ -410,11 +455,12 @@ def createIssue(dataRequest: request) -> json:
         enviarCorreo(destinatarios, 'ERROR EN GDR: NO SE PUDO CREAR SU REQUERIMIENTO', armarCuerpoDeCorreo(dataIssue, idUltimoRequerimiento))
     
    
+        print('-----------------------------')
+        print(f'esto es el response: {response}')
+        print('-----------------------------')
+        return jsonify(response)
+        
     
-    print('-----------------------------')
-    print(f'esto es el response: {response}')
-    print('-----------------------------')
-    return jsonify(response)
     #return {'link': 'http://requerimientos.provinciamicrocreditos.com/error', 'status': '400'}
 
 

@@ -11,21 +11,25 @@ def assignRole(email: str) -> str:
     Pre: Recibe el email de un usuario
     Pos: Devuelve el Rol del mismo, en este caso asociado al area al cual pertenece o rol "usuario" si no pertenece a ninguno.
     '''
+    try: 
+        managment = data_user['userCredential']['userDetails']['management']
+        print('esto es la gerencia: ',managment)
+        managment_normalize = normalize_management(managment)
+        print(managment_normalize)
+        
+        if managment_normalize:
+            role = managment_normalize
+            print('El rol del usuario es: %s' %role)
+            return role
+        
+        print('El rol del usuario es: usuario')
+        return 'usuario'
     
-    managment = data_user['userCredential']['userDetails']['management']
-    print('esto es la gerencia: ',managment)
-    managment_normalize = normalize_management(managment)
-    print(managment_normalize)
-    
-    if managment_normalize:
-        role = managment_normalize
-        print('El rol del usuario es: %s' %role)
-        return role
-   
-    print('El rol del usuario es: usuario')
-    return 'usuario'
-    
-      
+    except Exception as e:
+        print(f'Fallo la asignación de roles: {e}')
+        return 'usuario'
+         
+        
 def getFormByIDAndUser(data_user):
     '''
     Pre: Recibe el id de un formulario y el email quien solicita

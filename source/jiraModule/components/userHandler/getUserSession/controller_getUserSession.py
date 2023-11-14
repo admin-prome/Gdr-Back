@@ -13,6 +13,7 @@ def getUserSession(userSession):
         print('------ Inicio de getUserSession -----')
         # Obtén el ID de JIRA del usuario basado en el correo electrónico
         email = userSession['email']
+        
         idJIRA = getIdJiraUser(email)
 
         # Crea una instancia de SessionModel

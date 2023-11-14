@@ -30,7 +30,7 @@ class Issue:
         self.normativeDate = self.get_data(data, 'normativeDate')
             
         self.userCredential  = UserCredential(data['userCredential'])
-        self.isTecno = self.get_data(data, 'isTecno')
+        self.isTecno = self.setIsTecno(data)
 
         self.reporter = self.setReporter(data['userCredential'])
     
@@ -65,7 +65,17 @@ class Issue:
         else:
             return "No Approvers"
 
+    def setIsTecno(self, data)->str:
+        try: 
+             if (data['istecno']):            
+                return data['istecno']
     
+        except Exception as e:
+            
+            print(f'Ocurrio un error al setear el vaor de isTecno: {e}')
+            return 'No'
+            
+            
     def __str__(self):
         
         content: str = f'''
@@ -125,14 +135,15 @@ class Approver:
 class UserCredential:
     def __init__(self, data):
         try:
-           
-            self.email = data['email']
-            self.name = data['name']
-            self.exp = data['exp']
-            self.picture = self.setPicture(data)
-            self.idJIRA = data['idJIRA']
-            self.timestamp = data['timestamp']
-            self.userSession =  UserDetails.from_json(data['userSession'])
+            
+            if isinstance(data, dict):
+                self.email = data['email']
+                self.name = data['name']
+                self.exp = data['exp']
+                self.picture = self.setPicture(data)
+                self.idJIRA = data['idJIRA']
+                self.timestamp = data['timestamp']
+                self.userSession =  UserDetails.from_json(data)
             
         except Exception as e: print(f'Ocurrio un error al mapear UserCredential: {e}')
         

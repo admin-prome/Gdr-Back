@@ -21,13 +21,13 @@ createIssue_bp = Blueprint("createIssue_bp", __name__)
 def CreateNewIssue() -> json:  
     try:
         print('------------------POR RESPONSE-----------------')
-        #print(request.form)
-        
         response = controller_createIssue.createIssue(request)     
         print(response)
+        return response, 201
     except Exception as e:
         print(f'Ocurrio un error en la creación de la incidencia: {e}')
-        
+        return jsonify({'error':f'Ocurrio un error en la creación de la incidencia: {e}'}), 500
+
     # response.headers.add('Access-Control-Allow-Origin', '*')  # Permitir solicitudes desde cualquier origen
     # response.headers.add('Content-Type', 'application/json')  # Establecer el tipo de contenido como JSON
    
@@ -36,4 +36,4 @@ def CreateNewIssue() -> json:
     #jira.add_attachment(issue=new_issue, attachment='C:/Users/Colaborador/Documents/logo-icon.png')
 
     #borrarDirectorio.clear_directory('docs/tmpFilesReceived/')
-    return response
+    
