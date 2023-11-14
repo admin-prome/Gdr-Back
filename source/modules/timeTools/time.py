@@ -14,20 +14,33 @@ def obtenerFechaHoraBsAs():
 
 
 
-def convertir_formato_fecha(fecha_str):
-    # Intenta detectar el formato 'dd/MM/yyyy'
-    try:
-        fecha_obj = datetime.strptime(fecha_str, '%d/%m/%Y')
-    except ValueError:
-        # Si falla, intenta con el formato 'yyyy-MM-dd'
-        try:
-            fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d')
-        except ValueError:
-            print('El formato de fecha no fue reconocido')
-            # Si ambos intentos fallan, lanza una excepción
-            #raise ValueError('Formato de fecha no reconocido')
-            return ''
-    # Formatea la fecha al nuevo formato 'yyyy-MM-dd'
-    fecha_formateada = fecha_obj.strftime('%Y-%m-%d')
+def convertir_formato_fecha(fecha_str= ''):
+    print(str(fecha_str))
+    if (fecha_str!= ''):
+        fecha_str = str(fecha_str)
+        formatos = ['%d/%m/%Y', '%m/%d/%Y', '%Y/%m/%d', '%d-%m-%Y', '%m-%d-%Y', '%Y-%m-%d', '%Y %m %d', '%d %m %Y']
 
-    return fecha_formateada
+        for formato in formatos:
+            try:
+                fecha_obj = datetime.strptime(fecha_str, formato)
+                # Si la conversión tiene éxito, formatea la fecha al nuevo formato 'yyyy-MM-dd'
+                fecha_formateada = fecha_obj.strftime('%Y-%m-%d')
+                return fecha_formateada
+            except ValueError:
+                pass
+
+        # Si no se encuentra un formato válido, lanza una excepción
+        raise ValueError('Formato de fecha no reconocido')
+    print('No se registraron fechas para formatear')
+    return ''
+
+if __name__ == '__main__':
+    print(obtenerFecha())
+    print(obtenerFechaHoraBsAs())
+    print(convertir_formato_fecha('22/11/1989'))
+    print(convertir_formato_fecha('22-11-1989'))
+    print(convertir_formato_fecha('18/11/2023'))
+    print(convertir_formato_fecha('1989/11/22'))
+    print(convertir_formato_fecha('1989-11-22'))
+    print(convertir_formato_fecha('1989 01 22'))
+    print(convertir_formato_fecha())

@@ -188,7 +188,7 @@ def enviarCorreoDeError(_asunto: str, error:str):
     print(error)
     print(type(_asunto))
     print(type(error))
-    enviarCorreo(correosDeError, asunto, mensaje, ['mbarreto@provinciamicrocreditos.com','mjmillan@fi.uba.ar'])
+    enviarCorreo(correosDeError, asunto, mensaje)
     
     
 if __name__ == "__main__":

@@ -301,7 +301,7 @@ def attachFiles(data: request, newIssue, jiraServices):
 
 
 def enviarCorreoRequerimientoCreado(status, issue, issue_dict, data_issue, id_ultimo_requerimiento):
-    if status == '200':
+    if status == '201':
         correo_gerente = issue.approvers.email
         asunto = f'Requerimiento creado con GDR: {issue_dict["summary"]} - No responder'
 
@@ -428,7 +428,7 @@ def createIssue(dataRequest: request) -> json:
         #enviarCorreoDeError(dataIssue['summary'], str(issueDict))
         
         if status == '201':
-            print(status)
+         
             enviarCorreoRequerimientoCreado(status, issue, issueDict, dataIssue, idUltimoRequerimiento)
         else:
             dataIssue['summary'] = f"ERROR al crear: {dataIssue['summary']}"

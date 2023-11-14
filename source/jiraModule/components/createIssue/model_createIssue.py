@@ -21,14 +21,14 @@ class Issue:
         self.issuetype = self.get_data(data,'issuetype')
         self.subissuetype = self.get_data(data,'subissuetype')
         self.approvers = Approver(data['approvers'])
-        self.impact = convertir_formato_fecha(self.get_data(data, 'impact'))
-        self.attached = convertir_formato_fecha(self.get_data(data, 'attached'))
+        self.impact = self.get_data(data, 'impact')
+        self.attached = self.get_data(data, 'attached')
         self.managment = self.get_data(data, 'managment')
         self.priority = self.get_data(data, 'priority')
         #self.initiative = data['initiative']
         #self.normativeRequirement = data['normativeRequirement']
-        self.finalDate = self.get_data(data, 'finalDate')
-        self.normativeDate = self.get_data(data, 'normativeDate')
+        self.finalDate = convertir_formato_fecha(self.get_data(data, 'finalDate'))
+        self.normativeDate = convertir_formato_fecha(self.get_data(data, 'normativeDate'))
             
         self.userCredential  = UserCredential(data['userCredential'])
         self.isTecno = self.setIsTecno(data)
