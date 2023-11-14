@@ -22,7 +22,7 @@ def getUserDetails(email: str) -> dict:
        
         # Parsear la respuesta JSON a un diccionario
         response_data = response.json()
-
+        print(response.json)
         # Crear una instancia de UserDetails a partir del JSON
         user_details = model_getDetailsUser.UserDetails.from_json(response_data['result'])
    
@@ -32,6 +32,6 @@ def getUserDetails(email: str) -> dict:
         print(f"Error al realizar la solicitud: {e}")
     
     except Exception as e:
-        print(f"Ocurrió un error inesperado: {e}")
+        print(f"Ocurrió un error inesperado al intentar obtener el detalle del usuario: {e}")
 
     return {}  # Devolver un diccionario vacío en caso de error

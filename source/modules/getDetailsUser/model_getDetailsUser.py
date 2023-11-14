@@ -13,8 +13,6 @@ class UserDetails:
     @classmethod
     def from_json(cls, json_data):
         print(json_data)
-        json_data = json_data['userDetails']
-        print(type(json_data))
         rtaJson= cls(
             id=json_data.get("id"),
             employee_number=json_data.get("employeeNumber"),

@@ -143,7 +143,7 @@ class UserCredential:
                 self.picture = self.setPicture(data)
                 self.idJIRA = data['idJIRA']
                 self.timestamp = data['timestamp']
-                self.userSession =  UserDetails.from_json(data)
+                self.userSession =  UserDetails.from_json(data['userDetails'])
             
         except Exception as e: print(f'Ocurrio un error al mapear UserCredential: {e}')
         

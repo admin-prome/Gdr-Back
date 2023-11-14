@@ -17,7 +17,7 @@ def leer_json(nombre_archivo):
     except json.JSONDecodeError as e:
         print(f"Error al decodificar el JSON en '{nombre_archivo}': {e}")
     except Exception as e:
-        print(f"Ocurrió un error inesperado al leer el json : {e}")
+        print(f"enviar_correo_de_error al leer el json : {e}")
 
 forms = leer_json('./docs/forms.json')
 
