@@ -5,6 +5,7 @@ from sqlalchemy import Column, Integer, String
 import json
 
 from source.modules.getDetailsUser.model_getDetailsUser import UserDetails
+from source.modules.timeTools.time import convertir_formato_fecha
 
 
 class Issue:
@@ -20,8 +21,8 @@ class Issue:
         self.issuetype = self.get_data(data,'issuetype')
         self.subissuetype = self.get_data(data,'subissuetype')
         self.approvers = Approver(data['approvers'])
-        self.impact = self.get_data(data, 'impact')
-        self.attached = self.get_data(data, 'attached')
+        self.impact = convertir_formato_fecha(self.get_data(data, 'impact'))
+        self.attached = convertir_formato_fecha(self.get_data(data, 'attached'))
         self.managment = self.get_data(data, 'managment')
         self.priority = self.get_data(data, 'priority')
         #self.initiative = data['initiative']
