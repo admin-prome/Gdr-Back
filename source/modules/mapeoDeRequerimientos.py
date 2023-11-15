@@ -58,9 +58,9 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
 
             issue_dict["issuetype"] = {"id":"10003"} 
             
-            if(issue.isTecno == 'si'): 
+            if(issue.isTecno.lower() == 'si'): 
                 issue.isTecno = 'InternoTech'
-            else: issue.isTecno = 'Usuario'
+            else: issue.isTecno= 'Usuario'
             
             issue_dict['description'] = f"""{issue_dict['description']} 
                                             *Aprobado por:* {issue.approvers.name}

@@ -12,17 +12,20 @@ def assignRole(email: str) -> str:
     Pos: Devuelve el Rol del mismo, en este caso asociado al area al cual pertenece o rol "usuario" si no pertenece a ninguno.
     '''
     try: 
-        managment = data_user['userCredential']['userDetails']['management']
-        print('esto es la gerencia: ',managment)
-        managment_normalize = normalize_management(managment)
-        print(managment_normalize)
-        
-        if managment_normalize:
-            role = managment_normalize
-            print('El rol del usuario es: %s' %role)
-            return role
-        
-        print('El rol del usuario es: usuario')
+        data_user['userCredential']['userDetails']=''
+        if data_user['userCredential']['userDetails'] != '':
+            managment = data_user['userCredential']['userDetails']['management']
+            print('esto es la gerencia: ',managment)
+            managment_normalize = normalize_management(managment)
+            print(managment_normalize)
+            
+            if managment_normalize:
+                role = managment_normalize
+                print('El rol del usuario es: %s' %role)
+                return role
+            
+            print('El rol del usuario es: usuario')
+            
         return 'usuario'
     
     except Exception as e:
@@ -38,6 +41,7 @@ def getFormByIDAndUser(data_user):
     form_id: str= data_user['formId']
     email: str= data_user['email']
     # Primero, determina el rol del usuario a partir de su correo electrónico
+    
     user_role = assignRole(email)
     print('El rol definido del usuario es: %s' %user_role)
     
@@ -54,7 +58,7 @@ def getFormByIDAndUser(data_user):
             return formsAdmin.get(form_id, {})
         elif user_role == 'procesos':
             return formsUsuario.get(form_id, {})
-        elif user_role == 'user':
+        elif user_role == 'usuario':
             return formsUsuario.get(form_id, {})
         
         
@@ -78,7 +82,7 @@ def getFormIDs(role)-> list[str]:
                                 'tecnologia', 'direccion ejecutiva',
                                 'riesgo', 'comunicacion institucional',
                                 'investigacion y capacitacion',
-                                'user',
+                                'usuario',
                                 'admin'
                             ]
     
@@ -107,10 +111,6 @@ def getForm(dataRequest: request):
     return  jsonify({"formData": formData})
     
     
-if __name__ == '__main__':
-    
-    user_email = 'mmillan@provinciamicrocreditos.com'
-    form_id = 'traditional'
-    formulario = getFormByIDAndUser(form_id, user_email)
+
     
     

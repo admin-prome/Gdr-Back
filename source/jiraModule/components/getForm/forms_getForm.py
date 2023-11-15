@@ -1,5 +1,5 @@
 
-import json, os
+import json
 
 
 def leer_json(nombre_archivo):
