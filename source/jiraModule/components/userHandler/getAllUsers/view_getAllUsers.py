@@ -8,7 +8,7 @@ getAllUsers_bp = Blueprint("getAllUsers_bp", __name__)
 def getAllUsers() -> json:   
     
     response = controller_getAllUsers.getAllUsers()
-    input('Aguarde view')
+   
     return response
     
     

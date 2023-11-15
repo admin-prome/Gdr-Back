@@ -9,5 +9,4 @@ def getAllUsers() -> json:
     
     response = getProjectsForUser()
     print(response)
-    input('Aguarde view')
     return response
