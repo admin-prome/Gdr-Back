@@ -20,6 +20,7 @@ createIssue_bp = Blueprint("createIssue_bp", __name__)
 @createIssue_bp.route('/createissue', methods=['POST'])
 def CreateNewIssue() -> json:  
     try:
+        hola = input('hola')
         print('------------------POR RESPONSE-----------------')
         response = controller_createIssue.createIssue(request)     
         print(response)

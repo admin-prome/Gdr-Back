@@ -177,7 +177,6 @@ def clasificarProyecto(dataIssue: dict, issueDict: dict) -> str:
         print(f'Ocurrió un error al mapear proyecto: {e}')
 
 
-
 def mapearCamposParaJIRA(issue: Issue, issueDict: dict, idUltimoRequerimiento: str | list) -> None:
     """ Mapeo de campos mínimos de JIRA
 
@@ -273,7 +272,7 @@ def attachFiles(data: request, newIssue, jiraServices):
             nombre_archivo_original = secure_filename(archivo_adjunto.filename)
             
             # Genera un timestamp con formato año-mes-día-hora-minuto-segundo
-            timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')          
+            timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')          
             
             # Construye el nombre del archivo de salida con la extensión original
             nombre_archivo_salida = f'{timestamp}_{nombre_archivo_original}'
