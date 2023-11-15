@@ -12,7 +12,7 @@ def assignRole(email: str) -> str:
     Pos: Devuelve el Rol del mismo, en este caso asociado al area al cual pertenece o rol "usuario" si no pertenece a ninguno.
     '''
     try: 
-        data_user['userCredential']['userDetails']=''
+        
         if data_user['userCredential']['userDetails'] != '':
             managment = data_user['userCredential']['userDetails']['management']
             print('esto es la gerencia: ',managment)
