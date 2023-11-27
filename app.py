@@ -6,7 +6,7 @@ from flask_cors import CORS
 import google_auth_oauthlib
 import requests
 
-# from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy                                                                                                                        
 # from flask_marshmallow import Marshmallow
 # from source.settings.settings import settings
 
