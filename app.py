@@ -158,7 +158,7 @@ def middleware_de_autorizacion():
         
         currentRoute = request.path
       
-        if currentRoute == '/GetForm':
+        if currentRoute == '/GetForm' or currentRoute =='/getissuesforuser':
             if authorization_key != KEY:
                 # Si la clave o el origen son inválidos, retorna una respuesta de error
                 return jsonify({'error': 'Acceso denegado'}), 403

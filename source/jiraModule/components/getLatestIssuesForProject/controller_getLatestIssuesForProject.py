@@ -59,7 +59,7 @@ def extract_fields_from_description(description):
 
 
 
-def getLatestIssuesForProject(project_key):
+def getLatestIssuesForProjectII(project_key):
     conexion = Conexion()
 
     # Realizar la solicitud para buscar los issues del proyecto con campos específicos (summary y description)
@@ -111,6 +111,59 @@ def getLatestIssuesForProject(project_key):
 
     # Devolver los datos como respuesta JSON
     return jsonify(result)
+
+def procesar_json(json_data):
+    results = []
+
+    if json_data and isinstance(json_data, dict) and 'issues' in json_data:
+        for issue in json_data['issues']:
+            try:
+                approver_info = issue['fields'].get('customfield_10003', [{}])[0]
+                approver_display_name = approver_info.get('displayName', 'no definido')
+
+                issue_data = {
+                    'id': issue.get('id', 'no definido'),
+                    'key': issue.get('key', 'no definido'),
+                    'summary': issue['fields'].get('summary', 'no definido'),
+                    'approver': approver_display_name,
+                    'created': issue['fields'].get('created', 'no definido'),
+                    'description': issue['fields'].get('description', {}).get('content', [{}])[0].get('content', [{}])[0].get('text', 'no definido'),
+                    'last_updated': issue['fields'].get('updated', 'no definido'),
+                    'status': issue['fields'].get('status', {}).get('name', 'no definido'),
+                    'assignee': issue['fields'].get('assignee', {}).get('displayName', 'no definido')
+                }
+                results.append(issue_data)
+            except Exception as e:
+                print(f"Error al procesar el issue: {e}")
+
+    return results
+
+
+
+
+
+def getLatestIssuesForProject(user_email: str, maxResult: int = 10):
+  
+    """Obtiene todos los requerimientos que en la descripción contengan una palabra determinada."""
+
+   
+    payload = {
+        "jql": f"project = {'GDD'} AND description ~ '{user_email}'",
+         "expand": "summary,assignee,created,description,changelog",
+         "maxResults": maxResult
+    }
+    conexion = Conexion()
+
+    response = response = conexion.get(payload)
+    if response.status_code == 200:
+        response = response.json()
+   
+        respuesta = procesar_json(response)
+     
+        return respuesta
+    else:
+        raise Exception(f"Error al obtener los requerimientos: {response.status_code}")
+
 
 
 
