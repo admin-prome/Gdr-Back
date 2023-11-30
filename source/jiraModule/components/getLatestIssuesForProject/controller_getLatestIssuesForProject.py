@@ -4,7 +4,12 @@ import re
 from flask import jsonify
 from source.jiraModule.utils.conexion.conexion import Conexion
 import requests
+from source.jiraModule.components.userHandler.getUserForJiraId.controller_getUserForJiraId import get_user_info
+import os
 
+def clear_console():
+    """Borra la consola."""
+    os.system('cls' if os.name == 'nt' else 'clear')
 # def getLatestIssuesForProject(project_key) -> json:
 #     conexion = Conexion()
 #     # Realizar la solicitud para buscar los issues del proyecto
@@ -67,23 +72,7 @@ def getLatestIssuesForProjectII(project_key):
     data = response.json()
 
     # Función para procesar la descripción y eliminar las marcas (marks) y decodificar caracteres Unicode
-    def process_description(description):
-        if description is None:
-            return ""
-
-        content_blocks = description.get("content", [])
-
-        def get_text(block):
-            return block.get("text", "")
-
-        processed_text = ""
-        for block in content_blocks:
-            if block["type"] == "paragraph" and "content" in block:
-                paragraph_text = " ".join([get_text(content) for content in block["content"] if content["type"] == "text"])
-                processed_text += unicodedata.normalize('NFKD', paragraph_text) + "\n"
-
-        return processed_text.strip()
-
+    
     # Obtener la lista de issues (requerimientos) de la respuesta
     issues = data.get('issues', [])
 
@@ -112,58 +101,138 @@ def getLatestIssuesForProjectII(project_key):
     # Devolver los datos como respuesta JSON
     return jsonify(result)
 
+
+def process_description(description):
+        
+        try:
+            if description is None:
+                return ""
+
+            content_blocks = description.get("content", [])
+
+            def get_text(block):
+                return block.get("text", "")
+
+            processed_text = ""
+            for block in content_blocks:
+                if block["type"] == "paragraph" and "content" in block:
+                    paragraph_text = " ".join([get_text(content) for content in block["content"] if content["type"] == "text"])
+                    processed_text += unicodedata.normalize('NFKD', paragraph_text) + "\n"
+
+            return processed_text.strip()
+
+        except Exception as e:
+            print(f'Ocurrio un error al procesar la descripción: {e}')
+            return 'No se pudo procesar la descripción'
+
 def procesar_json(json_data):
     results = []
-
+    # print('-------------------------------')
+    # print(len(json_data['issues']))
+    # print('-------------------------------')
     if json_data and isinstance(json_data, dict) and 'issues' in json_data:
+        print('Inciando')
         for issue in json_data['issues']:
+            
+            
             try:
-                approver_info = issue['fields'].get('customfield_10003', [{}])[0]
+                
+                fields = issue.get('fields', {})
+                
+                
+                approver_info = fields.get('customfield_10003', [{}])[0]
                 approver_display_name = approver_info.get('displayName', 'no definido')
 
                 issue_data = {
                     'id': issue.get('id', 'no definido'),
                     'key': issue.get('key', 'no definido'),
-                    'summary': issue['fields'].get('summary', 'no definido'),
+                    'summary': fields.get('summary', 'no definido'),
                     'approver': approver_display_name,
-                    'created': issue['fields'].get('created', 'no definido'),
-                    'description': issue['fields'].get('description', {}).get('content', [{}])[0].get('content', [{}])[0].get('text', 'no definido'),
-                    'last_updated': issue['fields'].get('updated', 'no definido'),
-                    'status': issue['fields'].get('status', {}).get('name', 'no definido'),
-                    'assignee': issue['fields'].get('assignee', {}).get('displayName', 'no definido')
+                    'created': fields.get('created', 'no definido'),
+                    'description': normalizar_descripcion(fields.get('description', 'no definido')),
+                    'last_updated': fields.get('updated', 'no definido'),
+                    'status': fields.get('status', {}).get('name', 'no definido'),
+                    'responsible': '',
+                    'assignee': ''
                 }
-                results.append(issue_data)
-            except Exception as e:
-                print(f"Error al procesar el issue: {e}")
 
+                try: 
+                    issue_data['assignee'] =  get_user_info(fields.get('customfield_1010', 'no definido'))
+                except: issue_data['assignee'] = 'No definido'
+                
+                try:
+                    issue_data['responsible']: fields.get('assignee', {}).get('displayName', 'no definido')
+                except: issue_data['responsible'] = 'No definido'
+                
+                # print(len(json_data['issues']))
+                # print(f'esto es titulo en issue_data: {issue_data["summary"]}')
+                
+                results.append(issue_data)
+
+            except KeyError as ke:
+                print(f"Error al procesar la clave: {ke}")
+            except Exception as e:
+                print(f"Error inesperado al procesar el issue: {e}")
+
+            # print(results)
+            
     return results
 
 
 
 
+def normalizar_descripcion(json_data):
+    # Convierte la cadena JSON a un diccionario de Python
+    data = json_data
+    
+    # Inicializa una lista para almacenar las líneas de texto
+    lineas = []
 
-def getLatestIssuesForProject(user_email: str, maxResult: int = 10):
-  
+    # Itera a través del contenido del campo "description"
+    for item in data['content']:
+        if item['type'] == 'paragraph':
+            # Procesa el contenido del párrafo
+            parrafo = ''
+            for fragmento in item['content']:
+                if fragmento['type'] == 'text':
+                    parrafo += fragmento['text']
+                elif fragmento['type'] == 'hardBreak':
+                    parrafo += '\n'
+            lineas.append(parrafo)
+
+    # Une las líneas en un solo texto
+    texto_normalizado = '\n'.join(lineas)
+    
+    return texto_normalizado
+
+
+
+def getLatestIssuesForProjects(user_email: str, projects: list = ['GDD'], maxResult: int = 10):
     """Obtiene todos los requerimientos que en la descripción contengan una palabra determinada."""
 
-   
-    payload = {
-        "jql": f"project = {'GDD'} AND description ~ '{user_email}'",
-         "expand": "summary,assignee,created,description,changelog",
-         "maxResults": maxResult
-    }
-    conexion = Conexion()
+    respuesta: list = []
+    for project in projects:
+        try:
+            print(f'Iniciando busqueda en proyecto: {project}')
+            
+            payload = {
+                "jql": f"project = {project} AND description ~ '{user_email}'",
+                "expand": "summary,assignee,created,description,changelog",
+                "maxResults": maxResult
+            }
+            conexion = Conexion()
 
-    response = response = conexion.get(payload)
-    if response.status_code == 200:
-        response = response.json()
-   
-        respuesta = procesar_json(response)
-     
-        return respuesta
-    else:
-        raise Exception(f"Error al obtener los requerimientos: {response.status_code}")
-
+            response = conexion.get(payload)
+            if response.status_code == 200:
+                response = response.json()                
+                respuesta.extend(procesar_json(response))
+            else:
+                raise Exception(f"Error al obtener los requerimientos: {response.status_code}")
+    
+        except Exception as e:
+            print(f'Ocurrio un error al ejecutar proyecto {project} :   -> {e}')
+    
+    return respuesta
 
 
 

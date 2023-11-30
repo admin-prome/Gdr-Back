@@ -11,12 +11,18 @@ def GetProjects() -> json:
     try:
         print('inicio')
         user_email = request.json.get('email')
-        max_result = request.json.get('max_result', 10)
-    
+        max_result = request.json.get('max_result')
+        projects = request.json.get('projects')
         print(user_email)
         print(max_result)
+        print(projects)
+        response: list =  []
+       
         
-        response = controller_getLatestIssuesForProject.getLatestIssuesForProject(user_email, max_result)
+        response = controller_getLatestIssuesForProject.getLatestIssuesForProjects(user_email,  projects, max_result)
+           
+        print(response) 
+            
         return response, 201
     
     except Exception as e:
