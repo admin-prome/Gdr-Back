@@ -59,7 +59,6 @@ def remove_keywords(sentence: str, keywords: list):
         return sentence
    
 
-
 def find_max_similarity(text: str, options: list, keywords_to_remove=None):
     """
     Encontrar la opción con el máximo porcentaje de similitud con el texto proporcionado.
@@ -84,3 +83,22 @@ def find_max_similarity(text: str, options: list, keywords_to_remove=None):
 
     return best_match
 
+
+def split_identifier_from_title(input_string: str)->tuple:
+    # Define the regex pattern to find the specified nomenclature
+    regex_pattern = r'\[([^\]]+)\] (.+)'
+
+    # Search for the pattern in the input_string
+    match = re.search(regex_pattern, input_string)
+
+    # Check if the pattern is found
+    if match:
+        # Get the first and second captured groups
+        first_group = match.group(1)
+        second_group = match.group(2)
+
+        # Return the results as a tuple
+        return first_group, second_group
+    else:
+        # If the pattern is not found, return None
+        return None, None

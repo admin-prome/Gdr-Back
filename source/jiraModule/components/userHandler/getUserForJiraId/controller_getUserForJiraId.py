@@ -20,7 +20,6 @@ def get_user_info(username):
 
             if response.status_code == 200:
                 user_info = response.json()
-                print(user_info)
                 return user_info
         else:
             print(f"Error: {response.status_code}")

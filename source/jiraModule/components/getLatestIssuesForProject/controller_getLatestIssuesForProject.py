@@ -7,6 +7,8 @@ import requests
 from source.jiraModule.components.userHandler.getUserForJiraId.controller_getUserForJiraId import get_user_info
 import os
 
+from source.modules.stringTools.searchMatch import split_identifier_from_title
+
 def clear_console():
     """Borra la consola."""
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -125,13 +127,14 @@ def process_description(description):
             print(f'Ocurrio un error al procesar la descripción: {e}')
             return 'No se pudo procesar la descripción'
 
+
 def procesar_json(json_data):
     results = []
     # print('-------------------------------')
     # print(len(json_data['issues']))
     # print('-------------------------------')
     if json_data and isinstance(json_data, dict) and 'issues' in json_data:
-        print('Inciando')
+        print('Iniciando')
         for issue in json_data['issues']:
             
             
@@ -142,7 +145,8 @@ def procesar_json(json_data):
                 
                 approver_info = fields.get('customfield_10003', [{}])[0]
                 approver_display_name = approver_info.get('displayName', 'no definido')
-
+            
+                
                 issue_data = {
                     'id': issue.get('id', 'no definido'),
                     'key': issue.get('key', 'no definido'),
@@ -155,7 +159,14 @@ def procesar_json(json_data):
                     'responsible': '',
                     'assignee': ''
                 }
-
+                
+                identifier_and_title: tuple = split_identifier_from_title(issue_data["summary"])
+                internal_identifier: str = identifier_and_title[0]
+                title: str = identifier_and_title[1]
+                
+                issue_data['summary'] = title
+                issue_data['internal_identifier'] = internal_identifier
+                
                 try: 
                     issue_data['assignee'] =  get_user_info(fields.get('customfield_1010', 'no definido'))
                 except: issue_data['assignee'] = 'No definido'
@@ -177,8 +188,6 @@ def procesar_json(json_data):
             # print(results)
             
     return results
-
-
 
 
 def normalizar_descripcion(json_data):
@@ -204,8 +213,6 @@ def normalizar_descripcion(json_data):
     texto_normalizado = '\n'.join(lineas)
     
     return texto_normalizado
-
-
 
 def getLatestIssuesForProjects(user_email: str, projects: list = ['GDD'], maxResult: int = 10):
     """Obtiene todos los requerimientos que en la descripción contengan una palabra determinada."""
