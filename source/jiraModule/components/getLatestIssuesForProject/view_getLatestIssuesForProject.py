@@ -1,6 +1,7 @@
 import json
 from flask import Blueprint, jsonify, request
 from source.jiraModule.components.getLatestIssuesForProject import controller_getLatestIssuesForProject
+from source.modules.jsonTools.save_json import guardar_json
 
 
 getLatestIssuesForProject_bp = Blueprint("getLatestIssuesForProject", __name__)
@@ -13,16 +14,10 @@ def GetProjects() -> json:
         user_email = request.json.get('email')
         max_result = request.json.get('max_result')
         projects = request.json.get('projects')
-        print(user_email)
-        print(max_result)
-        print(projects)
-        response: list =  []
-       
-        
+      
+        response: list =  []              
         response = controller_getLatestIssuesForProject.getLatestIssuesForProjects(user_email,  projects, max_result)
-           
-        print(response) 
-            
+        guardar_json(response, 'respuestaAlFront.json')
         return response, 201
     
     except Exception as e:

@@ -6,8 +6,10 @@ from source.jiraModule.utils.conexion.conexion import Conexion
 import requests
 from source.jiraModule.components.userHandler.getUserForJiraId.controller_getUserForJiraId import get_user_info
 import os
+from source.modules.jsonTools.save_json import guardar_json
 
 from source.modules.stringTools.searchMatch import split_identifier_from_title
+from source.modules.stringTools.translate import translate_priority
 
 def clear_console():
     """Borra la consola."""
@@ -61,7 +63,7 @@ def extract_fields_from_description(description):
 
         fields_dict[key] = description[start_index:end_index].strip()
         start_index = end_index
-    print(fields_dict)
+        
     return fields_dict
 
 
@@ -144,9 +146,14 @@ def procesar_json(json_data):
                 
                 
                 approver_info = fields.get('customfield_10003', [{}])[0]
-                approver_display_name = approver_info.get('displayName', 'no definido')
-            
+                approver_display_name = approver_info.get('displayName', 'no definido')            
+                priority_name = translate_priority(fields['priority']['name'] if 'priority' in fields and 'name' in fields['priority'] else 'no definido')
+                #if(issue.get('customfield_10003') != None):
                 
+                
+                # print(display_name)
+                # display_name= fields['customfield_10108']['displayName'] if 'customfield_10108' in fields and 'displayName' in fields['customfield_10108'] else 'Sin asignar'
+                # print(display_name)
                 issue_data = {
                     'id': issue.get('id', 'no definido'),
                     'key': issue.get('key', 'no definido'),
@@ -157,7 +164,8 @@ def procesar_json(json_data):
                     'last_updated': fields.get('updated', 'no definido'),
                     'status': fields.get('status', {}).get('name', 'no definido'),
                     'responsible': '',
-                    'assignee': ''
+                    'assignee': '',
+                    'priority':priority_name                    
                 }
                 
                 identifier_and_title: tuple = split_identifier_from_title(issue_data["summary"])
@@ -168,8 +176,14 @@ def procesar_json(json_data):
                 issue_data['internal_identifier'] = internal_identifier
                 
                 try: 
-                    issue_data['assignee'] =  get_user_info(fields.get('customfield_1010', 'no definido'))
-                except: issue_data['assignee'] = 'No definido'
+                    if fields['customfield_10108'] != None:
+                        assigneIssue = fields.get("customfield_10108", {})
+                        display_name = assigneIssue.get("displayName", "Sin asignar")
+                        issue_data['assignee'] =  display_name
+                        
+                    else:  issue_data['assignee'] = 'Sin asignar'
+                    
+                except: issue_data['assignee'] = 'No encontrado'
                 
                 try:
                     issue_data['responsible']: fields.get('assignee', {}).get('displayName', 'no definido')
@@ -224,14 +238,15 @@ def getLatestIssuesForProjects(user_email: str, projects: list = ['GDD'], maxRes
             
             payload = {
                 "jql": f"project = {project} AND description ~ '{user_email}'",
-                "expand": "summary,assignee,created,description,changelog",
+                "expand": "summary,assignee,created,description,changelog,priority",
                 "maxResults": maxResult
             }
             conexion = Conexion()
 
             response = conexion.get(payload)
             if response.status_code == 200:
-                response = response.json()                
+                response = response.json()          
+                guardar_json(response,f'respuestaDeJira{project}.json')
                 respuesta.extend(procesar_json(response))
             else:
                 raise Exception(f"Error al obtener los requerimientos: {response.status_code}")
