@@ -27,8 +27,10 @@ class Issue:
         self.priority = self.get_data(data, 'priority')
         #self.initiative = data['initiative']
         #self.normativeRequirement = data['normativeRequirement']
-        self.finalDate = convertir_formato_fecha(self.get_data(data, 'finalDate'))
-        self.normativeDate = convertir_formato_fecha(self.get_data(data, 'normativeDate'))
+        if 'finalDate' in data:
+            self.finalDate = convertir_formato_fecha(self.get_data(data, 'finalDate'))
+        if 'normativeDate' in data:  
+            self.normativeDate = convertir_formato_fecha(self.get_data(data, 'normativeDate'))
             
         self.userCredential  = UserCredential(data['userCredential'])
         self.isTecno = self.setIsTecno(data)

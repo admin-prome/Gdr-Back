@@ -29,6 +29,7 @@ ENVIROMENT: str = settings.ENVIROMENT
 domain: str = settings.DOMAIN
 mail: str = settings.MAIL
 tokenId: str = settings.APIKEY
+print(ENVIROMENT, domain, mail, tokenId)
 
 
 
@@ -354,7 +355,9 @@ def createIssue(dataRequest: request) -> json:
         try:            
             print('--------------------------------------------------------------------')
             print('------------------ INICIO DE MAPEO DEL INCIDENTE -------------------')     
-            issue = Issue(dataIssue)         
+            issue = Issue(dataIssue)      
+            issue.key = 'GDD'  
+            print(f'esto es issue key: {issue.key}')
             print('--------------------------------------------------------------------')
             print('--------------------------------------------------------------------')              
             
@@ -369,9 +372,17 @@ def createIssue(dataRequest: request) -> json:
         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))
         jira = jiraServices.getConection()
         #######################################################################################
-        
+        print('#######################################################################################')
+        print('#######################################################################################')
+        print('#######################################################################################')
+        print(f'esto es issue key antes: {issue.key}')
         ########################## Mapeo de campos adicionales para JIRA ######################
         issue.setKey(clasificarProyecto(dataIssue, issueDict))
+        print(f'esto es issue key despues: {issue.key}')
+        print('#######################################################################################')
+        print('#######################################################################################')
+        print('#######################################################################################')
+        
         idUltimoRequerimiento = getNumberId(dataIssue['issuetype'], dataIssue.get('subissuetype'))    
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
         MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)         
@@ -399,7 +410,8 @@ def createIssue(dataRequest: request) -> json:
         
         ############################ ENVIANDO REQUERIMIENTO A JIRA ############################  
         print('--------------------------------------------------------------------')
-        print('------------------ ENVIANDO REQUERIMIENTO A JIRA -------------------')        
+        print('------------------ ENVIANDO REQUERIMIENTO A JIRA -------------------')     
+           
         newIssue = jira.create_issue(fields=issueDict)        
         print(f'creando requerimiento: {newIssue} \n')  
         

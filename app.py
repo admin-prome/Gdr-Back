@@ -5,6 +5,7 @@ from flask import Flask, abort, jsonify, redirect, request, session
 from flask_cors import CORS
 import google_auth_oauthlib
 import requests
+# from flask_cache import Cache
 
 # from flask_sqlalchemy import SQLAlchemy                                                                                                                        
 # from flask_marshmallow import Marshmallow
@@ -47,8 +48,10 @@ url = settings.URL_BACK
 app = Flask(__name__)
 app.secret_key = "gdrback"
 client_secrets_file = os.path.join(pathlib.Path(__file__).parent, './docs/token.json')
-print('-----------------------------------')
-print(client_secrets_file)
+# Configuración de la caché (en este ejemplo, se utiliza la caché en memoria)
+#cache = Cache(app, config={'CACHE_TYPE': 'simple'})
+
+# print(client_secrets_file)
 
 flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file,
                                      scopes=["https://www.googleapis.com/auth/userinfo.profile",
@@ -164,11 +167,6 @@ def middleware_de_autorizacion():
                 return jsonify({'error': 'Acceso denegado'}), 403
     pass
 
-
-
-
-    
-    
 if __name__ == '__main__':
     
     try:            

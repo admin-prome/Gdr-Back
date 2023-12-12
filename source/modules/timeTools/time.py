@@ -14,11 +14,22 @@ def obtenerFechaHoraBsAs():
 
 
 
-def convertir_formato_fecha(fecha_str= ''):
+def convertir_formato_fecha(fecha_str=''):
     print(str(fecha_str))
-    if (fecha_str!= ''):
-        fecha_str = str(fecha_str)
-        formatos = ['%d/%m/%Y', '%m/%d/%Y', '%Y/%m/%d', '%d-%m-%Y', '%m-%d-%Y', '%Y-%m-%d', '%Y %m %d', '%d %m %Y']
+
+    if fecha_str:
+        # Intenta parsear la fecha directamente en el formato 'YYYY-MM-DD'
+        try:
+            if fecha_str is str:
+                print('la fecha es string')
+                fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d')
+                print(fecha_obj)
+            # Si la conversión tiene éxito, simplemente devuelve la fecha original
+            return fecha_str
+        except ValueError:
+            pass
+
+        formatos = ['%d/%m/%Y', '%m/%d/%Y', '%Y/%m/%d', '%d-%m-%Y', '%m-%d-%Y', '%Y-%m-%d', '%Y %m %d', '%d %m %Y', '%Y-%m-%d']
 
         for formato in formatos:
             try:
@@ -31,8 +42,9 @@ def convertir_formato_fecha(fecha_str= ''):
 
         # Si no se encuentra un formato válido, lanza una excepción
         raise ValueError('Formato de fecha no reconocido')
+
     print('No se registraron fechas para formatear')
-    return ''
+    return fecha_str
 
 if __name__ == '__main__':
     print(obtenerFecha())
