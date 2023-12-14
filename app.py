@@ -48,7 +48,7 @@ app = Flask(__name__)
 app.secret_key = "gdrback"
 client_secrets_file = os.path.join(pathlib.Path(__file__).parent, './docs/token.json')
 print('-----------------------------------')
-print(client_secrets_file)
+#print(client_secrets_file)
 
 flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file,
                                      scopes=["https://www.googleapis.com/auth/userinfo.profile",

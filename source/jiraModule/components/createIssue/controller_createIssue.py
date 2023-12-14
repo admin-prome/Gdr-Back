@@ -343,8 +343,7 @@ def createIssue(dataRequest: request) -> json:
                
         print('--------------------------------------------------------------------')  
         print('-----------------------REQUERIMIENTO RECIBIDO-----------------------')   
-        print(dataIssue)
-        print(type(dataIssue))  
+        
         print('--------------------------------------------------------------------')
         print('--------------------------------------------------------------------')     
         logging.info(dataIssue)
@@ -360,35 +359,39 @@ def createIssue(dataRequest: request) -> json:
             
         except Exception as e : 
             print('------------------- NO se pudo Mapear-----------------')
-            print(e)
+            print(f'Ocurrio un error al mapear el requerimiento: {e}')
             print('------------------- NO se pudo Mapear-----------------')
         
           
         ###################### Inicio del conexión con jira api ##############################
+        print('------------------- Iniciando Conexión a JIRA --------------------') 
+        print('Iniciando Conexión a JIRA')
         jiraOptions = {'server': "https://"+domain+".atlassian.net"}
         jira = JIRA(options=jiraOptions, basic_auth=(mail, tokenId))
-        jira = jiraServices.getConection()
+        jira = jiraServices.getConection()      
+        print('------------------------------------------------------------------') 
         #######################################################################################
         
         ########################## Mapeo de campos adicionales para JIRA ######################
+        print('-------- Inicio de mapeo de campos adicionales para JIRA ---------') 
+        print('Inicio de mapeo de campos adicionales para JIRA')
         issue.setKey(clasificarProyecto(dataIssue, issueDict))
         idUltimoRequerimiento = getNumberId(dataIssue['issuetype'], dataIssue.get('subissuetype'))    
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
-        MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)         
+        MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)    
+        print('------------------------------------------------------------------')      
         #######################################################################################
         
         
-        print('--------------------------------------------------------------------')
         print('---------------- ASIGNANDO LLAVE DE TABLERO DE JIRA ----------------')        
         issueDict["project"] = issue.key
         print(f'esto es el issue.key: {issue.key}')                      
-        print('--------------------------------------------------------------------')        
-        print('--------------------------------------------------------------------')
+        print('--------------------------------------------------------------------')     
         
         ############################# ELIMINANDO REPORTER EN CASO #############################
-        
+        print('------------------- VERIFICANDO ELIMINACION DE REPORTER --------------------')
         if issueDict["project"] not in ('GDD', 'TSTGDR'):
-            print('eliminando reporter')
+            print('--------------------- ELIMINANDO REPORTER ----------------------')           
             reporter_value = issueDict.pop("reporter", None)  # Elimina "reporter" si existe, o devuelve None si no existe
             if reporter_value is not None:
                 print(f"Valor eliminado de 'reporter': {reporter_value}")
@@ -399,7 +402,8 @@ def createIssue(dataRequest: request) -> json:
         
         ############################ ENVIANDO REQUERIMIENTO A JIRA ############################  
         print('--------------------------------------------------------------------')
-        print('------------------ ENVIANDO REQUERIMIENTO A JIRA -------------------')        
+        print('------------------ ENVIANDO REQUERIMIENTO A JIRA -------------------') 
+        
         newIssue = jira.create_issue(fields=issueDict)        
         print(f'creando requerimiento: {newIssue} \n')  
         
@@ -426,8 +430,7 @@ def createIssue(dataRequest: request) -> json:
         status = '201'                
         #enviarCorreoDeError(dataIssue['summary'], str(issueDict))
         
-        if status == '201':
-         
+        if status == '201':         
             enviarCorreoRequerimientoCreado(status, issue, issueDict, dataIssue, idUltimoRequerimiento)
         else:
             dataIssue['summary'] = f"ERROR al crear: {dataIssue['summary']}"
