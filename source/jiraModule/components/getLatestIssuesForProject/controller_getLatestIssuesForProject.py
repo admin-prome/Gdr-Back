@@ -6,6 +6,8 @@ from source.jiraModule.utils.conexion.conexion import Conexion
 import requests
 from source.jiraModule.components.userHandler.getUserForJiraId.controller_getUserForJiraId import get_user_info
 import os
+import requests
+import unicodedata
 from source.modules.jsonTools.save_json import guardar_json
 
 from source.modules.stringTools.searchMatch import split_identifier_from_title
@@ -14,6 +16,7 @@ from source.modules.stringTools.translate import translate_priority
 def clear_console():
     """Borra la consola."""
     os.system('cls' if os.name == 'nt' else 'clear')
+
 # def getLatestIssuesForProject(project_key) -> json:
 #     conexion = Conexion()
 #     # Realizar la solicitud para buscar los issues del proyecto
@@ -26,8 +29,7 @@ def clear_console():
 #     return jsonify(data)
 #prueba
 
-import requests
-import unicodedata
+
 
 def extract_fields_from_description(description):
     if not description:
@@ -227,6 +229,7 @@ def normalizar_descripcion(json_data):
     
     return texto_normalizado
 
+
 def getLatestIssuesForProjects(user_email: str, projects: list = ['GDD'], maxResult: int = 10):
     """Obtiene todos los requerimientos que en la descripción contengan una palabra determinada."""
 
@@ -242,13 +245,14 @@ def getLatestIssuesForProjects(user_email: str, projects: list = ['GDD'], maxRes
             }
 
             conexion = Conexion()
+
             response = conexion.get(payload)
             if response.status_code == 200:
                 response = response.json()          
                 guardar_json(response,f'respuestaDeJira{project}.json')
                 respuesta.extend(procesar_json(response))
             else:
-                raise Exception(f"Error al obtener los requerimientos: {response.status_code}")
+                raise Exception(f"Error al obtener los requerimientos: {response.status_code} - {response.text}")
     
         except Exception as e:
             print(f'Ocurrio un error al ejecutar proyecto {project} :   -> {e}')
@@ -258,4 +262,4 @@ def getLatestIssuesForProjects(user_email: str, projects: list = ['GDD'], maxRes
 
 
 
-#jql=project={project_key}&maxResults=5&orderBy=created%20desc
+

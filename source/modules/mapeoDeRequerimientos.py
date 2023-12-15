@@ -98,8 +98,7 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
                 if(issue.isTecno == 'si'): 
                     issue.isTecno = 'InternoTech'
                 else: issue.isTecno = 'Usuario'
-               
-                #issue_dict["customfield_100
+                
                 issue_dict["issuetype"] = {"id":"10096"} #Tipo de requerimiento (tarea) 
                 #issue_dict["reporter"] = {"accountId": "6228d7c3302c6b006af5de63","accountType": "atlassian"} #Reportado por:                   
                 issue_dict["customfield_10083"] = f'{issue.userCredential.name} - {issue.userCredential.email}' #Creado por (nombre - correo)

@@ -18,8 +18,7 @@ class SessionModel:
             'userSession': self.userSessionToken,
             'name': self.userName,
             'idJIRA': self.userIdJIRA,
-            'email': self.userEmail,
-            
+            'email': self.userEmail       
         }
     
     def get_timestamp(self):
