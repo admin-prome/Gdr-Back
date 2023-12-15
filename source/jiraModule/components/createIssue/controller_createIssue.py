@@ -314,8 +314,10 @@ def enviarCorreoRequerimientoCreado(status, issue, issue_dict, data_issue, id_ul
             destinatarios.append('infra_tecno@provinciamicrocreditos.com')
         elif data_issue['issuetype'] == 'INC':
             destinatarios.append('gdi@provinciamicrocreditos.com')
-
+        else: 
+            destinatarios.append('analisis@provinciamicrocreditos.com')
         response = mapearRespuestaAlFront(issue, data_issue, issue_dict)
+        
         enviarCorreo(destinatarios, asunto, armarCuerpoDeCorreo(data_issue, id_ultimo_requerimiento))
     else:
         data_issue['summary'] = f"ERROR al crear: {data_issue['summary']}"
