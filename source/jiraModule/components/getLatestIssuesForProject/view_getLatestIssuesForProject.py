@@ -14,7 +14,6 @@ def GetProjects() -> json:
         user_email = request.json.get('email')
         max_result = request.json.get('max_result')
         projects = request.json.get('projects')
-      
         response: list =  []              
         response = controller_getLatestIssuesForProject.getLatestIssuesForProjects(user_email,  projects, max_result)
         guardar_json(response, 'respuestaAlFront.json')

@@ -98,11 +98,10 @@ def getLatestIssuesForProjectII(project_key):
     
     for issue in result:
         descripciones.append(extract_fields_from_description(issue['description']))
-    print(descripciones)
         
     
     # Imprimir los resultados (opcional, para fines de depuración)
-    print(json.dumps(result, sort_keys=True, indent=4, separators=(",", ": "), ensure_ascii=False))
+    #print(json.dumps(result, sort_keys=True, indent=4, separators=(",", ": "), ensure_ascii=False))
 
     # Devolver los datos como respuesta JSON
     return jsonify(result)
@@ -240,14 +239,13 @@ def getLatestIssuesForProjects(user_email: str, projects: list = ['GDD'], maxRes
             print(f'Iniciando busqueda en proyecto: {project}')
             
             payload = {
-                "jql": f"project = {project} AND description ~ '{user_email}'",
+                "jql": f'project = "{project}" AND text ~ "{user_email}"',
                 "expand": "summary,assignee,created,description,changelog,priority",
                 "maxResults": maxResult
             }
+
             conexion = Conexion()
 
-            print(payload)
-            print(conexion)
             response = conexion.get(payload)
             if response.status_code == 200:
                 response = response.json()          
@@ -264,4 +262,4 @@ def getLatestIssuesForProjects(user_email: str, projects: list = ['GDD'], maxRes
 
 
 
-#jql=project={project_key}&maxResults=5&orderBy=created%20desc
+
