@@ -1,6 +1,6 @@
 # from utils.conexion.db import Base
 from source.jiraModule.utils.conexion.db import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Text
 
 
 class GDR(Base):
@@ -46,6 +46,27 @@ class AprobadoPor(Base):
         # Método para representación de cadena más detallada, útil para depuración
         return f"AprobadoPor(id={self.id}, email='{self.email}', idJIRA='{self.idJIRA}', nombre='{self.nombre}', area='{self.area}')"
 
+
+class TechnoSystem(Base):
+    __tablename__ = 'tec_GDR_TechnoSystems'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    systemName = Column(String(100), nullable=False)
+    code = Column(String(30), nullable=False)
+    systemStatus = Column(Integer)
+    systemDescription = Column(Text)
+
+    def __init__(self, systemName, code, systemStatus, systemDescription):
+        self.systemName = systemName
+        self.code = code
+        self.systemStatus = systemStatus
+        self.systemDescription = systemDescription
+
+    def __str__(self):
+        return f"Sistema Tecnológico: {self.systemName} (ID: {self.id}, Código: {self.code}, Estado: {self.systemStatus}, Descripción: {self.systemDescription})"
+
+    def __repr__(self):
+        return f"TechnoSystem(id={self.id}, systemName='{self.systemName}', code='{self.code}', systemStatus={self.systemStatus}, systemDescription='{self.systemDescription}')"
 
 # class NominaUsersIds(Base):
 #     __tablename__ = 'tec_nomina'

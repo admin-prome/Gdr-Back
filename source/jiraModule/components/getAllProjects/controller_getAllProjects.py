@@ -8,6 +8,7 @@ from source.jiraModule.utils.conexion.db import Base
 from source.jiraModule.utils.conexion import db
 from source.jiraModule.components.getAllProjects.model_GDR import *
 
+
 ENVIROMENT: str = settings.ENVIROMENT
 domain: str = settings.DOMAIN
 mail: str = settings.MAIL
@@ -158,6 +159,33 @@ def getInitiatives()->list:
     
     
     return initiatives
+
+
+def getSystems() -> dict:
+    try:
+        print('Comienzo de obtener Sistemas')
+        approvers = {}
+        
+        with db.Session() as session:  # Crea una nueva sesión dentro de un contexto 'with'
+            consulta = session.query(TechnoSystem).filter(TechnoSystem.systemStatus == 1)
+            resultados = consulta.all()
+            
+            for resultado in resultados:
+                approver = {
+                    "id": resultado.id,                 
+                    "systemName": resultado.systemName,
+                    "code": resultado.code,
+                    "systemDescription" : resultado.systemDescription
+                }
+                approvers[resultado.id] = approver
+            db.session.close()
+        print('Fin de obtener proyectos')
+        
+        return approvers
+
+    except Exception as e:
+        db.session.close()
+        print(e)
 
 
 def getAllProjects() -> list:
