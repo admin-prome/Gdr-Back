@@ -13,6 +13,7 @@ def obtenerFechaHoraBsAs():
     return fecha_hora
 
 
+from datetime import datetime
 
 def convertir_formato_fecha(fecha_str=''):
     print(str(fecha_str))
@@ -20,12 +21,12 @@ def convertir_formato_fecha(fecha_str=''):
     if fecha_str:
         # Intenta parsear la fecha directamente en el formato 'YYYY-MM-DD'
         try:
-            if fecha_str is str:
+            if isinstance(fecha_str, str):  # Corregir la condición
                 print('la fecha es string')
                 fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d')
                 print(fecha_obj)
-            # Si la conversión tiene éxito, simplemente devuelve la fecha original
-            return fecha_str
+                # Si la conversión tiene éxito, simplemente devuelve la fecha original
+                return fecha_str
         except ValueError:
             pass
 
@@ -45,6 +46,7 @@ def convertir_formato_fecha(fecha_str=''):
 
     print('No se registraron fechas para formatear')
     return fecha_str
+
 
 if __name__ == '__main__':
     print(obtenerFecha())
