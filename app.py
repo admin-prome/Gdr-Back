@@ -48,10 +48,7 @@ url = settings.URL_BACK
 app = Flask(__name__)
 app.secret_key = "gdrback"
 client_secrets_file = os.path.join(pathlib.Path(__file__).parent, './docs/token.json')
-# Configuración de la caché (en este ejemplo, se utiliza la caché en memoria)
-#cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
-# print(client_secrets_file)
 
 flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file,
                                      scopes=["https://www.googleapis.com/auth/userinfo.profile",
