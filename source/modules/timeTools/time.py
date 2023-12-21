@@ -15,18 +15,21 @@ def obtenerFechaHoraBsAs():
 
 from datetime import datetime
 
-def convertir_formato_fecha(fecha_str=''):
-    print(str(fecha_str))
+from datetime import datetime
 
-    if fecha_str:
-        # Intenta parsear la fecha directamente en el formato 'YYYY-MM-DD'
+def convertir_formato_fecha(fecha_str=''):
+    print('-----------------INICIO DE FORMATEO DE FECHA-----------------')
+    print(datetime.now())
+    if fecha_str is not None and isinstance(fecha_str, str):
+        print(str(fecha_str))
+        print(f'Esta es la fecha: {fecha_str}')
+        
+        # Verifica si la fecha ya está en el formato 'YYYY-MM-DD'
         try:
-            if isinstance(fecha_str, str):  # Corregir la condición
-                print('la fecha es string')
-                fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d')
-                print(fecha_obj)
-                # Si la conversión tiene éxito, simplemente devuelve la fecha original
-                return fecha_str
+            fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d')
+            print('La fecha ya está en el formato correcto')
+            print('-----------------FIN FORMATEO DE FECHA-----------------')
+            return fecha_str
         except ValueError:
             pass
 
@@ -37,16 +40,18 @@ def convertir_formato_fecha(fecha_str=''):
                 fecha_obj = datetime.strptime(fecha_str, formato)
                 # Si la conversión tiene éxito, formatea la fecha al nuevo formato 'yyyy-MM-dd'
                 fecha_formateada = fecha_obj.strftime('%Y-%m-%d')
+                print(f'Fecha formateada: {fecha_formateada}')
                 return fecha_formateada
             except ValueError:
                 pass
 
         # Si no se encuentra un formato válido, lanza una excepción
-        raise ValueError('Formato de fecha no reconocido')
+        #raise ValueError('Formato de fecha no reconocido')
 
+    fecha_str = ''
     print('No se registraron fechas para formatear')
+    print('-----------------FIN FORMATEO DE FECHA-----------------')
     return fecha_str
-
 
 if __name__ == '__main__':
     print(obtenerFecha())
