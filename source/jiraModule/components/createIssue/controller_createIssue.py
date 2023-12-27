@@ -337,12 +337,23 @@ def createIssue(dataRequest: request) -> json:
     response = {}
     issue: object = None
     archivo: object = None
+    dataIssue: json = {}
    
     try:
-                
+            
         print('------------- INICIANDO CREAR REQUERIMIENTO  ---------------')          
-        dataIssue_str = dataRequest.form['myJson']
+        try:
+            dataIssue_str = dataRequest.form['myJson']
+
+        except Exception as e: 
+            print(f'hola: {e}')
+
+        print(dataIssue_str)
+
         dataIssue = json.loads(dataIssue_str)    
+
+        print(dataIssue)
+        
                
         print('--------------------------------------------------------------------')  
         print('-----------------------REQUERIMIENTO RECIBIDO-----------------------')   
