@@ -46,10 +46,10 @@ print('-----------------------------------')
 
 
 
-CORS(app, resources={r"/GetForm": {"origins": "http://localhost:4200"}})
+CORS(app, origins= ["https://gdr-front-tst.azurewebsites.net", "http://localhost:4200","https://requerimientos.provinciamicrocreditos.com"],methods="POST")
+# cors = CORS(app, origins=["https://requerimientos.provinciamicrocreditos.com","https://gdrfront.azurewebsites.net","https://gdr-back-prod.azurewebsites.net" ],methods="POST")
 
-cors = CORS(app, origins=["https://requerimientos.provinciamicrocreditos.com","https://gdrfront.azurewebsites.net","https://gdr-back-prod.azurewebsites.net" ],methods="POST")
-CORS(app)
+
 app.url_map.strict_slashes = False
 
 
