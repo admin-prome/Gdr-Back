@@ -25,6 +25,7 @@ class Settings:
     KEY_USER_DETAILS: str
     URL_SERVICIOS_TECNO: str
     KEY_GDR_FRONT: str
+    URL_BACK : str
 
     
 load_dotenv()
@@ -51,7 +52,8 @@ settings = Settings(
     KEY_USER_DETAILS = os.getenv('KEY_USER_DETAILS'),
     URL_SERVICIOS_TECNO= os.getenv('URL_SERVICIOS_TECNO'),
     KEY_GDR_FRONT= os.getenv('KEY_GDR_FRONT'),
-   
+    URL_BACK= os.getenv('URLBACK')
+        
     )
 
 

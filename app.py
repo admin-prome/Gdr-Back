@@ -5,6 +5,7 @@ from flask import Flask, abort, jsonify, redirect, request, session
 from flask_cors import CORS
 import google_auth_oauthlib
 import requests
+# from flask_cache import Cache
 
 # from flask_sqlalchemy import SQLAlchemy                                                                                                                        
 # from flask_marshmallow import Marshmallow
@@ -36,20 +37,26 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 KEY: str = settings.KEY_GDR_FRONT
 
-#url = settings.URL_BACK
+
+#url: str = "https://gdr-back-tst.azurewebsites.net"
+url = settings.URL_BACK
+# # getUserForProject_bp = Blueprint("getUserForProject_bp", __name__)
+# conn_str = str(f"mssql+pyodbc://{USER}:{PASS}@{SERVER}/{NAME}?driver=ODBC+Driver+17+for+SQL+Server")
 
 app = Flask(__name__)
-app.secret_key = "gdrback"
-
-print('-----------------------------------')
-#print(client_secrets_file)
 
 
+# app.config['SQLALCHEMY_DATABASE_URI'] = conn_str
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# db = SQLAlchemy(app)
+# ma = Marshmallow(app)
 
-CORS(app, origins= ["https://gdr-front-tst.azurewebsites.net", "http://localhost:4200","https://requerimientos.provinciamicrocreditos.com"],methods="POST")
-# cors = CORS(app, origins=["https://requerimientos.provinciamicrocreditos.com","https://gdrfront.azurewebsites.net","https://gdr-back-prod.azurewebsites.net" ],methods="POST")
 
+cors = CORS(app, origins=["https://requerimientos.provinciamicrocreditos.com", "https://gdrfront.azurewebsites.net"], methods=["POST"])
 
+# Configuración CORS específica para la ruta /GetForm
+cors = CORS(app, resources={r"/GetForm": {"origins": ["https://requerimientos.provinciamicrocreditos.com", "https://gdrfront.azurewebsites.net", "http://localhost:4200"]}}, methods=["POST"])
+CORS(app)
 app.url_map.strict_slashes = False
 
 
@@ -71,11 +78,64 @@ app.register_blueprint(getForm_bp)
 app.static_folder = 'static'
 app.template_folder='templates'
 
+def login_is_required(function):
+    def wrapper(*args, **kwargs):
+        print('esta accediendo a una ruta protegida')
+        if 'google_id' not in session:
+            abort(401)  # Devuelve un error 401 si el usuario no ha iniciado sesión
+        else:
+            return function()
+    return wrapper  # Asegúrate de devolver la función "wrapper"
+
+@app.route('/login')
+def login():
+    authorization_url, state = flow.authorization_url()
+    session['state'] = state
+    return redirect(authorization_url)
+
+
+@app.route('/callback')
+def callback():
+    flow.fetch_token(authorization_response=request.url)
+    
+    if not session['state'] == request.args['state']:
+        abort(500)
+    
+    credentials = flow.credentials
+    request_session = requests.session()
+    cached_session = cachecontrol.CacheControl(request_session)
+    token_request = Request(session=cached_session)  # Corregir la creación del objeto Request
+    
+    id_info = id_token.verify_oauth2_token(
+        id_token=credentials._id_token,
+        request=token_request,
+        audience=GOOGLE_CLIENT_ID
+    )
+    
+    print(id_info)
+    
+    if 'hd' in id_info and id_info['hd'] == 'provinciamicrocreditos.com':
+
+        session['google_id'] = id_info.get('sub')
+        session['name'] = id_info.get('name')
+    
+        return redirect('/home')
+    return abort(401)
 
 @app.route('/')
 def index():
     return "Por favor inicie sesión con su cuenta corporativa <a href='/login'><button>Login</button></a>"
 
+
+@app.route('/protected_area')
+@login_is_required
+def protected_area():
+    return "Protected! <a href='/logout'><button>Logout</button></a>"
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/login')
 
 # Esta función de middleware se ejecuta antes de cada solicitud
 @app.before_request
@@ -95,11 +155,6 @@ def middleware_de_autorizacion():
                 return jsonify({'error': 'Acceso denegado'}), 403
     pass
 
-
-
-
-    
-    
 if __name__ == '__main__':
     
     try:            
