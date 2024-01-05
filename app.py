@@ -40,7 +40,14 @@ KEY: str = settings.KEY_GDR_FRONT
 
 
 app = Flask(__name__)
+app.secret_key = "gdrback"
 
+
+
+
+
+
+CORS(app, resources={r"/GetForm": {"origins": "http://localhost:4200"}})
 
 cors = CORS(app, origins=["https://requerimientos.provinciamicrocreditos.com","https://gdrfront.azurewebsites.net" ],methods="POST")
 CORS(app)
