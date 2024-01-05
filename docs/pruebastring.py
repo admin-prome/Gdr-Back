@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
     text = "Gerencias De Tecnología"
     options = departments.keys()
-    print(options)
+   
     keywords_to_ignore = ["gerencia", "gcia", "gerencias", "gerenc", "gerenc"]
 
     result = find_max_similarity(text, options, keywords_to_ignore)
