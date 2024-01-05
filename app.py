@@ -36,7 +36,7 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 KEY: str = settings.KEY_GDR_FRONT
 
-url = settings.URL_BACK
+#url = settings.URL_BACK
 
 app = Flask(__name__)
 app.secret_key = "gdrback"
