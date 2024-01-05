@@ -29,7 +29,6 @@ ENVIROMENT: str = settings.ENVIROMENT
 domain: str = settings.DOMAIN
 mail: str = settings.MAIL
 tokenId: str = settings.APIKEY
-print(ENVIROMENT, domain, mail, tokenId)
 
 
 
