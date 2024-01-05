@@ -61,7 +61,7 @@ def clasificarGerencia(texto):
         else:
             respuesta = buscarCoincidencia(texto_normalizado, gerencias.keys())
             if  respuesta!= False:
-                print('hola')
+           
                 for respuesta, codigo in gerencias.items():
                     if re.search(respuesta, texto_normalizado):
                         return {"gerencia": gerencia, "codigo": codigo}
