@@ -37,23 +37,23 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 KEY: str = settings.KEY_GDR_FRONT
 
-#url: str = "https://gdr-back-tst.azurewebsites.net"
+
 url = settings.URL_BACK
-# # getUserForProject_bp = Blueprint("getUserForProject_bp", __name__)
-# conn_str = str(f"mssql+pyodbc://{USER}:{PASS}@{SERVER}/{NAME}?driver=ODBC+Driver+17+for+SQL+Server")
 
 app = Flask(__name__)
+
 app.secret_key = "gdrback"
 
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = conn_str
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# db = SQLAlchemy(app)
-# ma = Marshmallow(app)
 
 CORS(app, resources={r"/GetForm": {"origins": ["https://requerimientos.provinciamicrocreditos.com","https://gdr-front-tst.azurewebsites.net/" ,"http://localhost:4200"]}})
 
 cors = CORS(app, origins=["https://requerimientos.provinciamicrocreditos.com","https://gdr-front-tst.azurewebsites.net/","http://localhost:4200" ],methods="POST")
+
+
+
+
+
 CORS(app)
 app.url_map.strict_slashes = False
 
@@ -75,7 +75,6 @@ app.register_blueprint(getForm_bp)
 
 app.static_folder = 'static'
 app.template_folder='templates'
-
 
 
 
