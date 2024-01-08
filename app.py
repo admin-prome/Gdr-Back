@@ -38,21 +38,22 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 KEY: str = settings.KEY_GDR_FRONT
 
 
-
 url = settings.URL_BACK
 
 app = Flask(__name__)
 
+app.secret_key = "gdrback"
+
+
+
+CORS(app, resources={r"/GetForm": {"origins": ["https://requerimientos.provinciamicrocreditos.com","https://gdr-front-tst.azurewebsites.net/" ,"http://localhost:4200"]}})
+
+cors = CORS(app, origins=["https://requerimientos.provinciamicrocreditos.com","https://gdr-front-tst.azurewebsites.net/","http://localhost:4200" ],methods="POST")
 
 
 
 
 
-
-cors = CORS(app, origins=["https://requerimientos.provinciamicrocreditos.com", "https://gdrfront.azurewebsites.net"], methods=["POST"])
-
-# Configuración CORS específica para la ruta /GetForm
-cors = CORS(app, resources={r"/GetForm": {"origins": ["https://requerimientos.provinciamicrocreditos.com", "https://gdrfront.azurewebsites.net", "http://localhost:4200"]}}, methods=["POST"])
 CORS(app)
 app.url_map.strict_slashes = False
 
@@ -76,19 +77,9 @@ app.static_folder = 'static'
 app.template_folder='templates'
 
 
-@app.route('/')
-def index():
-    return "Por favor inicie sesión con su cuenta corporativa <a href='/login'><button>Login</button></a>"
-
-
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect('/login')
 
 # Esta función de middleware se ejecuta antes de cada solicitud
 @app.before_request
-
 def middleware_de_autorizacion():
     if request.method != 'OPTIONS':
         #if request.method == 'POST' and currentRoute == '/GetForm':

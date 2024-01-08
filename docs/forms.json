@@ -102,13 +102,8 @@
                             "value": "INF",
                             "label": "Infraestructura"
                         }
-                    ],
-                    "SEG": [
-                        {
-                            "value": "SEG",
-                            "label": "Seguridad Informática"
-                        }
                     ]
+                  
                 },
                 "required": true,
                 "value": "",
@@ -139,6 +134,10 @@
                         {
                             "value": "SEG",
                             "label": "Seguridad Informática"
+                        },                        
+                        {
+                            "value": "ABM",
+                            "label": "Alta, Baja y Modificación"
                         }
                     ],
                     "REQ": [
@@ -514,6 +513,10 @@
                         {
                             "value": "SEG",
                             "label": "Seguridad Informática"
+                        },
+                        {
+                            "value": "ABM",
+                            "label": "Alta, Baja y Modificación"
                         }
                     ],
                     "REQ": [
