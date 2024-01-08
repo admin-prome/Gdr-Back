@@ -37,9 +37,6 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 KEY: str = settings.KEY_GDR_FRONT
 
-GOOGLE_CLIENT_ID = settings.GOOGLE_CLIENT_ID
-GOOGLE_CLIENT_SECRET = settings.GOOGLE_CLIENT_SECRET
-REDIRECT_URI = settings.REDIRECT_URI
 #url: str = "https://gdr-back-tst.azurewebsites.net"
 url = settings.URL_BACK
 # # getUserForProject_bp = Blueprint("getUserForProject_bp", __name__)
@@ -47,14 +44,7 @@ url = settings.URL_BACK
 
 app = Flask(__name__)
 app.secret_key = "gdrback"
-client_secrets_file = os.path.join(pathlib.Path(__file__).parent, './docs/token.json')
 
-
-flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file,
-                                     scopes=["https://www.googleapis.com/auth/userinfo.profile",
-                                             "https://www.googleapis.com/auth/userinfo.email",
-                                             "openid"], 
-                                     redirect_uri=f"{url}/callback")
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = conn_str
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -62,7 +52,7 @@ flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file,
 # ma = Marshmallow(app)
 
 
-CORS(app, resources={r"/GetForm": {"origins": "http://localhost:4200"}})
+CORS(app, resources={r"/GetForm": {"origins": ["https://requerimientos.provinciamicrocreditos.com","https://gdrfront.azurewebsites.net" ,"http://localhost:4200"]}})
 
 cors = CORS(app, origins=["https://requerimientos.provinciamicrocreditos.com","https://gdrfront.azurewebsites.net" ],methods="POST")
 CORS(app)
@@ -87,68 +77,11 @@ app.register_blueprint(getForm_bp)
 app.static_folder = 'static'
 app.template_folder='templates'
 
-def login_is_required(function):
-    def wrapper(*args, **kwargs):
-        print('esta accediendo a una ruta protegida')
-        if 'google_id' not in session:
-            abort(401)  # Devuelve un error 401 si el usuario no ha iniciado sesión
-        else:
-            return function()
-    return wrapper  # Asegúrate de devolver la función "wrapper"
-
-@app.route('/login')
-def login():
-    authorization_url, state = flow.authorization_url()
-    session['state'] = state
-    return redirect(authorization_url)
 
 
-@app.route('/callback')
-def callback():
-    flow.fetch_token(authorization_response=request.url)
-    
-    if not session['state'] == request.args['state']:
-        abort(500)
-    
-    credentials = flow.credentials
-    request_session = requests.session()
-    cached_session = cachecontrol.CacheControl(request_session)
-    token_request = Request(session=cached_session)  # Corregir la creación del objeto Request
-    
-    id_info = id_token.verify_oauth2_token(
-        id_token=credentials._id_token,
-        request=token_request,
-        audience=GOOGLE_CLIENT_ID
-    )
-    
-    print(id_info)
-    
-    if 'hd' in id_info and id_info['hd'] == 'provinciamicrocreditos.com':
-
-        session['google_id'] = id_info.get('sub')
-        session['name'] = id_info.get('name')
-    
-        return redirect('/home')
-    return abort(401)
-
-@app.route('/')
-def index():
-    return "Por favor inicie sesión con su cuenta corporativa <a href='/login'><button>Login</button></a>"
-
-
-@app.route('/protected_area')
-@login_is_required
-def protected_area():
-    return "Protected! <a href='/logout'><button>Logout</button></a>"
-
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect('/login')
 
 # Esta función de middleware se ejecuta antes de cada solicitud
 @app.before_request
-
 def middleware_de_autorizacion():
     if request.method != 'OPTIONS':
         #if request.method == 'POST' and currentRoute == '/GetForm':
