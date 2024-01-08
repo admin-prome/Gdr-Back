@@ -68,3 +68,16 @@ class Conexion:
         except:
             response = requests.delete(self.url2 + self.path, auth=self.auth, headers=self.headers)
         return response
+
+    def __str__(self):
+        # Crear una representación de cadena para la instancia de Conexion
+        return (
+            f"Conexion(domain={self.domain}, "
+            f"mail={self.mail}, "
+            f"tokenId={self.tokenId}, "
+            f"path={self.path}, "
+            f"url={self.url}, "
+            f"url2={self.url2}"
+            # Agrega otras propiedades si es necesario
+            ")"
+        )

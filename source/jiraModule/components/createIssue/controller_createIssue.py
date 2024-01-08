@@ -313,8 +313,10 @@ def enviarCorreoRequerimientoCreado(status, issue, issue_dict, data_issue, id_ul
             destinatarios.append('infra_tecno@provinciamicrocreditos.com')
         elif data_issue['issuetype'] == 'INC':
             destinatarios.append('gdi@provinciamicrocreditos.com')
-
+        else: 
+            destinatarios.append('analisis@provinciamicrocreditos.com')
         response = mapearRespuestaAlFront(issue, data_issue, issue_dict)
+        
         enviarCorreo(destinatarios, asunto, armarCuerpoDeCorreo(data_issue, id_ultimo_requerimiento))
     else:
         data_issue['summary'] = f"ERROR al crear: {data_issue['summary']}"
@@ -334,12 +336,23 @@ def createIssue(dataRequest: request) -> json:
     response = {}
     issue: object = None
     archivo: object = None
+    dataIssue: json = {}
    
     try:
-                
+            
         print('------------- INICIANDO CREAR REQUERIMIENTO  ---------------')          
-        dataIssue_str = dataRequest.form['myJson']
+        try:
+            dataIssue_str = dataRequest.form['myJson']
+
+        except Exception as e: 
+            print(f'hola: {e}')
+
+        print(dataIssue_str)
+
         dataIssue = json.loads(dataIssue_str)    
+
+        print(dataIssue)
+        
                
         print('--------------------------------------------------------------------')  
         print('-----------------------REQUERIMIENTO RECIBIDO-----------------------')   
@@ -353,7 +366,9 @@ def createIssue(dataRequest: request) -> json:
         try:            
             print('--------------------------------------------------------------------')
             print('------------------ INICIO DE MAPEO DEL INCIDENTE -------------------')     
-            issue = Issue(dataIssue)         
+            issue = Issue(dataIssue)      
+            issue.key = 'GDD'  
+            print(f'esto es issue key: {issue.key}')
             print('--------------------------------------------------------------------')
             print('--------------------------------------------------------------------')              
             
@@ -371,11 +386,19 @@ def createIssue(dataRequest: request) -> json:
         jira = jiraServices.getConection()      
         print('------------------------------------------------------------------') 
         #######################################################################################
-        
+        print('#######################################################################################')
+        print('#######################################################################################')
+        print('#######################################################################################')
+        print(f'esto es issue key antes: {issue.key}')
         ########################## Mapeo de campos adicionales para JIRA ######################
         print('-------- Inicio de mapeo de campos adicionales para JIRA ---------') 
         print('Inicio de mapeo de campos adicionales para JIRA')
         issue.setKey(clasificarProyecto(dataIssue, issueDict))
+        print(f'esto es issue key despues: {issue.key}')
+        print('#######################################################################################')
+        print('#######################################################################################')
+        print('#######################################################################################')
+        
         idUltimoRequerimiento = getNumberId(dataIssue['issuetype'], dataIssue.get('subissuetype'))    
         mapearCamposParaJIRA(issue, issueDict, str(idUltimoRequerimiento))
         MapeoDeRequerimientos(issue, issueDict, ENVIROMENT)    
@@ -402,8 +425,7 @@ def createIssue(dataRequest: request) -> json:
         
         ############################ ENVIANDO REQUERIMIENTO A JIRA ############################  
         print('--------------------------------------------------------------------')
-        print('------------------ ENVIANDO REQUERIMIENTO A JIRA -------------------') 
-        
+
         newIssue = jira.create_issue(fields=issueDict)        
         print(f'creando requerimiento: {newIssue} \n')  
         
