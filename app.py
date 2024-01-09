@@ -38,11 +38,11 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 KEY: str = settings.KEY_GDR_FRONT
 
 
-url = settings.URL_BACK
 
 app = Flask(__name__)
 
 app.secret_key = "gdrback"
+
 
 
 
@@ -66,7 +66,6 @@ app.register_blueprint(getIssueForID_bp)
 app.register_blueprint(home_bp)
 app.register_blueprint(getLatestIssuesForProject_bp)
 app.register_blueprint(getUserForEmail_bp)
-#app.register_blueprint(getUserForProject_bp)
 app.register_blueprint(getAllUsers_bp)
 app.register_blueprint(loginJira_bp)
 app.register_blueprint(getUserSession_bp)
