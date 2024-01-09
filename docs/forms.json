@@ -101,7 +101,13 @@
                         {
                             "value": "INF",
                             "label": "Infraestructura"
-                        }
+                        }                    
+                    ],
+                    "FIX": [
+                        {
+                            "value": "FIX",
+                            "label": "Requerimiento Correctivo"
+                        }  
                     ]
                   
                 },
@@ -178,6 +184,22 @@
                             "label": "Hace la Cuenta"
                         },
                         {
+                            "value": "IMM",
+                            "label": "Importación de Ministesterios"
+                        },
+                        {
+                            "value": "IMP",
+                            "label": "Importación de Prospectos"
+                        },
+                        {
+                            "value": "PDF",
+                            "label": "Portal de Finanzas"
+                        },
+                        {
+                            "value": "VDM",
+                            "label": "Validador de Metas"
+                        },
+                        {
                             "value": "GDD",
                             "label": "Gestión de la Demanda"
                         }
@@ -228,7 +250,7 @@
                     "FIX": [
                         {
                             "value": "FIX",
-                            "label": "Correción"
+                            "label": "Requerimiento de Correctivo"
                         }
                     ]
                 },
@@ -555,6 +577,22 @@
                         {
                             "value": "HLC",
                             "label": "Hace la Cuenta"
+                        },
+                        {
+                            "value": "IMM",
+                            "label": "Importación de Ministesterios"
+                        },
+                        {
+                            "value": "IMP",
+                            "label": "Importación de Prospectos"
+                        },
+                        {
+                            "value": "PDF",
+                            "label": "Portal de Finanzas"
+                        },
+                        {
+                            "value": "VDM",
+                            "label": "Validador de Metas"
                         },
                         {
                             "value": "GDD",
