@@ -21,7 +21,7 @@
                 "key": "file",
                 "label": "Adjuntar archivo",
                 "name": "archivo",
-                "placeholder": "Ingrese un titulo descriptivo",
+                "placeholder": "Ingrese un título descriptivo",
                 "required": false,
                 "value": "",
                 "validators": {
@@ -68,8 +68,8 @@
                 "type": "input",
                 "key": "summary",
                 "label": "Ingrese el",
-                "name": "Titulo",
-                "placeholder": "Ingrese un titulo descriptivo",
+                "name": "titulo",
+                "placeholder": "Ingrese un título descriptivo",
                 "required": true,
                 "value": "",
                 "validators": {
@@ -82,7 +82,7 @@
                 "type": "select",
                 "key": "issuetype",
                 "label": "Elija el",
-                "name": "tipo de incidencia",
+                "name": "Tipo de incidencia",
                 "placeholder": "Elije el tipo de incidencia",
                 "options": {
                     "REQ": [
@@ -129,7 +129,7 @@
                 "type": "select",
                 "key": "subissuetype",
                 "label": "Elija el",
-                "name": "subtipo de incidencia",
+                "name": "Subtipo de incidencia",
                 "placeholder": "Elije el subtipo de incidencia",
                 "options": {
                     "INF": [
@@ -476,8 +476,8 @@
                 "type": "input",
                 "key": "summary",
                 "label": "Ingrese el",
-                "name": "Titulo",
-                "placeholder": "Ingrese un titulo descriptivo",
+                "name": "titulo",
+                "placeholder": "Ingrese un título descriptivo",
                 "required": true,
                 "value": "",
                 "validators": {
@@ -490,7 +490,7 @@
                 "type": "select",
                 "key": "issuetype",
                 "label": "Elija el",
-                "name": "tipo de incidencia",
+                "name": "Tipo de incidencia",
                 "placeholder": "Elije el tipo de incidencia",
                 "options": {
                     "REQ": [
@@ -524,7 +524,7 @@
                 "type": "select",
                 "key": "subissuetype",
                 "label": "Elija el",
-                "name": "subtipo de incidencia",
+                "name": "Subtipo de incidencia",
                 "placeholder": "Elije el subtipo de incidencia",
                 "options": {
                     "INF": [
@@ -849,7 +849,7 @@
                 "key": "file",
                 "label": "Adjuntar archivo",
                 "name": "archivo",
-                "placeholder": "Ingrese un titulo descriptivo",
+                "placeholder": "Ingrese un título descriptivo",
                 "required": false,
                 "value": "",
                 "validators": {
