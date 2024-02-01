@@ -1,15 +1,14 @@
 from datetime import datetime
 import json
 
-from source.modules.getRandomToken import generateRandomToken
+from source.modules.securityTools.getRandomToken import generateRandomToken
 
 
 class SessionModel:
     
     def __init__(self, userSession):
-        
-        self.userEmail: str = userSession['email']
-        self.userName: str = userSession['name']
+        self.userEmail: str = userSession['email'] 
+        self.userName: str = userSession['name'].title()
         self.userIdJIRA: str = ''
         self.userSessionToken: str = self.setUserSessionToken()
         self.timestamp: str = self.get_timestamp()
@@ -19,9 +18,8 @@ class SessionModel:
             'userSession': self.userSessionToken,
             'name': self.userName,
             'idJIRA': self.userIdJIRA,
-            'email': self.userEmail
+            'email': self.userEmail       
         }
-        
     
     def get_timestamp(self):
         return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -53,4 +51,6 @@ class SessionModel:
         
     def toJson(self):
         return json.dumps(self.session, indent=4)
+    
+    
     

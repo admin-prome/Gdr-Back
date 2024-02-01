@@ -1,6 +1,6 @@
 from jira import JIRA
 import requests
-from source.modules.generarJSON import generate_and_save_json
+from source.modules.jsonTools.generarJSON import generate_and_save_json
 from source.modules.mapeoDeRequerimientos import MapeoDeRequerimientos
 from source.jiraModule.utils.conexion.conexion import Conexion
 from flask import Blueprint, jsonify

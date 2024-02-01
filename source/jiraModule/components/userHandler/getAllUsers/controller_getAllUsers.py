@@ -1,7 +1,7 @@
 # url = "https://your-domain.atlassian.net/rest/api/2/user/email"
 import json
 from source.jiraModule.utils.conexion.conexion import Conexion
-from  source.modules.generarJSON import generate_and_save_json
+from  source.modules.jsonTools.generarJSON import generate_and_save_json
 from source.jiraModule.components.userHandler.getProjectsForUser.controller_getProjectsForUser import getProjectsForUser
 
 def getTotalUsers():
@@ -45,7 +45,7 @@ def getUsersMails(accountId: str) -> json:
         response = conexion.get(f"user/email", params)
         print(f'Esto es el response: {response.text}')
         response.raise_for_status()  # Comprobar si hubo un error en la respuesta del servidor
-        input('presione enter')
+        
         return response
     except Exception as e:
         print('Ocurrió un error en la solicitud de email:', e)
@@ -108,7 +108,6 @@ def getAllUsers():
     for user in all_users:
         
         #userMail: str = getUserMail(user["accountId"])
-        input('presione enter para continuar')
         user_list.append({
             "displayName": user["displayName"],
             "accountId": user["accountId"]

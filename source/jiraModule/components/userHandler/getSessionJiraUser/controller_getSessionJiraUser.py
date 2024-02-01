@@ -19,7 +19,8 @@ def getSessionJiraUser(data: json):
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/json"
-    }
+    } 
+   
     
     payload = {
         'oauth_token': token_respuesta,
@@ -54,7 +55,7 @@ def get_jira_token(data):
     try:
         google_credential = data['credential']
     
-        print(data['credential'])
+        
         # Verify the Google sign-in credential and get the user information         
         # Exchange the Google access token for a Jira token
         response = requests.post(

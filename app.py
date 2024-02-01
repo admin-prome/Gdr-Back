@@ -1,8 +1,13 @@
 import os
-from flask import Flask, jsonify, request
+import pathlib
+import cachecontrol
+from flask import Flask, abort, jsonify, redirect, request, session
 from flask_cors import CORS
+import google_auth_oauthlib
+import requests
+# from flask_cache import Cache
 
-# from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy                                                                                                                        
 # from flask_marshmallow import Marshmallow
 # from source.settings.settings import settings
 
@@ -20,27 +25,35 @@ from source.jiraModule.components.userHandler.getAllUsers.view_getAllUsers impor
 from source.jiraModule.components.userHandler.getUserSession.view_getUserSession import getUserSession_bp
 
 from source.jiraModule.components.userHandler.getProjectsForUser.view_getProjectsForUser import getProjectsForUser_bp
-# USER: str = settings.DBUSER
-# PASS: str = settings.DBPASS
-# SERVER: str = settings.DBSERVER
-# NAME: str = settings.DBNAME
+from source.jiraModule.components.getForm.view_getForm import getForm_bp
+from source.settings.settings import settings
 
-# # getUserForProject_bp = Blueprint("getUserForProject_bp", __name__)
-# conn_str = str(f"mssql+pyodbc://{USER}:{PASS}@{SERVER}/{NAME}?driver=ODBC+Driver+17+for+SQL+Server")
+from google_auth_oauthlib.flow import Flow
+from google.oauth2 import id_token
+from google.auth.transport.requests import Request
+
+
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+KEY: str = settings.KEY_GDR_FRONT
+
+
 
 app = Flask(__name__)
+app.secret_key = "gdrback"
 
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = conn_str
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# db = SQLAlchemy(app)
-# ma = Marshmallow(app)
 
-    
+
+
+
+CORS(app, resources={r"/GetForm": {"origins": "http://localhost:4200"}})
 
 cors = CORS(app, origins=["https://requerimientos.provinciamicrocreditos.com","https://gdrfront.azurewebsites.net" ],methods="POST")
 CORS(app)
 app.url_map.strict_slashes = False
+
+
 app.register_blueprint(test_bp)
 app.register_blueprint(createIssue_bp)
 app.register_blueprint(getIssues_bp)
@@ -53,17 +66,45 @@ app.register_blueprint(getUserForEmail_bp)
 app.register_blueprint(getAllUsers_bp)
 app.register_blueprint(loginJira_bp)
 app.register_blueprint(getUserSession_bp)
-
 app.register_blueprint(getProjectsForUser_bp)
+app.register_blueprint(getForm_bp)
 
 app.static_folder = 'static'
 app.template_folder='templates'
 
 
+@app.route('/')
+def index():
+    return "Por favor inicie sesión con su cuenta corporativa <a href='/login'><button>Login</button></a>"
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/login')
+
+# Esta función de middleware se ejecuta antes de cada solicitud
+@app.before_request
+
+def middleware_de_autorizacion():
+    if request.method != 'OPTIONS':
+        #if request.method == 'POST' and currentRoute == '/GetForm':
+        # Verifica la clave y el origen de la solicitud en los encabezados
+        authorization_key = request.headers.get('Authorization-Key')
+        origin = request.headers.get('Origin')
+        
+        currentRoute = request.path
+      
+        if currentRoute == '/GetForm' or currentRoute =='/getissuesforuser':
+            if authorization_key != KEY:
+                # Si la clave o el origen son inválidos, retorna una respuesta de error
+                return jsonify({'error': 'Acceso denegado'}), 403
+    pass
+
 if __name__ == '__main__':
     
     try:            
-        app.run()
+        app.run(debug=True)
         
     except Exception as e:
         print(f'Ocurrio un error en la ejecución: {e}') 

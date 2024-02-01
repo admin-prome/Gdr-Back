@@ -4,6 +4,9 @@ from source.jiraModule.utils.conexion import db
 from sqlalchemy import Column, Integer, String
 import json
 
+from source.modules.getDetailsUser.model_getDetailsUser import UserDetails
+from source.modules.timeTools.time import convertir_formato_fecha
+
 
 class Issue:
     
@@ -11,34 +14,47 @@ class Issue:
     
     def __init__(self, data):
         # self.project = data['project']        
-        self.key = data['key']
-        self.summary = str(data['summary'])
-        self.description = data['description']
-        self.type = data['type']
-        self.issueType = data['issueType']
-        self.subIssueType = data['subIssueType']
+        self.key = self.get_data(data,'key')
+        self.summary = self.get_data(data,'summary')
+        self.description = self.get_data(data,'description')
+        self.type = self.get_data(data, 'type')
+        self.issuetype = self.get_data(data,'issuetype')
+        self.subissuetype = self.get_data(data,'subissuetype')
         self.approvers = Approver(data['approvers'])
-        self.impact = data['impact']
-        self.attached = data['attached']
-        self.managment = data['managment']
-        self.priority = data['priority']
-        self.initiative = data['initiative']
-        self.normativeRequirement = data['normativeRequirement']
-        self.finalDate = data['finalDate']
-        self.normativeDate = data['normativeDate']
-        self.userCredential = self.userCredential = UserCredential(data['userCredential'])
-        self.isTecno = data['isTecno']
+        self.impact = self.get_data(data, 'impact')
+        self.attached = self.get_data(data, 'attached')
+        self.managment = self.get_data(data, 'managment')
+        self.priority = self.get_data(data, 'priority')
+        #self.initiative = data['initiative']
+        #self.normativeRequirement = data['normativeRequirement']
+        if 'finalDate' in data:
+            self.finalDate = convertir_formato_fecha(self.get_data(data, 'finalDate'))
+        if 'normativeDate' in data:  
+            self.normativeDate = convertir_formato_fecha(self.get_data(data, 'normativeDate'))
+            
+        self.userCredential  = UserCredential(data['userCredential'])
+        self.isTecno = self.setIsTecno(data)
 
         self.reporter = self.setReporter(data['userCredential'])
     
+    def get_data(self, data, key):
+        try:
+            return data[key]
+        except KeyError:
+            print(f'No se encontró {key}')
+            return ''
+        
     def setReporter(self, data) -> dict:
         try:
             if (data['idJIRA']):
-                print('inicio de set reporter')
+                print('inicio de set reporter')   
+                print(data['idJIRA'])           
                 reporter = {"accountId": data['idJIRA'],"accountType": "atlassian"}
+               
             else: 
                 reporter = {"accountId": "6228d8734160640069ca5686","accountType": "atlassian"}
                 print(reporter)
+                
         except Exception as e:
             print(f'No se encontro el id de JIRA {e}')
             reporter = {"accountId": "6228d8734160640069ca5686","accountType": "atlassian"}
@@ -52,7 +68,17 @@ class Issue:
         else:
             return "No Approvers"
 
+    def setIsTecno(self, data)->str:
+        try: 
+             if (data['istecno']):            
+                return data['istecno']
     
+        except Exception as e:
+            
+            print(f'Ocurrio un error al setear el vaor de isTecno: {e}')
+            return 'No'
+            
+            
     def __str__(self):
         
         content: str = f'''
@@ -60,7 +86,7 @@ class Issue:
             Creado por: {self.userCredential.name}
             Email: {self.userCredential.email}
             Nombre del proyecto: {self.key} 
-            Titulo del requerimiento: [{self.issueType}-{self.subIssueType} XXX] {self.summary}           
+            Titulo del requerimiento: [{self.issuetype}-{self.subissuetype} XXX] {self.summary}           
             Prioridad definida por el usuario: {self.priority} 
             Aprobado por: {self.approvers.name} - {self.approvers.email}
             Gerencia: {self.approvers.management}             
@@ -68,7 +94,7 @@ class Issue:
             Rol: {self.managment} 
             Funcionalidad: {self.description}
             Beneficio: {self.impact}
-            Iniciativa: {self.initiative}
+            
             Fecha de implementación: {self.finalDate} 
             Fecha normativa: {self.normativeDate}
             Proyecto: {self.key}
@@ -103,20 +129,25 @@ class Approver:
         self.email = data['email']
         #self.id = data['id']
         self.management = data['management']
-        self.name = data['name']
+        try:
+            self.name = data['name']
+        except:
+            self.name = data['label']
         self.value = data['value']
 
 class UserCredential:
     def __init__(self, data):
         try:
-           
-            self.email = data['email']
-            self.name = data['name']
-            self.exp = data['exp']
-            self.picture = self.setPicture(data)
-            self.idJIRA = data['idJIRA']
-            self.timestamp = data['timestamp']
-            self.userSession = data['userSession']
+            
+            if isinstance(data, dict):
+                self.email = data['email']
+                self.name = data['name']
+                self.exp = data['exp']
+                self.picture = self.setPicture(data)
+                self.idJIRA = data['idJIRA']
+                self.timestamp = data['timestamp']
+                self.userSession =  UserDetails.from_json(data['userDetails'])
+            
         except Exception as e: print(f'Ocurrio un error al mapear UserCredential: {e}')
         
     

@@ -1,0 +1,445 @@
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 1,
+    "total": 18,
+    "issues": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,customfield_10010.requestTypePractice,renderedFields",
+            "id": "14068",
+            "self": "https: //provinciamicroempresas.atlassian.net/rest/api/3/issue/14068",
+            "key": "GDD-1225",
+            "changelog": {
+                "startAt": 0,
+                "maxResults": 2,
+                "total": 2,
+                "histories": [
+                    {
+                        "id": "40437",
+                        "author": {
+                            "self": "https://provinciamicroempresas.atlassian.net/rest/api/3/user?accountId=60480a06b020eb006843b1de",
+                            "accountId": "60480a06b020eb006843b1de",
+                            "avatarUrls": {
+                                "48x48": "https://secure.gravatar.com/avatar/f99b911a788d8f9682464eeef8197f71?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FEF-0.png",
+                                "24x24": "https://secure.gravatar.com/avatar/f99b911a788d8f9682464eeef8197f71?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FEF-0.png",
+                                "16x16": "https://secure.gravatar.com/avatar/f99b911a788d8f9682464eeef8197f71?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FEF-0.png",
+                                "32x32": "https://secure.gravatar.com/avatar/f99b911a788d8f9682464eeef8197f71?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FEF-0.png"
+                            },
+                            "displayName": "Emanuel Damián Chura Flores",
+                            "active": true,
+                            "timeZone": "America/Argentina/Buenos_Aires",
+                            "accountType": "atlassian"
+                        },
+                        "created": "2023-11-27T16:25:41.696-0300",
+                        "items": [
+                            {
+                                "field": "status",
+                                "fieldtype": "jira",
+                                "fieldId": "status",
+                                "from": "10072",
+                                "fromString": "Backlog",
+                                "to": "10071",
+                                "toString": "Cancelado"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "40392",
+                        "author": {
+                            "self": "https://provinciamicroempresas.atlassian.net/rest/api/3/user?accountId=6228d8734160640069ca5686",
+                            "accountId": "6228d8734160640069ca5686",
+                            "emailAddress": "tecnologia@provinciamicrocreditos.com",
+                            "avatarUrls": {
+                                "48x48": "https://secure.gravatar.com/avatar/066b4b92ec7075503b8651927e75e85e?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FUS-2.png",
+                                "24x24": "https://secure.gravatar.com/avatar/066b4b92ec7075503b8651927e75e85e?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FUS-2.png",
+                                "16x16": "https://secure.gravatar.com/avatar/066b4b92ec7075503b8651927e75e85e?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FUS-2.png",
+                                "32x32": "https://secure.gravatar.com/avatar/066b4b92ec7075503b8651927e75e85e?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FUS-2.png"
+                            },
+                            "displayName": "Usuario de Servicio",
+                            "active": true,
+                            "timeZone": "America/Argentina/Buenos_Aires",
+                            "accountType": "atlassian"
+                        },
+                        "created": "2023-11-27T11: 59: 47.005-0300",
+                        "items": [
+                            {
+                                "field": "Attachment",
+                                "fieldtype": "jira",
+                                "fieldId": "attachment",
+                                "from": "",
+                                "fromString": "",
+                                "to": "12141",
+                                "toString": "2023-11-27_14-59-46_3401ee2dbb27776d850e77c6a2bee3d2.jpg"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "fields": {
+                "statuscategorychangedate": "2023-11-27T16: 25: 41.661-0300",
+                "customfield_10074": "",
+                "customfield_10075": "",
+                "customfield_10076": "",
+                "customfield_10110": "",
+                "fixVersions": [],
+                "customfield_10078": "",
+                "customfield_10111": "",
+                "customfield_10079": "",
+                "resolution": "",
+                "customfield_10108": "",
+                "customfield_10109": "",
+                "lastViewed": "",
+                "priority": {
+                    "self": "https: //provinciamicroempresas.atlassian.net/rest/api/3/priority/3",
+                    "iconUrl": "https://provinciamicroempresas.atlassian.net/images/icons/priorities/medium.svg",
+                    "name": "Medium",
+                    "id": "3"
+                },
+                "labels": [],
+                "timeestimate": "",
+                "aggregatetimeoriginalestimate": "",
+                "versions": [],
+                "issuelinks": [],
+                "assignee": {
+                    "self": "https://provinciamicroempresas.atlassian.net/rest/api/3/user?accountId=5cb0e51cfb6145589296296a",
+                    "accountId": "5cb0e51cfb6145589296296a",
+                    "avatarUrls": {
+                        "48x48": "https://secure.gravatar.com/avatar/ff8f8d8f9057b62e62f3da9b2d02fd64?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FJC-4.png",
+                        "24x24": "https://secure.gravatar.com/avatar/ff8f8d8f9057b62e62f3da9b2d02fd64?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FJC-4.png",
+                        "16x16": "https://secure.gravatar.com/avatar/ff8f8d8f9057b62e62f3da9b2d02fd64?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FJC-4.png",
+                        "32x32": "https://secure.gravatar.com/avatar/ff8f8d8f9057b62e62f3da9b2d02fd64?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FJC-4.png"
+                    },
+                    "displayName": "Juan Carlos Canepa",
+                    "active": true,
+                    "timeZone": "America/Argentina/Buenos_Aires",
+                    "accountType": "atlassian"
+                },
+                "status": {
+                    "self": "https://provinciamicroempresas.atlassian.net/rest/api/3/status/10071",
+                    "description": "",
+                    "iconUrl": "https://provinciamicroempresas.atlassian.net/images/icons/statuses/generic.png",
+                    "name": "Cancelado",
+                    "id": "10071",
+                    "statusCategory": {
+                        "self": "https://provinciamicroempresas.atlassian.net/rest/api/3/statuscategory/3",
+                        "id": 3,
+                        "key": "done",
+                        "colorName": "green",
+                        "name": "Listo"
+                    }
+                },
+                "components": [],
+                "customfield_10051": "",
+                "customfield_10052": "",
+                "customfield_10053": "",
+                "customfield_10054": [
+                    {
+                        "self": "https://provinciamicroempresas.atlassian.net/rest/api/3/customFieldOption/10029",
+                        "value": "Gerencia de Tecnología",
+                        "id": "10029"
+                    }
+                ],
+                "customfield_10055": "",
+                "customfield_10056": "",
+                "customfield_10057": "",
+                "customfield_10058": "",
+                "customfield_10059": "",
+                "aggregatetimeestimate": "",
+                "creator": {
+                    "self": "https://provinciamicroempresas.atlassian.net/rest/api/3/user?accountId=6228d8734160640069ca5686",
+                    "accountId": "6228d8734160640069ca5686",
+                    "emailAddress": "tecnologia@provinciamicrocreditos.com",
+                    "avatarUrls": {
+                        "48x48": "https://secure.gravatar.com/avatar/066b4b92ec7075503b8651927e75e85e?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FUS-2.png",
+                        "24x24": "https://secure.gravatar.com/avatar/066b4b92ec7075503b8651927e75e85e?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FUS-2.png",
+                        "16x16": "https://secure.gravatar.com/avatar/066b4b92ec7075503b8651927e75e85e?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FUS-2.png",
+                        "32x32": "https://secure.gravatar.com/avatar/066b4b92ec7075503b8651927e75e85e?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FUS-2.png"
+                    },
+                    "displayName": "Usuario de Servicio",
+                    "active": true,
+                    "timeZone": "America/Argentina/Buenos_Aires",
+                    "accountType": "atlassian"
+                },
+                "subtasks": [],
+                "customfield_10040": "",
+                "customfield_10041": "",
+                "customfield_10042": "",
+                "customfield_10043": "",
+                "reporter": {
+                    "self": "https://provinciamicroempresas.atlassian.net/rest/api/3/user?accountId=62476153258562006fa50037",
+                    "accountId": "62476153258562006fa50037",
+                    "avatarUrls": {
+                        "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/62476153258562006fa50037/a2151fe7-24a6-461f-a5de-06f8e9ede7e6/48",
+                        "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/62476153258562006fa50037/a2151fe7-24a6-461f-a5de-06f8e9ede7e6/24",
+                        "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/62476153258562006fa50037/a2151fe7-24a6-461f-a5de-06f8e9ede7e6/16",
+                        "32x32": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/62476153258562006fa50037/a2151fe7-24a6-461f-a5de-06f8e9ede7e6/32"
+                    },
+                    "displayName": "Maximiliano Juan Millan",
+                    "active": true,
+                    "timeZone": "America/Argentina/Buenos_Aires",
+                    "accountType": "atlassian"
+                },
+                "customfield_10044": "",
+                "aggregateprogress": {
+                    "progress": 0,
+                    "total": 0
+                },
+                "customfield_10045": "",
+                "customfield_10046": "",
+                "customfield_10047": "",
+                "customfield_10048": "",
+                "customfield_10038": "",
+                "customfield_10039": "2023-11-30",
+                "progress": {
+                    "progress": 0,
+                    "total": 0
+                },
+                "votes": {
+                    "self": "https://provinciamicroempresas.atlassian.net/rest/api/3/issue/GDD-1225/votes",
+                    "votes": 0,
+                    "hasVoted": false
+                },
+                "issuetype": {
+                    "self": "https://provinciamicroempresas.atlassian.net/rest/api/3/issuetype/10001",
+                    "id": "10001",
+                    "description": "Un trabajo pequeño e independiente.",
+                    "iconUrl": "https://provinciamicroempresas.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10318?size=medium",
+                    "name": "Tarea",
+                    "subtask": false,
+                    "avatarId": 10318,
+                    "hierarchyLevel": 0
+                },
+                "timespent": "",
+                "customfield_10030": "",
+                "customfield_10031": "",
+                "project": {
+                    "self": "https://provinciamicroempresas.atlassian.net/rest/api/3/project/10045",
+                    "id": "10045",
+                    "key": "GDD",
+                    "name": "GDD - Gestión de la Demanda",
+                    "projectTypeKey": "software",
+                    "simplified": false,
+                    "avatarUrls": {
+                        "48x48": "https://provinciamicroempresas.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10404",
+                        "24x24": "https://provinciamicroempresas.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10404?size=small",
+                        "16x16": "https://provinciamicroempresas.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10404?size=xsmall",
+                        "32x32": "https://provinciamicroempresas.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10404?size=medium"
+                    }
+                },
+                "customfield_10032": "",
+                "customfield_10033": "",
+                "customfield_10034": [],
+                "aggregatetimespent": "",
+                "customfield_10035": "",
+                "customfield_10036": "",
+                "customfield_10037": "",
+                "customfield_10029": "",
+                "resolutiondate": "",
+                "workratio": -1,
+                "watches": {
+                    "self": "https://provinciamicroempresas.atlassian.net/rest/api/3/issue/GDD-1225/watchers",
+                    "watchCount": 1,
+                    "isWatching": true
+                },
+                "created": "2023-11-27T11:59:45.627-0300",
+                "customfield_10020": "",
+                "customfield_10021": "",
+                "customfield_10022": "",
+                "customfield_10023": "",
+                "customfield_10024": "",
+                "customfield_10025": "",
+                "customfield_10026": "",
+                "customfield_10016": "",
+                "customfield_10017": "",
+                "customfield_10018": {
+                    "hasEpicLinkFieldDependency": false,
+                    "showField": false,
+                    """ditableReason": {
+                        "reason": "PLUGIN_LICENSE_ERROR",
+                        "message": "El enlace principal solo está disponible para los usuarios de Jira Premium."
+                    }
+                },
+                "customfield_10019": "0|i00nu4:",
+                "updated": "2023-11-27T16:25:41.661-0300",
+                "timeoriginalestimate": "",
+                "customfield_10096": [
+                    {
+                        "self": "https://provinciamicroempresas.atlassian.net/rest/api/3/customFieldOption/10102",
+                        "value": "Usuario",
+                        "id": "10102"
+                    }
+                ],
+                "customfield_10097": "",
+                "description": {
+                    "version": 1,
+                    "type": "doc",
+                    "content": [
+                        {
+                            "type": "paragraph",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": "Fecha de Creación:",
+                                    "marks": [
+                                        {
+                                            "type": "strong"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "text",
+                                    "text": " 27/11/2023 11:59:45"
+                                },
+                                {
+                                    "type": "hardBreak"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "Creado por:",
+                                    "marks": [
+                                        {
+                                            "type": "strong"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "text",
+                                    "text": " Maximiliano Juan Millan"
+                                },
+                                {
+                                    "type": "hardBreak"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "Correo:",
+                                    "marks": [
+                                        {
+                                            "type": "strong"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "text",
+                                    "text": " mmillan@provinciamicrocreditos.com"
+                                },
+                                {
+                                    "type": "hardBreak"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "Rol:",
+                                    "marks": [
+                                        {
+                                            "type": "strong"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "text",
+                                    "text": " beneficio"
+                                },
+                                {
+                                    "type": "hardBreak"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "Funcionalidad:",
+                                    "marks": [
+                                        {
+                                            "type": "strong"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "text",
+                                    "text": " funcionalidad"
+                                },
+                                {
+                                    "type": "hardBreak"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "Beneficio:",
+                                    "marks": [
+                                        {
+                                            "type": "strong"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "text",
+                                    "text": " impacto"
+                                },
+                                {
+                                    "type": "hardBreak"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "Enlace a la Documentación:",
+                                    "marks": [
+                                        {
+                                            "type": "strong"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "text",
+                                    "text": " enlace."
+                                },
+                                {
+                                    "type": "hardBreak"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "Prioridad",
+                                    "marks": [
+                                        {
+                                            "type": "strong"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "text",
+                                    "text": " definida por el usuario: Estándar"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "customfield_10010": "",
+                "customfield_10014": "",
+                "customfield_10015": "",
+                "customfield_10005": "",
+                "customfield_10006": "",
+                "security": "",
+                "customfield_10007": "",
+                "customfield_10008": "",
+                "customfield_10009": "",
+                "summary": "[REQ-HLC 017] prueba desde tst (eliminar)",
+                "customfield_10080": "",
+                "customfield_10081": "",
+                "customfield_10001": "",
+                "customfield_10002": "",
+                "customfield_10003": [
+                    {
+                        "self": "https://provinciamicroempresas.atlassian.net/rest/api/3/user?accountId=712020%3Afaf61986-8ac1-47e7-9c28-8dac9ad497b8",
+                        "accountId": "712020:faf61986-8ac1-47e7-9c28-8dac9ad497b8",
+                        "avatarUrls": {
+                            "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:faf61986-8ac1-47e7-9c28-8dac9ad497b8/3b9c0c18-7d4a-486b-ae9a-51e9d5569eb8/48",
+                            "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:faf61986-8ac1-47e7-9c28-8dac9ad497b8/3b9c0c18-7d4a-486b-ae9a-51e9d5569eb8/24",
+                            "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:faf61986-8ac1-47e7-9c28-8dac9ad497b8/3b9c0c18-7d4a-486b-ae9a-51e9d5569eb8/16",
+                            "32x32": "https: //avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:faf61986-8ac1-47e7-9c28-8dac9ad497b8/3b9c0c18-7d4a-486b-ae9a-51e9d5569eb8/32"
+                        },
+                        "displayName": "Nicolás Rivanera",
+                        "active": true,
+                        "timeZone": "America/Argentina/Buenos_Aires",
+                        "accountType": "atlassian"
+                    }
+                ],
+                "customfield_10004": "",
+                "environment": "",
+                "duedate": ""
+            }
+        }
+    ]
+}
