@@ -60,7 +60,8 @@ def getFormByIDAndUser(data_user):
             return formsUsuario.get(form_id, {})
         elif user_role == 'usuario':
             return formsUsuario.get(form_id, {})
-        
+        else:
+            return formsUsuario.get(form_id, {})
         
         
         # Agrega más casos según los roles necesarios

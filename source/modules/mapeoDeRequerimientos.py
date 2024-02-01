@@ -39,9 +39,12 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
               
             
             
-            if (issue.isTecno == "si"):
-                    issue_dict['customfield_10096'] = [{"id" :"10103"}]
-            else: issue_dict['customfield_10096'] = [{"id" :"10102"}]
+            if (issue.isTecno.lower() == "si"):
+                print(f'Mapeando campo Origen (tecno): {issue.isTecno.lower()} : [{"id" :"10103"}] ')
+                issue_dict['customfield_10096'] = [{"id" :"10103"}]
+            else: 
+                issue_dict['customfield_10096'] = [{"id" :"10102"}]
+                print(f'Mapeando campo Origen (usuario): {issue.isTecno.lower()} : [{"id" :"10102"}] ')
 
             if((issue.finalDate != 'None') and (issue.finalDate != '')):
                 issue_dict['customfield_10038']= str((issue.finalDate[0:10]))
@@ -98,8 +101,7 @@ def MapeoDeRequerimientos(issue: Issue, issue_dict : dict, ENVIROMENT: str) -> d
                 if(issue.isTecno == 'si'): 
                     issue.isTecno = 'InternoTech'
                 else: issue.isTecno = 'Usuario'
-               
-                #issue_dict["customfield_100
+                
                 issue_dict["issuetype"] = {"id":"10096"} #Tipo de requerimiento (tarea) 
                 #issue_dict["reporter"] = {"accountId": "6228d7c3302c6b006af5de63","accountType": "atlassian"} #Reportado por:                   
                 issue_dict["customfield_10083"] = f'{issue.userCredential.name} - {issue.userCredential.email}' #Creado por (nombre - correo)

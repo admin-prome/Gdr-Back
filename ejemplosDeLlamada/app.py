@@ -15,7 +15,7 @@ def jira_auth_endpoint():
         return jsonify({'jira_user_token': jira_user_token})
 
     except requests.exceptions.RequestException as e:
-        print(str(e))
+        
         return jsonify({'error': f'Error de autenticación con Jira: {str(e)}'}), 400
 
 

@@ -28,8 +28,20 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 KEY: str = settings.KEY_GDR_FRONT
 
 app = Flask(__name__)
-cors = CORS(app, origins=["https://requerimientos.provinciamicrocreditos.com", "https://gdrfront.azurewebsites.net"], methods=["POST"])
-cors = CORS(app, resources={r"/GetForm": {"origins": ["https://requerimientos.provinciamicrocreditos.com", "https://gdrfront.azurewebsites.net", "http://localhost:4200"]}}, methods=["POST"])
+
+app.secret_key = "gdrback"
+
+
+
+
+CORS(app, resources={r"/GetForm": {"origins": ["https://requerimientos.provinciamicrocreditos.com","https://gdr-front-tst.azurewebsites.net/" ,"http://localhost:4200"]}})
+
+cors = CORS(app, origins=["https://requerimientos.provinciamicrocreditos.com","https://gdr-front-tst.azurewebsites.net/","http://localhost:4200" ],methods="POST")
+
+
+
+
+
 CORS(app)
 
 app.url_map.strict_slashes = False
@@ -49,6 +61,8 @@ app.register_blueprint(getForm_bp)
 
 app.static_folder = 'static'
 app.template_folder='templates'
+
+
 
 
 @app.route('/')
