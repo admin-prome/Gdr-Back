@@ -18,6 +18,8 @@ from source.jiraModule.components.userHandler.getAllUsers.view_getAllUsers impor
 from source.jiraModule.components.userHandler.getUserSession.view_getUserSession import getUserSession_bp
 from source.jiraModule.components.userHandler.getProjectsForUser.view_getProjectsForUser import getProjectsForUser_bp
 from source.jiraModule.components.getForm.view_getForm import getForm_bp
+from source.jiraModule.components.HigherAmount.controller_postHigherAmount import post_higherAmount_bp
+
 from source.settings.settings import settings
 from google_auth_oauthlib.flow import Flow
 from google.oauth2 import id_token
@@ -58,6 +60,7 @@ app.register_blueprint(loginJira_bp)
 app.register_blueprint(getUserSession_bp)
 app.register_blueprint(getProjectsForUser_bp)
 app.register_blueprint(getForm_bp)
+app.register_blueprint(post_higherAmount_bp)
 
 app.static_folder = 'static'
 app.template_folder='templates'
