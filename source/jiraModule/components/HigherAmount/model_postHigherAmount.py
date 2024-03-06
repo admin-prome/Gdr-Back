@@ -11,17 +11,20 @@ class QuotaAmountOneMillion(Base):
     quotaValue = Column(Integer, nullable=False)
     amount = Column(Integer, nullable=False)
     notified = Column(Boolean, default=False)
+    creditCourse = Column(String(255), nullable=False)
 
-    def __init__(self, dni, opportunity, executive, quotaValue, amount, notified):
+
+    def __init__(self, dni, opportunity, executive, quotaValue, amount, notified, creditCourse):
         self.dni = dni
         self.opportunity = opportunity
         self.executive = executive
         self.quotaValue = quotaValue
         self.amount = amount
         self.notified = notified
+        self.creditCourse = creditCourse
 
     def __str__(self):
-        return f"QuotaAmountOneMillion(ID: {self.id}, DNI: {self.dni}, Opportunity: {self.opportunity}, Executive: {self.executive}, QuotaValue: {self.quotaValue}, Amount: {self.amount}, Notified: {self.notified})"
+        return f"QuotaAmountOneMillion(ID: {self.id}, DNI: {self.dni}, Opportunity: {self.opportunity}, Executive: {self.executive}, QuotaValue: {self.quotaValue}, Amount: {self.amount}, Notified: {self.notified},creditCourse: {self.creditCourse})"
 
     def __repr__(self):
-        return f"QuotaAmountOneMillion(id={self.id}, dni={self.dni}, opportunity='{self.opportunity}', executive='{self.executive}', quotaValue={self.quotaValue}, amount={self.amount}, notified={self.notified})"
+        return f"QuotaAmountOneMillion(id={self.id}, dni={self.dni}, opportunity='{self.opportunity}', executive='{self.executive}', quotaValue={self.quotaValue}, amount={self.amount}, notified={self.notified}, creditCourse: {self.creditCourse})"

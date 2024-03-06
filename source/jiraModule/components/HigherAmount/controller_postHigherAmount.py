@@ -16,7 +16,8 @@ def post_higher_amount():
             executive=data['executive'],
             quotaValue=data['quotaValue'],
             amount=data['amount'],
-            notified=data.get('notified', False)  # Si 'notified' no está presente, establece el valor predeterminado en False
+            notified=data.get('notified', False),  # Si 'notified' no está presente, establece el valor predeterminado en False
+            creditCourse=data.get('creditCourse',False)
         )
 
         db.session.add(new_quota_amount)
