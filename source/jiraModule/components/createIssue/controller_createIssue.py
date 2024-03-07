@@ -34,7 +34,6 @@ tokenId: str = settings.APIKEY
 
 
 
-
 def waitUntilClosed(path:str) -> None:
     while os.path.isfile(path):
         timeout: int = 60
