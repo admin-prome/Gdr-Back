@@ -25,4 +25,8 @@ def post_higher_amount():
 
         return jsonify({'message': 'Datos insertados correctamente'}), 201
     except Exception as e:
+        session.rollback()
         return jsonify({'error': str(e)}), 500
+
+    finally:
+        session.close() 
