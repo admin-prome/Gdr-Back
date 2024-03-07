@@ -2,7 +2,6 @@ from source.jiraModule.utils.conexion import db
 from flask import Blueprint, jsonify, request
 from source.jiraModule.components.HigherAmount.model_postHigherAmount import QuotaAmountOneMillion
 
-
 post_higherAmount_bp = Blueprint("HigherAmount", __name__)
 
 @post_higherAmount_bp.route('/HigherAmount', methods=['POST'])
@@ -16,8 +15,8 @@ def post_higher_amount():
             executive=data['executive'],
             quotaValue=data['quotaValue'],
             amount=data['amount'],
-            notified=data.get('notified', False),  # Si 'notified' no está presente, establece el valor predeterminado en False
-            creditCourse=data.get('creditCourse',False)
+            notified=data.get('notified', False),
+            creditCourse=data.get('creditCourse', False)
         )
 
         db.session.add(new_quota_amount)
@@ -25,8 +24,7 @@ def post_higher_amount():
 
         return jsonify({'message': 'Datos insertados correctamente'}), 201
     except Exception as e:
-        session.rollback()
+        db.session.rollback()
         return jsonify({'error': str(e)}), 500
-
     finally:
-        session.close() 
+        db.session.close()
